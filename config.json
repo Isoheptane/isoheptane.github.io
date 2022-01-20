@@ -1,0 +1,75 @@
+{
+    "baseURL": "https://blog.cascade.moe",
+    "languageCode": "zh-cn",
+    "defaultContentLanguage": "zh-cn",
+    "title": "Isoheptane",
+    "theme": ["m10c", "hugo-notice"],
+    "module": {
+        "imports": [
+            {
+                "path": "m10c"
+            }
+        ]
+    },
+    "params": {
+        "author": "Isoheptane",
+        "description": "工程师猫娘",
+        "avatar": "/images/avatar.png",
+        "menu_item_separator": " - ",
+        "favicon": "/images/favicon.ico",
+        "social": [
+            {
+                "icon": "twitter",
+                "name": "Twitter",
+                "url": "https://twitter.com/ArcadiaIso"
+            },
+            {
+                "icon": "github",
+                "name": "GitHub",
+                "url": "https://github/isoheptane"
+            }
+        ],
+        "gitalk": {
+            "clientID": "9bc6b0142cbe94ac7b96",
+            "clientSecret": "8990b3be4de1a800b06f2fe055935fa16c0eb86c",
+            "repo": "isoheptane.github.io",
+            "owner": "Isoheptane",
+            "admin": "Isoheptane"
+        }
+    },
+    "menu": {
+        "main": [
+            {
+                "identifier": "home",
+                "name": "Home",
+                "url": "/",
+                "weight": 1
+            },
+            {
+                "identifier": "tags",
+                "name": "Tags",
+                "url": "/tags/",
+                "weight": 2
+            },
+            {
+                "identifier": "links",
+                "name": "Links",
+                "url": "/links/",
+                "weight": 3
+            }
+        ]
+    },
+    "markup":{
+        "highlight":{
+            "codeFences": true,
+            "guessSyntax": false,
+            "hl_Lines": "",
+            "lineNoStart": 1,
+            "lineNos": false,
+            "lineNumbersInTable": true,
+            "noClasses": true,
+            "style": "monokai",
+            "tabWidth": 4
+        }
+    }
+}
