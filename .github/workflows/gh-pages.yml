@@ -1,0 +1,37 @@
+name: Deploy on GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.github'
+      - 'README.md'
+      - 'LICENSE'
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.85.0'
+
+      - name: Build blog.cascade.moe
+        run: hugo --minify
+
+      - name: Deploy on GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_branch: github-pages
