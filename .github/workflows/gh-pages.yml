@@ -37,3 +37,4 @@ jobs:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_branch: github-pages
           publish_dir: ./public
+          force_orphan: true
