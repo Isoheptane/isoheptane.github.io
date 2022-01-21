@@ -39,8 +39,12 @@ code {
   font-size: 1em;
   color: rgba(175, 186, 196, 0.8);
 }
+.notice > p > code {
+  color: #3f3f3f;
+}
 pre {
-  overflow: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 pre code {
   font-size: 0.8em;
