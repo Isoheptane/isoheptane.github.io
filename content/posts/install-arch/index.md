@@ -125,12 +125,9 @@ sudo pacman -S kde-applications
 
 ### 配置 ArchlinuxCN 仓库和 AUR
 
-{{< notice info >}}
-Arch Linux 中文社区仓库 是由 Arch Linux 中文社区驱动的非官方用户仓库。包含中文用户常用软件、工具、字体/美化包等。
-{{< /notice >}}
-{{< notice info >}}
-Arch 用户软件仓库（Arch User Repository，AUR）是为用户而建、由用户主导的 Arch 软件仓库。AUR 中的软件包以软件包生成脚本（PKGBUILD）的形式提供，用户自己通过 makepkg 生成包，再由 pacman 安装。创建 AUR 的初衷是方便用户维护和分享新软件包，并由官方定期从中挑选软件包进入 community 仓库。
-{{< /notice >}}
+> Arch Linux 中文社区仓库 是由 Arch Linux 中文社区驱动的非官方用户仓库。包含中文用户常用软件、工具、字体/美化包等。
+
+> Arch 用户软件仓库（Arch User Repository，AUR）是为用户而建、由用户主导的 Arch 软件仓库。AUR 中的软件包以软件包生成脚本（PKGBUILD）的形式提供，用户自己通过 makepkg 生成包，再由 pacman 安装。创建 AUR 的初衷是方便用户维护和分享新软件包，并由官方定期从中挑选软件包进入 community 仓库。  
 
 有很多包是来自 [ArchlinuxCN](https://www.archlinuxcn.org/) 仓库和 [AUR](https://aur.archlinux.org/) 的，首先需要配置好 ArchlinuxCN 仓库。打开 `/etc/pacman.conf` 并在文件末尾添加上这两行：
 
