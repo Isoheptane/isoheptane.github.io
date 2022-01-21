@@ -3,11 +3,11 @@
     "languageCode": "zh-cn",
     "defaultContentLanguage": "zh-cn",
     "title": "Isoheptane",
-    "theme": ["m10c"],
+    "theme": ["m10c-iso"],
     "module": {
         "imports": [
             {
-                "path": "m10c"
+                "path": "m10c-iso"
             }
         ]
     },
