@@ -8,8 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="{{ .Site.Params.author | default "John Doe" }}" />
     <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Description }}{{ end }}" />
-    {{ $style := resources.Get "css/main.css" -}}
-    <link rel="stylesheet" href="{{ $style.Permalink }}" />
+    {{ $main_style := resources.Get "css/main.css" -}}
+    {{ $gitalk_style := resources.Get "css/gitalk.css" -}}
+    <link rel="stylesheet" href="{{ $main_style.Permalink }}" />
+    <link rel="stylesheet" href="{{ $gitalk_style.Permalink }}" />
 
     {{ template "_internal/google_analytics.html" . }}
     {{ template "_internal/twitter_cards.html" . }}
