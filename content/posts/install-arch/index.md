@@ -69,7 +69,7 @@ grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 
 最后需要生成 grub 的配置文件，照着这上面的来就可以了~~别像我一样第一次把配置文件生成到了/`efi/grub/`里。~~ 然后用 `exit` 退出 chroot 环境后，就可以 `reboot` 重启了。重启后应该会看到 `grub` 选择启动项的页面。
 
-```
+```shell
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
