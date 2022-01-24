@@ -37,7 +37,7 @@ a {
 a:hover {
   color: #fff;
 }
-.notice > p > a:hover {
+.notice-body > p > a:hover {
   color: #438861;
 }
 code {
@@ -45,7 +45,7 @@ code {
   font-size: 1em;
   color: rgba(175, 186, 196, 0.8);
 }
-.notice > p > code {
+.notice-body > p > code {
   color: #3f3f3f;
 }
 pre {
