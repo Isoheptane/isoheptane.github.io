@@ -39,14 +39,14 @@ Device            Start       End   Sectors  Size Type
 
 ```shell
 # 创建文件系统
-mkfs.fat -F32 /dev/nvme0n1p1
-mkswap /dev/nvme0n1p2
-mkfs.ext4 /dev/nvme0n1p3
+$ mkfs.fat -F32 /dev/nvme0n1p1
+$ mkswap /dev/nvme0n1p2
+$ mkfs.ext4 /dev/nvme0n1p3
 # 挂载分区
-mount /dev/nvme0n1p3 /mnt
-mount /dev/nvme0n1p1 /mnt/efi
+$ mount /dev/nvme0n1p3 /mnt
+$ mount /dev/nvme0n1p1 /mnt/efi
 # 在 swap 分区上开启 swap
-swapon /dev/nvme0n1p2
+$ swapon /dev/nvme0n1p2
 ```
 
 ### 安装 Boot loader
@@ -55,22 +55,22 @@ swapon /dev/nvme0n1p2
 # 在 /mnt 下安装必要的包
 # 其实这里还建议安装 dhcpcd 和 base-devel 之类的其他包
 # 不过我安装的时候没有装上，所以后面会比较麻烦
-pacstrap /mnt base linux linux-firmware
+$ pacstrap /mnt base linux linux-firmware
 # 生成 fstab
-genfstab -U /mnt >> /mnt/etc/fstab
+$ genfstab -U /mnt >> /mnt/etc/fstab
 # chroot 进系统里
-arch-chroot /mnt
+$ arch-chroot /mnt
 ```
 跟着流程的设置自然不用多说，跟着 ArchWiki 走就好了，现在安装 Boot loader。在 UEFI 下，安装 `grub` 需要安装两个包：`grub` 和 `efibootmgr`。用 `pacman` 把它们安装上就好了。接下来执行：
 
 ```shell
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+$ grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 ```
 
 最后需要生成 grub 的配置文件，照着这上面的来就可以了~~别像我一样第一次把配置文件生成到了/`efi/grub/`里。~~ 然后用 `exit` 退出 chroot 环境后，就可以 `reboot` 重启了。重启后应该会看到 `grub` 选择启动项的页面。
 
 ```shell
-grub-mkconfig -o /boot/grub/grub.cfg
+$ grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 ## 安装后的一些工作
@@ -80,15 +80,15 @@ grub-mkconfig -o /boot/grub/grub.cfg
 日常使用时用 `root` 用户是非常危险的，如不小心打出了`rm -rf /*` 这样的操作。所以日常使用还是有必要创建一个新的用户的，我们用如下指令创建一个新用户 `iso` 并将这个用户加入到 `wheel` 这个用户组里。
 
 ```shell
-useradd -m -G wheel iso
+$ useradd -m -G wheel iso
 ```
 
 然后用 `passwd iso` 给这个用户设置一个密码。
 使用 `sudo` 指令需要先安装 `sudo` 这个包，用 `pacman -S sudo` 安装上就好了。接下来我们需要修改 sudoers 列表，让在 `wheel` 组中的成员可以使用 `sudo` 指令。这里我们需要用到 `visudo` 这个专用的指令打开 `vi` 来修改 sudoers 列表。不过由于 `vi` 并不是预装的，所以我们这里还需要创建一个 `vi` 到 `vim` 的软链接。
 
 ```shell
-ln -s /usr/bin/vi /usr/bin/vim
-visudo
+$ ln -s /usr/bin/vi /usr/bin/vim
+$ visudo
 ```
 
 找到下面这一行，去掉注释，然后重启即可。
@@ -104,21 +104,21 @@ visudo
 
 ```shell
 # 安装 Xorg
-sudo pacman -S xorg
+$ sudo pacman -S xorg
 # 安装 Plasma 桌面环境
-sudo pacman -S plasma
+$ sudo pacman -S plasma
 # 安装并启动桌面管理器服务，用于帮助我们进入桌面环境
-sudo pacman -S sddm
-sudo systemctl enable sddm
+$ sudo pacman -S sddm
+$ sudo systemctl enable sddm
 # 关闭之前使用的网络服务，使用桌面环境下使用的 NetworkManager 服务
 # netctl 有可能并没有开启
-sudo systemctl disable netctl
-sudo systemctl enable NetworkManager
+$ sudo systemctl disable netctl
+$ sudo systemctl enable NetworkManager
 # 安装工具栏工具
-sudo pacman -S network-manager-applet
+$ sudo pacman -S network-manager-applet
 
 # 如果你想要的话，你也可以安装上 KDE 的预装应用，不过体积很大，而且有可能你用不到
-sudo pacman -S kde-applications
+$ sudo pacman -S kde-applications
 ```
 
 这样桌面环境就安装完成了，重启应该就能进入桌面了。
@@ -155,7 +155,7 @@ sudo pacman -S yay
 `yay` 是一个 AUR 助手，可以用来管理 AUR 上包。同样，AUR 也是有镜像的，可以通过下面的命令修改到清华大学开源软件镜像站。
 
 ```shell
-yay --aururl "https://aur.tuna.tsinghua.edu.cn" --save
+$ yay --aururl "https://aur.tuna.tsinghua.edu.cn" --save
 ```
 
 ## 开始使用

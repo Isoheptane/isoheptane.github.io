@@ -23,7 +23,7 @@ enableGitalk = true
 首先，需要在服务器上安装 Xray：
 
 ```shell
-bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
+$ bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 ```
 
 安装完成后，Xray 可以被作为服务启动，默认配置文件的路径为 `/usr/local/etc/xray/config.json`。
@@ -91,14 +91,14 @@ JSON 不支持注释，因此需要将配置文件中所有双斜杠后的内容
 修改好上述配置文件后，可以通过以下命令检测配置文件是否正常：
 
 ```shell
-xray -test -config /usr/local/etc/xray/config.json
+$ xray -test -config /usr/local/etc/xray/config.json
 ```
 
 若最后一行输出 `Configuration OK.`，则配置文件正常。接下来可以启动 Xray 服务，使之开机自启动。
 
 ```shell
-systemctl enable xray
-systemctl start xray
+$ systemctl enable xray
+$ systemctl start xray
 ```
 
 ## 配置 Nginx 流量伪装
@@ -174,7 +174,7 @@ VLESS 可以检测非 VLESS 协议，将非 VLESS 协议流量进行分流。其
 这里需要先安装 Nginx：
 
 ```shell
-sudo apt install nginx
+$ sudo apt install nginx
 ```
 
 安装完成后，Nginx 同样可以作为服务被启动，默认的配置文件路径为 `/etc/nginx/nginx.conf`，这里将基于这个默认的配置文件进行修改。
