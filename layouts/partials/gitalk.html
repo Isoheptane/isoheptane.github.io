@@ -1,6 +1,7 @@
 {{ if .Page.Params.enableGitalk }}
 <div id="gitalk-container"></div>
-{{ $style := resources.Get "css/gitalk.css" -}}
+{{ $style := resources.Get "css/gitalk-override.css" -}}
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 <link rel="stylesheet" href="{{ $style.Permalink }}">
 <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 <script>
