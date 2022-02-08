@@ -6,7 +6,7 @@ enableGitalk = false
 ### 友情链接
 - [云line](https://yunline.github.io/)
 - [Malachite](https://blog-malachite.vercel.app/)
-- [XenonWzh](https://xenonwzh.github.io)
+- [XenonWZH](https://xenonwzh.github.io)
 
 ### 联系方式
 - Twitter: [@ArcadiaIso](https://twitter.com/ArcadiaIso)
