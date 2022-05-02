@@ -81,7 +81,7 @@ server
         proxy_read_timeout 600s;
 		# 传递客户端 IP 地址
 		proxy_set_header X-Real-IP $remote_addr;
-    	proxy_set_header X-Forwarded-For$proxy_add_x_forwarded_for;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
     # ...
 }
@@ -112,11 +112,11 @@ proxy_read_timeout 600s;
 
 ```nginx
 proxy_set_header X-Real-IP $remote_addr;
-proxy_set_header X-Forwarded-For$proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 ```
 
 ### 捕获后端服务器的 400 Bad Request 响应
-当通过不正确的方式访问 WebSocket 的路径时，后端服务器会响应 ``400 Bad Request``。但是这对 GFW 来讲是一种可以被探测到的特征，因此需要设置 Nginx 捕获后端服务器的 ``400 Bad Request`` 响应，并跳转到其它位置。这里以跳转到主页为例，添加如下设置：
+当通过不正确的方式访问 WebSocket 的路径时，后端服务器会响应 ``400 Bad Request``。这对 GFW 来讲是一种可能可以被探测到的特征，因此可以设置 Nginx 捕获后端服务器的 ``400 Bad Request`` 响应，并跳转到其它位置。这里以跳转到主页为例，添加如下设置：
 
 ```nginx
 proxy_intercept_errors on;
