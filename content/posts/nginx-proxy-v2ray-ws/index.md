@@ -2,7 +2,7 @@
 title = "配置 Nginx 流量伪装并反向代理 V2Ray+WebSocket"
 tags = ["代理", "Nginx", "V2Ray"]
 date = "2022-05-01"
-update = "2022-05-01"
+update = "2022-05-02"
 enableGitalk = true
 +++
 
