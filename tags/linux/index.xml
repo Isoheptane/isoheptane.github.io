@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on Isoheptane</title><link>https://blog.cascade.moe/tags/linux/</link><description>Recent content in Linux on Isoheptane</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 13 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.cascade.moe/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>第一次尝试安装 Arch Linux</title><link>https://blog.cascade.moe/posts/install-arch/</link><pubDate>Wed, 13 Oct 2021 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/install-arch/</guid><description>为什么突然想装 Arch Linux 想起自己有过一段时间没有折腾过 Linux 相关的东西了，这段时间正好想起上次在虚拟机里安装 Arch Linux 失败的经历，恰巧我笔电刚拿回来。但我笔电上安装的是 Windows 11，并且是一个相对较老的 Beta 渠道体验版。所以今天就试着在实体机上安装了一下 Arch Linux。
+我目前正在使用的笔电是 ThinkPad E14 Gen2 (AMD)。
+安装 Arch Linux 注意
+这并不是一篇完整的教程，而是一篇记录。因此，如果要遵循这篇文章的操作，请根据自己的实际情况适当修改。 阅读本文章前建议先阅读官方教程。 从U盘启动 写入镜像的话，用 Rufus 向U盘中写入镜像就好了，我选择的 MBR 分区表和 ISO 镜像模式。
+比较坑的一点是，大部分的笔记本电脑，Secure Boot 都是默认启用的。然而如果要从U盘镜像启动，就必须得把 Secure Boot 关掉。其实我一开始也想到了这一点，但是我看到 BIOS 里那么多的启动项，怀疑其他启动项可能干扰了启动过程（前面的启动项启动失败后便会继续执行后面的启动项），就把硬盘擦除了。事实证明这和启动失败一点关系都没有，也不会删除那些启动项。
+在关掉了 Secure Boot 之后，就可以从U盘启动 Archiso 了。
+硬盘分区 联网貌似是自动的，使用 DHCP 获取到了IP地址。所以这部分就没怎么做过（虽然之后还是得做）。
+我几乎没用过 fdisk 这种分区工具，所以我也是现学现用用完就忘的。按照 Arch Linux 官方的教程，UEFI 模式下应该分出三个分区，分别是 ESP 分区、交换分区和根文件系统分区。ESP 分区我设置了 512MB 的大小，交换分区为 12GB，根文件系统占用其他所有空间。
+Device Start End Sectors Size Type /dev/nvme0n1p1 2048 1048576 1048576 512M EFI System /dev/nvme0n1p2 1050624 25165824 25165824 12G Linux swap /dev/nvme0n1p3 26216448 500118158 473901711 226G Linux filesystem 然后我们在分区上创建文件系统。把根文件系统的分区挂载到/mnt上，把 ESP 分区挂载到/mnt/efi上，并开启 swap 分区。</description></item></channel></rss>

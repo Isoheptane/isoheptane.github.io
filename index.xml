@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Isoheptane</title><link>https://blog.cascade.moe/</link><description>Recent content on Isoheptane</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 01 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.cascade.moe/index.xml" rel="self" type="application/rss+xml"/><item><title>配置 Nginx 流量伪装并反向代理 V2Ray+WebSocket</title><link>https://blog.cascade.moe/posts/nginx-proxy-v2ray-ws/</link><pubDate>Sun, 01 May 2022 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/nginx-proxy-v2ray-ws/</guid><description>前言 某一天，群友告诉我梯子炸了，试了一下果然如此，被 GFW 封了443端口。但是 VLESS+TCP+XTLS 可是所谓的“终极形态”啊，怎么会这么容易地被发现呢？也许是我的问题，也许是 XTLS 或者 VLESS 的问题。但是无论怎么样，我们都需要更隐蔽的代理方式。
+于是，我选择了最经典的 Nginx 流量伪装的 V2Ray+WebSocket 这种方式。
+原理 Nginx 是一个高性能的 HTTP 和 Web 反向代理服务器。在这里将会像 配置 VLESS+TCP+XTLS + Nginx 流量伪装 + VMess 回落 这篇文章一样配置一个伪装站点，配置伪装内容的站点不在赘述。
+Nginx 可以反向代理 WebSocket 流量，因此可以配置 Nginx 将流量转发至后端的 V2Ray 服务器。
+分流 Nginx 要怎么区别哪些是网站的流量，哪些是代理流量呢？这个时候便需要用 Nginx 的 location 了。location 可以用来匹配访问不同路径的请求，进而对不同路径的请求进行不同的处理。
+因此可以为不同的路径配置不同的处理方式，来将特定的路径代理到 V2Ray 服务器上。
+代理 Nginx 反向代理可以使用 proxy_pass 这一属性，设置将请求代理到其它的服务器上。对于特定路径的格式如下：
+location /specific/path/ { proxy_pass http://targetserver.com:12345; # 使用 HTTPS 也是可以的 # proxy_pass https://targetserver.com:11000; } 需要注意的是，Nginx 同样是将经过 TLS 解密后的流量转发至其它服务器。</description></item><item><title>RSA 算法</title><link>https://blog.cascade.moe/posts/rsa-algorithm/</link><pubDate>Tue, 08 Feb 2022 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/rsa-algorithm/</guid><description>前言 本来以前就想学习一下非对称加密算法中，大名鼎鼎的 RSA 算法，但是奈何本人当时不会数论，完全看不懂那些讲解。并且那些讲解往往都没有说清楚每一步在干什么，所以自然也没能理解 RSA 算法。
+近日看了一个关于 RSA 算法的讲解视频，茅塞顿开，明白了 RSA 算法的基本原理。在这里就来记录一下自己对 RSA 算法的理解。
+注意
+这篇文章并不通俗易懂，文章中含有大量数论相关内容。建议在阅读前先了解 同余 和 欧拉定理。 公钥和私钥 公钥和私钥都由一对数字组成，这里可以假定公钥为 $(N,e)$，私钥为 $(N,d)$。其中两个 $N$ 是相等的。
+使用公钥加密的内容可以用私钥解密，使用私钥加密的内容可以用公钥解密。不过由于公钥是公开的，因此私钥加密一般用于数字签名。公钥和私钥这一对密钥实际上没有什么本质的区别。区别仅在于一个是公开的，一个是不公开的。
+加密和解密 加密 假设有明文 $x$，使用公钥对数据进行加密的过程，相当于将明文 $x$ 幂上 $e$ 并取除以 $N$ 的余数。这里加密所得的密文 $c$ 满足： $$ c=x^e \bmod N $$
+解密 解密的过程实际上与加密是一样的，只不过使用的是私钥。使用私钥对数据进行解密的过程，相当于将密文 $c$ 幂上 $d$ 并取除以 $N$ 的余数。这里解密出的明文 $x&amp;rsquo;$ 满足： $$ x&amp;rsquo;=c^d \bmod N=x^{ed} \bmod N=x $$
+这里可以发现密钥对是满足 $x^{ed} \bmod N =x$ 的，因此重点是需要找到一组数字 ${N, e, d}$ 满足上述情况。
+样例 例如有这么一对密钥，公钥为 $(33, 3)$，私钥为 $(33, 7)$。</description></item><item><title>配置 VLESS+TCP+XTLS + Nginx 流量伪装 + VMess 回落</title><link>https://blog.cascade.moe/posts/vless-proxy-setup/</link><pubDate>Fri, 21 Jan 2022 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/vless-proxy-setup/</guid><description>前言 放假前几天，原来的域名就要过期了。不过咱的代理服务器还是需要一个域名的，所以这几天买了cascade.moe这个域名，准备重建代理。
+我原本是打算继续用 wulabing 的 V2Ray 基于 Nginx 的 vmess+ws+tls 一键安装脚本，不过后来又想自己折腾。于是选择了自己在服务器上，从零开始配置 VLESS 代理服务器。配置代理这次使用了 Xray 而不是 V2Ray，想试试被称为黑科技的 XTLS。
+这次就只写配置阶段的内容吧。
+准备工作 需要有一台国外的 VPS，这里安装的是 Ubuntu 20.04.3 LTS。 配置代理需要准备一个域名，基本上只要有这个域名就行。 XTLS 协议需要 SSL 证书，因此这里还需要预先申请好这个域名的 SSL 证书。 配置 VLESS+TCP+XTLS 代理 安装 Xray 首先，需要在服务器上安装 Xray：
+$ bash -c &amp;#34;$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)&amp;#34; @ install 安装完成后，Xray 可以被作为服务启动，默认配置文件的路径为 /usr/local/etc/xray/config.json。
+修改配置文件 在这里需要修改这个配置文件 config.json，可以使用 vim、nano 等编辑器直接在服务器上编辑，也可以在本地编辑好后使用 SFTP 上传至服务器。配置文件中填入以下内容：
+{ &amp;#34;log&amp;#34;: { &amp;#34;loglevel&amp;#34;: &amp;#34;warning&amp;#34; }, // 所有入站代理，用于接收发来的数据 &amp;#34;inbounds&amp;#34;: [ { &amp;#34;tag&amp;#34;: &amp;#34;inbound-proxy-vless&amp;#34;, &amp;#34;listen&amp;#34;: &amp;#34;0.</description></item><item><title>七碳的人设</title><link>https://blog.cascade.moe/posts/character-set/</link><pubDate>Sun, 31 Oct 2021 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/character-set/</guid><description>基本信息 一位工程师猫娘。
+名字：七碳烷烃 Isoheptane 昵称：七碳 生日：12月25日 身高：164 cm 年龄：17 物种：猫娘 气味：薄荷味 外观 本体 毛发颜色：深青色 瞳色：深蓝色 发型：齐颌短发 胸部大小：B 服饰 日常 灰白色卫衣（上白下灰色块） 灰色短裙 *黑色丝袜 *灰白条纹胖次 日常(夏) 纯白色T恤衫 *白色丝袜 *蓝白条纹胖次 外出 深灰色外套（边缘有白色线条） 深灰色短裙（浅灰色边缘） 白色衬衫（有些时候也可以换成黑色的） 黑色丝袜 灰白条纹胖次 黑色猫耳帽 头饰/发饰 *自定义图案的发卡 *头戴式耳机 眼镜：*圆框眼镜 *可选项
+PS: 外出时尾巴会缩在裙子里，帽子会用来遮蔽猫耳
+装备 衣服：手机，零钱，证件 白色单肩挎包： 有些时候会把衣服里的东西放进包里 平板电脑，充电器，充电宝，移动硬盘，线材，纸巾 背包： 单肩挎包里的东西 笔记本电脑，键盘，鼠标，零食，饮料 特征与技能 技能 计算机，CGI
+性格特征 在陌生人面前会比较羞涩。 对认识的人不会很羞涩。 待人通常都很友善。 偏感性。 不想麻烦别人。 很害怕让别人感到不舒服或难受。 容易忘记要做的事情。 会因为小事生气。 有些时候会想要色色。 非常看重自由。 行为特征 说话时会不自觉地在末尾加上“喵~”。 会说脏话。 会一直黏着主人。 偏好 颜色：深灰色，白色，粉色，天蓝色，浅绿色 配色：浅色+白色 食物 喜欢的水果：西瓜，香蕉 喜欢的零食：薄荷糖，小鱼干，辣条 喜欢的饮料：牛奶，咖啡，水，葡萄糖溶液 爱好：陪着主人一起玩，折腾自己的设备</description></item><item><title>第一次尝试安装 Arch Linux</title><link>https://blog.cascade.moe/posts/install-arch/</link><pubDate>Wed, 13 Oct 2021 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/install-arch/</guid><description>为什么突然想装 Arch Linux 想起自己有过一段时间没有折腾过 Linux 相关的东西了，这段时间正好想起上次在虚拟机里安装 Arch Linux 失败的经历，恰巧我笔电刚拿回来。但我笔电上安装的是 Windows 11，并且是一个相对较老的 Beta 渠道体验版。所以今天就试着在实体机上安装了一下 Arch Linux。
+我目前正在使用的笔电是 ThinkPad E14 Gen2 (AMD)。
+安装 Arch Linux 注意
+这并不是一篇完整的教程，而是一篇记录。因此，如果要遵循这篇文章的操作，请根据自己的实际情况适当修改。 阅读本文章前建议先阅读官方教程。 从U盘启动 写入镜像的话，用 Rufus 向U盘中写入镜像就好了，我选择的 MBR 分区表和 ISO 镜像模式。
+比较坑的一点是，大部分的笔记本电脑，Secure Boot 都是默认启用的。然而如果要从U盘镜像启动，就必须得把 Secure Boot 关掉。其实我一开始也想到了这一点，但是我看到 BIOS 里那么多的启动项，怀疑其他启动项可能干扰了启动过程（前面的启动项启动失败后便会继续执行后面的启动项），就把硬盘擦除了。事实证明这和启动失败一点关系都没有，也不会删除那些启动项。
+在关掉了 Secure Boot 之后，就可以从U盘启动 Archiso 了。
+硬盘分区 联网貌似是自动的，使用 DHCP 获取到了IP地址。所以这部分就没怎么做过（虽然之后还是得做）。
+我几乎没用过 fdisk 这种分区工具，所以我也是现学现用用完就忘的。按照 Arch Linux 官方的教程，UEFI 模式下应该分出三个分区，分别是 ESP 分区、交换分区和根文件系统分区。ESP 分区我设置了 512MB 的大小，交换分区为 12GB，根文件系统占用其他所有空间。
+Device Start End Sectors Size Type /dev/nvme0n1p1 2048 1048576 1048576 512M EFI System /dev/nvme0n1p2 1050624 25165824 25165824 12G Linux swap /dev/nvme0n1p3 26216448 500118158 473901711 226G Linux filesystem 然后我们在分区上创建文件系统。把根文件系统的分区挂载到/mnt上，把 ESP 分区挂载到/mnt/efi上，并开启 swap 分区。</description></item><item><title>自我介绍</title><link>https://blog.cascade.moe/posts/introduction/</link><pubDate>Mon, 11 Oct 2021 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/posts/introduction/</guid><description>概要 这里是 七碳烷烃 Isoheptane。目前是一名就读于成都某高中的学生。
+在2019年之前，我应该算是比较”可爱“吧。会卖萌什么的，说话也会比较温和。当时和家长关系比较紧张，所以有些时候也会出现过激发言。不太好的一点是，当时我把能力看得特别重，经常会嫉妒其他人的条件和能力，然后就自闭了。自闭之后，就往一些群里倒垃圾。可能有些群友对此有些意见，所以当时也经常因为倒垃圾被骂。不过现在的话，大家也算是原谅我了吧，不再追究以前的那些事情了。
+从2019年末开始，我就逐渐变得麻木起来了。那个时候会想表现出认真的样子，让自己看起来很冷静和理性。当时和家长的关系更加紧张，但是因为理性，过激的发言其实少了很多，倒垃圾也少了很多。然而，我还是会嫉妒其他人的条件和能力，所以有些时候还是会自闭。
+我不想伤害任何人，因此我通常没有什么攻击性。并且我也很容易心软，很难对别人下狠手。一般情况下，我会遵循“人不犯我，我不犯人。”这一原则，只要其他人不先攻击我或者是让我感到反感，我就不会去攻击别人。但是对于自己酸的人来讲的话，有些时候会控制不住自己地想上去阴阳怪气那个人。不过现在的话，我也很少会阴阳怪气别人了，毕竟我并不想伤害任何人。
+到了2020年，通过非中考渠道进入了一所高中。一开始对这个学校还抱有期望，但是后来学校政策变得越来越难以令人理解和不合理，导致可以自己安排的时间大幅度缩减，因此开始变得暴躁了起来。但是随着时间推移，这样的暴躁也逐渐消退了。
+但没有时间对我来讲仍然是相当致命的。由于每天没有足够的时间做自己想做的事情（包括但不限于学习新知识、和朋友聊天、玩游戏等），导致每天都没有动力，并且会尝试将时间用于游戏上（但是这种状态下玩游戏并不能带来放松）。而最近一段时间，我甚至无法对游戏提起兴趣了。
+来到整个高中阶段的话，状态都不太好，不过我还是相信未来会好起来的。
+个人信息 一些可以公开的个人信息。
+生日：2005/04/22 故乡：四川 技能：硬表面建模，3D渲染，程序设计(C++,C#)，前端 感兴趣的方面：计算机科学，影视特效 非常讨厌的事情：被浪费时间，被强调生理性别
+喜欢吃的水果：西瓜，香蕉，柑橘 喜欢做的运动：床上运动 设备 Cho-H-WS0: 主力机 CPU: AMD Ryzen 7 3700X 主板: 微星 B450M MORTAR MAX RAM: 2x 金士顿 HyperX Fury 16GB CL16 2666MHz (超频到 3200MHz 使用) 显卡: 技嘉 AORUS nVIDIA GeForce RTX 2060 SUPER (GDDR6 8GB) （因为是白嫖的所以没的选QAQ） SSD: 西部数据 SN750 500G SSD: 西部数据 SN550 Pro 1T (是2021年4月购入的，已经确认是缓外砍半前的产品） 电源: 迎广 CS700 机箱: 机械大师 C26 白色 显示器: 盛色 (SANC) H30 Pro 操作系统：Windows 11 黑历史</description></item><item><title>链接</title><link>https://blog.cascade.moe/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://blog.cascade.moe/links/</guid><description>友情链接 云line Malachite XenonWZH 联系方式 Twitter: @ArcadiaIso GitHub: Isoheptane QQ: 1396767837 Bilibili: CascadeArc</description></item></channel></rss>
