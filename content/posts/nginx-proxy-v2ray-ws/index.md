@@ -2,7 +2,7 @@
 title = "配置 Nginx 流量伪装并反向代理 V2Ray+WebSocket"
 tags = ["代理", "Nginx", "V2Ray"]
 date = "2022-05-01"
-update = "2022-05-02"
+update = "2022-08-29"
 enableGitalk = true
 +++
 
@@ -14,25 +14,23 @@ enableGitalk = true
 ## 原理
 Nginx 是一个高性能的 HTTP 和 Web 反向代理服务器。在这里将会像 [配置 VLESS+TCP+XTLS + Nginx 流量伪装 + VMess 回落](/posts/vless-proxy-setup) 这篇文章一样配置一个伪装站点，配置伪装内容的站点不在赘述。  
 
-Nginx 可以反向代理 WebSocket 流量，因此可以配置 Nginx 将流量转发至后端的 V2Ray 服务器。  
+Nginx 可以反向代理 WebSocket 流量，因此可以配置 Nginx 将请求转发至后端的 V2Ray 服务器。  
 
 ### 分流
-Nginx 要怎么区别哪些是网站的流量，哪些是代理流量呢？这个时候便需要用 Nginx 的 ``location`` 了。``location`` 可以用来匹配访问**不同路径**的请求，进而对不同路径的请求进行不同的处理。  
+Nginx 要怎么区别哪些是网站的请求，哪些是代理请求呢？这个时候便需要用 Nginx 的 ``location`` 了。``location`` 可以用来匹配访问**不同路径**的请求，进而对不同路径的请求进行不同的处理。  
 
-因此可以为不同的路径配置不同的处理方式，来将特定的路径代理到 V2Ray 服务器上。
+因此可以为不同的路径配置不同的处理方式，来将特定路径的请求代理到 V2Ray 服务器上。
 
 ### 代理
-Nginx 反向代理可以使用 ``proxy_pass`` 这一属性，设置将请求代理到其它的服务器上。对于特定路径的格式如下：
+Nginx 反向代理可以使用 ``proxy_pass`` 这一属性，设置代理请求到其它的服务器上。对于特定路径 `/specific/path` 的格式如下：
 
 ```nginx
 location /specific/path/ {
 	proxy_pass http://targetserver.com:12345;
     # 使用 HTTPS 也是可以的
-    # proxy_pass https://targetserver.com:11000;
+    # proxy_pass https://targetserver.com:12346;
 }
 ```
-
-需要注意的是，Nginx 同样是将经过 TLS 解密后的流量转发至其它服务器。
 
 ## 配置 V2Ray
 这里以 Trojan 协议为例：
@@ -59,7 +57,7 @@ location /specific/path/ {
 }
 ```
 
-后端的 V2Ray 服务器设置为监听本地连接。因为是本地连接，所以不需要使用 TLS。WebSocket 需要匹配访问的路径，因此还需要设置好路径。  
+后端的 V2Ray 服务器设置为监听本地连接。因为是本地连接，所以没有必要使用 TLS。WebSocket 需要匹配访问的路径，因此还需要设置好路径。  
 
 你也可以设置多个入站代理来支持多种协议。
 
@@ -126,7 +124,7 @@ error_page 400 = https://name.yourdomain/;
 此时访问 ``https://name.yourdomain/yourpath/trojan`` 时将会跳转到 ``https://name.yourdomain`` 上。  
 
 ## 配置客户端
-客户端的配置比较简单，请注意选择 WebSocket 协议，选择 TLS 传输层安全，并且将你选择的路径填写到路径选项中。
+客户端的配置比较简单，请注意选择 WebSocket 协议并使用 TLS 传输层安全，并且将你选择的路径填写到路径选项中。
 
 - - -
 ### 参考资料
