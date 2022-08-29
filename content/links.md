@@ -7,6 +7,7 @@ enableGitalk = false
 - [云line](https://yunline.github.io/)
 - [Malachite](https://blog-malachite.vercel.app/)
 - [XenonWZH](https://xenonwzh.github.io)
+- [ShinoMoe](https://shinomoe.xyz/about/)
 
 ### 联系方式
 - Twitter: [@ArcadiaIso](https://twitter.com/ArcadiaIso)
