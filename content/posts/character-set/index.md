@@ -1,6 +1,6 @@
 +++
 title = "七碳的人设"
-tags = ["日常"]
+tags = ["杂谈"]
 date = "2021-10-31"
 update = "2022-06-25"
 enableGitalk = true
