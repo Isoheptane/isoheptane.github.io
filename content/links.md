@@ -8,7 +8,7 @@ enableGitalk = false
 - [Malachite](https://blog-malachite.vercel.app/)
 - [XenonWZH](https://xenonwzh.github.io)
 - [ShinoMoe](https://shinomoe.xyz/about/)
-- [Moexxx](https://moe23333.vercel.app/)
+- [Moe23333](https://moe23333.vercel.app/)
 
 ## 联系方式
 - 邮箱: <chomodiso@outlook.com>
