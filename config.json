@@ -46,15 +46,15 @@
                 "weight": 1
             },
             {
-                "identifier": "tags",
-                "name": "Tags",
-                "url": "/tags/",
-                "weight": 2
-            },
-            {
                 "identifier": "about",
                 "name": "About",
                 "url": "/about/",
+                "weight": 2
+            },
+            {
+                "identifier": "tags",
+                "name": "Tags",
+                "url": "/tags/",
                 "weight": 3
             },
             {
