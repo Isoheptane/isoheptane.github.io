@@ -264,7 +264,6 @@ server
 ## 客户端选择
 客户端可以使用 [Qv2ray](https://github.com/Qv2ray/Qv2ray) 或 [v2rayN](https://github.com/2dust/v2rayN)，而 Android 上可以使用 [v2rayNG](https://github.com/2dust/v2rayNG)。内核使用 V2Ray 或 Xray 均可。 
 
-- 若使用 Xray 内核，请不要使用 Qv2ray v2.7.0，因为该版本被开发者投毒，使之无法兼容 Xray 内核。  
 - 若使用 V2Ray 内核，请确保内核版本在 v4.27.2~v4.33.0 之间。因为更新版本中，由于许可证原因移除了对 XTLS 的支持。
 
 - - -
