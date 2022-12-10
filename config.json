@@ -27,6 +27,11 @@
                 "icon": "twitter",
                 "name": "Twitter",
                 "url": "https://twitter.com/ArcadiaIso"
+            },
+            {
+                "icon": "mail",
+                "name": "Email",
+                "url": "mailto:chomodiso@outlook.com"
             }
         ],
         "gitalk": {
@@ -46,15 +51,15 @@
                 "weight": 1
             },
             {
-                "identifier": "about",
-                "name": "About",
-                "url": "/about/",
-                "weight": 2
-            },
-            {
                 "identifier": "tags",
                 "name": "Tags",
                 "url": "/tags/",
+                "weight": 2
+            },
+            {
+                "identifier": "about",
+                "name": "About",
+                "url": "/about/",
                 "weight": 3
             },
             {
