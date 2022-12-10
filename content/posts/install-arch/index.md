@@ -35,7 +35,7 @@ Device            Start       End   Sectors  Size Type
 /dev/nvme0n1p3 26216448 500118158 473901711  226G Linux filesystem
 ```
 
-然后我们在分区上创建文件系统。把根文件系统的分区挂载到/mnt上，把 ESP 分区挂载到/mnt/efi上，并开启 swap 分区。
+然后我们在分区上创建文件系统。把根文件系统的分区挂载到 `/mnt` 上，把 ESP 分区挂载到 `/mnt/efi` 上，并开启 swap 分区。
 
 ```shell
 # 创建文件系统
@@ -67,7 +67,7 @@ $ arch-chroot /mnt
 $ grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 ```
 
-最后需要生成 grub 的配置文件，照着这上面的来就可以了~~别像我一样第一次把配置文件生成到了/`efi/grub/`里。~~ 然后用 `exit` 退出 chroot 环境后，就可以 `reboot` 重启了。重启后应该会看到 `grub` 选择启动项的页面。
+最后需要生成 grub 的配置文件，照着  这上面的来就可以了~~别像我一样第一次把配置文件生成到了 `/efi/grub/` 里。~~ 然后用 `exit` 退出 chroot 环境后，就可以 `reboot` 重启了。重启后应该会看到 `grub` 选择启动项的页面。
 
 ```shell
 $ grub-mkconfig -o /boot/grub/grub.cfg
@@ -77,7 +77,7 @@ $ grub-mkconfig -o /boot/grub/grub.cfg
 ### 创建一个普通用户
 首先要做的事情就是创建一个普通用户。
 
-日常使用时用 `root` 用户是非常危险的，如不小心打出了`rm -rf /*` 这样的操作。所以日常使用还是有必要创建一个新的用户的，我们用如下指令创建一个新用户 `iso` 并将这个用户加入到 `wheel` 这个用户组里。
+日常使用时用 `root` 用户是非常危险的，如不小心打出了 `rm -rf /*` 这样的操作。所以日常使用还是有必要创建一个新的用户的，我们用如下指令创建一个新用户 `iso` 并将这个用户加入到 `wheel` 这个用户组里。
 
 ```shell
 $ useradd -m -G wheel iso
