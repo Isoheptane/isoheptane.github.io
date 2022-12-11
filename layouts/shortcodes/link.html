@@ -1,0 +1,35 @@
+{{ if not (.Page.Scratch.Get "linkCount") }}
+<style>
+    .link-item {
+        margin: 3px 5px 3px 5px;
+    }
+    .link-url {
+        display: inline-flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        width: 120px;
+        height: 160px;
+        border-radius: 5px;
+        background-color: #424850;
+    }
+    .link-avatar {
+        width: 120px;
+        height: 120px;
+    }
+    .link-info {
+        flex-grow: 1;
+        flex-wrap: wrap;
+        color: #afbac4;
+        text-align: center;
+    }
+</style>
+{{ end }}
+<li class="link-item">
+    <a class="link-url" {{ with .Get "url" }} href="{{ . }}" {{ end }}>
+        <img class="link-avatar" {{ with .Get "avatar" }} src="{{ . }}" {{ end }}/>
+        <div class="link-info" >
+            {{ with .Get "name" }} {{ . }} {{ end }}
+        </div>
+    </a>
+</li>
+{{ .Page.Scratch.Add "linkCount" 1 }}
