@@ -10,6 +10,7 @@ enableGitalk = false
     {{< link name="XenonWZH" url="https://xenonwzh.github.io/" avatar="/images/links/xenonwzh.jpg" >}}
     {{< link name="ShinoMoe" url="https://shinomoe.xyz/" avatar="/images/links/shinomoe.png" >}}
     {{< link name="Moe23333" url="https://moe23333.vercel.app/" avatar="/images/links/moe23333.avif" >}}
+    {{< link name="我是小猫" url="https://github.com/yunline/" avatar="/images/links/littlecat.png" >}}
 {{< /link_list >}}
 
 ## 联系方式
