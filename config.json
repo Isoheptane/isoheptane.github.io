@@ -82,5 +82,6 @@
             "style": "monokai",
             "tabWidth": 4
         }
-    }
+    },
+    "buildFuture": true
 }

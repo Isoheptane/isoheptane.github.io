@@ -1,7 +1,7 @@
 +++
 title = "Title"
 tags = []
-date = {{ .Date }}
-update = {{ .Date }}
+date = "{{ time.Format "2006-01-02" .Date }}"
+update = "{{ time.Format "2006-01-02" .Date }}"
 enableGitalk = true
 +++
