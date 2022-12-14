@@ -5,11 +5,11 @@ enableGitalk = false
 
 ## 友链
 {{< link_list >}}
-    {{< link name="Malachite" url="https://blog-malachite.vercel.app/" avatar="/images/links/malachite.png" >}}
+    {{< link name="Malachite" url="https://blog-malachite.vercel.app/" avatar="/images/links/malachite.webp" >}}
     {{< link name="XenonWZH" url="https://xenonwzh.github.io/" avatar="/images/links/xenonwzh.jpg" >}}
-    {{< link name="ShinoMoe" url="https://shinomoe.xyz/" avatar="/images/links/shinomoe.png" >}}
-    {{< link name="Moe23333" url="https://moe23333.vercel.app/" avatar="/images/links/moe23333.avif" >}}
-    {{< link name="我是小猫" url="https://yunline.github.io/LittleCatMemeCollection/" avatar="/images/links/littlecat.png" >}}
+    {{< link name="ShinoMoe" url="https://shinomoe.xyz/" avatar="/images/links/shinomoe.webp" >}}
+    {{< link name="Moe23333" url="https://moe23333.vercel.app/" avatar="/images/links/moe23333.webp" >}}
+    {{< link name="我是小猫" url="https://yunline.github.io/LittleCatMemeCollection/" avatar="/images/links/littlecat.webp" >}}
 {{< /link_list >}}
 
 ## 联系方式

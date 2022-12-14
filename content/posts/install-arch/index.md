@@ -99,7 +99,7 @@ $ visudo
 
 ### 安装 KDE
 以前用 Manjaro 的时候就用的 KDE，所以在这里我也安装 KDE 好了。首先需要安装显卡驱动，因为我是 AMD 核显用户，所以我就直接安装 `xf86-video-amdgpu` 了。（其他的显卡可以参考这张图）
-{{< image driver-selection.png >}}
+{{< image driver-selection.webp >}}
 然后我们安装 Xorg 和桌面环境，并启动桌面管理器：
 
 ```shell
