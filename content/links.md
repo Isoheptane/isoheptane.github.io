@@ -3,7 +3,7 @@ title = "链接"
 enableGitalk = false
 +++
 
-## 友链
+## 友情链接
 {{< link_list >}}
     {{< link name="Malachite" url="https://blog-malachite.vercel.app/" avatar="/images/links/malachite.webp" >}}
     {{< link name="XenonWZH" url="https://xenonwzh.github.io/" avatar="/images/links/xenonwzh.jpg" >}}
