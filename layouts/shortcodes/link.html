@@ -1,26 +1,54 @@
 {{ if not (.Page.Scratch.Get "linkCount") }}
 <style>
     .link-item {
-        margin: 5px;
+        margin: 5px 25px 5px 25px;
     }
     .link-url {
         display: inline-flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         overflow: hidden;
-        width: 120px;
-        height: 160px;
-        border-radius: 5px;
+        width: 100%;
+        height: 50px;
+        border-radius: 25px;
         background-color: #424850;
     }
+    .link-url:link,
+    .link-url:visited,
+    .link-url:hover,
+    .link-url:active {
+        color: #afbac4
+    }
     .link-avatar {
-        width: 120px;
-        height: 120px;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
     }
     .link-info {
+        padding: 0 10px;
         flex-grow: 1;
-        flex-wrap: wrap;
-        color: #afbac4;
-        text-align: center;
+        text-align: left;
+        line-height: 50px;
+        font-size: 1.25em;
+    }
+    .link-desc {
+        opacity: 50%;
+        font-size: 1.0em;
+    }
+    .link-arrow {
+        display: inline-flex;
+        position: relative;
+        width: 50px;
+        right: -40px;
+        justify-content: center;
+        align-items: center;
+        line-height: 50px;
+        font-size: 1.5rem;
+        opacity: 0%;
+        transition: right 0.4s, opacity 0.4s;
+    }
+    .link-url:hover .link-arrow {
+        right: -5px;
+        opacity: 100%;
     }
 </style>
 {{ end }}
@@ -28,8 +56,12 @@
     <a class="link-url" {{ with .Get "url" }} href="{{ . }}" {{ end }}>
         <img class="link-avatar" {{ with .Get "avatar" }} src="{{ . }}" {{ end }}/>
         <div class="link-info" >
-            {{ with .Get "name" }} {{ . }} {{ end }}
+            <span>{{ with .Get "name" }} {{ . }} {{ end }}</span>
+            </span>
+            <span class="link-desc">{{ with .Get "desc" }} - {{ markdownify . }} {{ end }}</span>
+            </span>
         </div>
+        <div class="link-arrow">{{ partial "icon.html" (dict "ctx" $ "name" "chevron-right") }}</div>
     </a>
 </li>
 {{ .Page.Scratch.Add "linkCount" 1 }}
