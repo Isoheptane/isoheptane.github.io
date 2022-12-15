@@ -15,26 +15,28 @@
         width: 40px;
         height: 40px;
         border-radius: 20px;
+        border: none;
     }
     .link-info {
-        padding: 0 10px;
+        padding: 0 8px;
         flex-grow: 1;
         text-align: left;
         line-height: 40px;
     }
     .link-desc {
         opacity: 50%;
-        font-size: 1.0em;
     }
 </style>
 {{ end }}
 <li class="link-item">
     <a class="link-url" {{ with .Get "url" }} href="{{ . }}" {{ end }}>
-        <img class="link-avatar" {{ with .Get "avatar" }} src="{{ . }}" {{ end }}/>
+        <img class="link-avatar" {{ with .Get "avatar" }} src="{{ . }}" {{ end }} />
         <div class="link-info" >
-            <span>{{ with .Get "name" }} {{ . }} {{ end }}</span>
+            <span class="link-name">
+                {{ with .Get "name" }} {{ . }} {{ end }}
             </span>
-            <span class="link-desc">{{ with .Get "desc" }} - {{ markdownify . }} {{ end }}</span>
+            <span class="link-desc">
+                {{ with .Get "desc" }} - {{ markdownify . }} {{ end }}
             </span>
         </div>
     </a>
