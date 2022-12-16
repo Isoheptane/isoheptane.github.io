@@ -35,8 +35,8 @@ $link-hover-color: #ffffff;
 
     &.is--active {
       color: $fore-color;
-      &::before {
-        content: none;
+      &::hover {
+        color: $fore-color;
       }
     }
   }
@@ -98,6 +98,12 @@ $link-hover-color: #ffffff;
     box-shadow: #0002 0 10px 10px;
     border: none;
     border-radius: 10px;
+
+    .gt-active {
+      &::before {
+        content: none;
+      }
+    }
   }
 
   .gt-header-textarea {
