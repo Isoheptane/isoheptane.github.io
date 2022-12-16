@@ -99,8 +99,8 @@ $link-hover-color: #ffffff;
     border: none;
     border-radius: 10px;
 
-    .gt-active {
-      &::before {
+    .gt-action {
+      &.is--active::before {
         content: none;
       }
     }
