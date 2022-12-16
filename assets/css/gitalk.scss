@@ -1,7 +1,7 @@
-$background-color: {{ .Site.Params.gitlak.style.darkColor | default "#424850" }};
-$fore-color: {{ .Site.Params.gitlak.style.textColor | default "#afbac4" }};
-$link-color: {{ .Site.Params.gitlak.style.linkColor | default "#57cc8a" }};
-$link-hover-color: {{ .Site.Params.gitlak.style.linkHoverColor | default "#ffffff" }};
+$background-color: #424850;
+$fore-color: #afbac4;
+$link-color: #57cc8a;
+$link-hover-color: #ffffff;
 
 .markdown-body {
   color: $fore-color;
