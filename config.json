@@ -39,7 +39,10 @@
             "clientSecret": "8990b3be4de1a800b06f2fe055935fa16c0eb86c",
             "repo": "isoheptane.github.io",
             "owner": "Isoheptane",
-            "admin": "Isoheptane"
+            "admin": "Isoheptane",
+            "style": {
+                
+            }
         }
     },
     "menu": {

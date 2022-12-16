@@ -14,11 +14,10 @@
                 list.appendChild(list.children[Math.random() * i | 0])
             }
         });
-        lists
     });
 </script>
-{{- end -}}
+{{ end }}
 <ul class="link-list">
-    {{- .Inner -}}
+    {{ .Inner }}
 </ul>
 {{ .Page.Scratch.Add "linkListCount" 1 }}

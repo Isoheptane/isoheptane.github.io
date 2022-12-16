@@ -1,0 +1,160 @@
+$background-color: {{ .Site.Params.gitlak.style.darkColor | default "#424850" }};
+$fore-color: {{ .Site.Params.gitlak.style.textColor | default "#afbac4" }};
+$link-color: {{ .Site.Params.gitlak.style.linkColor | default "#57cc8a" }};
+$link-hover-color: {{ .Site.Params.gitlak.style.linkHoverColor | default "#ffffff" }};
+
+.markdown-body {
+  color: $fore-color;
+
+  hr: {
+    border-bottom: 1px solid $fore-color;
+    background-color: $fore-color;
+  }
+
+  blockquote {
+    padding: 0.25em 1em;
+    color: $fore-color;
+    border-left: 0.25em solid $fore-color;
+    border-radius: 0.25em;
+  }
+
+  pre {
+    background-color: rgba(27, 31, 35, 0.2);
+  }
+}
+
+.gt-container {
+  a {
+    color: $link-color;
+    &:hover {
+      color: $link-hover-color;
+      border-color: $link-hover-color;
+    }
+
+    &.is--active {
+      color: $fore-color;
+      &::before {
+        content: none;
+      }
+    }
+  }
+
+  .gt-svg {
+    fill: $fore-color;
+    svg {
+      fill: $fore-color;
+    }
+  }
+
+  .gt-avatar {
+    margin-top: 0.5em;
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .gt-btn {
+    border: 0px solid;
+    border-radius: 15px;
+    background-color: $background-color;
+    color: $fore-color;
+  }
+
+  .gt-btn-preview {
+    background-color: $background-color;
+    color: $fore-color;
+    &:hover {
+      background-color: $background-color;
+      color: $fore-color;
+    }
+  }
+
+  .gt-container .gt-btn-public:hover {
+    background-color: $background-color;
+    color: $fore-color;
+  }
+
+  .gt-link {
+    border-bottom: none;
+  }
+
+  .gt-meta {
+    border-bottom: 1px solid $background-color;
+  }
+
+  .gt-version {
+    color: $fore-color;
+    opacity: 50%;
+  }
+
+  .gt-copyright {
+    border-top: 1px solid rgba($fore-color, 0.5);
+  }
+
+  .gt-popup {
+    background: $background-color;
+    box-shadow: #0002 0 10px 10px;
+    border: none;
+    border-radius: 10px;
+  }
+
+  .gt-header-textarea {
+    min-height: 3.125em;
+    border-radius: 10px;
+    border: 0px solid;
+    background-color: $background-color;
+    color: $fore-color;
+    caret-color: white;
+    &:hover {
+      background-color: $background-color;
+    }
+  }
+
+  .gt-header-preview {
+    border-radius: 10px;
+    background-color: $background-color;
+  }
+
+  .gt-header-controls-tip {
+    color: $link-color;
+  }
+
+  .gt-comments {
+    padding-top: 0.5em;
+  }
+
+  .gt-comment-content {
+    margin-left: 1em;
+    padding: 0.625em 1em;
+    background-color: $background-color;
+    border-radius: 10px;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
+  .gt-comment-username {
+    color: $link-color;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .gt-comment-text {
+    color: $fore-color;
+    opacity: 50%;
+  }
+
+  .gt-comment-date {
+    color: $fore-color;
+    opacity: 50%;
+  }
+
+  .gt-comment-body {
+    color: $fore-color !important;
+  }
+
+  .gt-comment-admin .gt-comment-content {
+    background-color: $background-color;
+  }
+}
