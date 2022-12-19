@@ -11,3 +11,18 @@ enableGitalk = false
     {{< link name="Moe23333" url="https://moe23333.vercel.app/" avatar="https://moe23333.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ficon.1eed70b8.png&w=256&q=75" desc="*We shall meet in the place where there is no darkness.*" >}}  
     {{< link name="我是小猫" url="https://yunline.github.io/LittleCatMemeCollection/" avatar="/images/links/littlecat.webp" >}}  
 {{< /link_list >}}
+
+### 本站的信息
+- 名称：Isoheptane
+- 描述：工程师猫娘
+- 链接地址：<https://blog.cascade.moe/>
+- 图标：[头像](/images/avatar.webp)
+
+### 友链请求
+您可以在 GitHub 上提交一个新的 [Issue](https://github.com/Isoheptane/isoheptane.github.io/issues) 来申请添加友链。申请添加友链需要提供如下的信息：  
+- 网站名称
+- 网站地址
+- 网站图标或头像（尺寸大于 256x256）
+- 描述（可选）
+
+您也可以自己动手修改本站的源代码，并提交一个 [Pull Request](https://github.com/Isoheptane/isoheptane.github.io)。网站图标或头像文件的应为 WebP 格式，尺寸为 256x256。 
