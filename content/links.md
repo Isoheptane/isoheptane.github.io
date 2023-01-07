@@ -12,6 +12,7 @@ enableGitalk = false
     {{< link name="我是小猫" url="https://yunline.github.io/LittleCatMemeCollection/" avatar="/images/links/littlecat.webp" >}}  
     {{< link name="Taranakineko" url="https://nekoq.eu.org" avatar="/images/links/taranakineko.webp" desc="青く滲む 青く滲む 綺麗に" >}}  
     {{< link name="Vincent文朔" url="https://blog.vincent1230.top/" avatar="/images/links/vincent.webp" desc="太阳出来了 雾就会散的" >}}  
+    {{< link name="伊緻幻の主页" url="https://www.chwin.asia" avatar="/images/links/iora_maboroshi.webp" desc="Take my hands." >}}  
 {{< /link_list >}}
 
 ### 本站的信息
