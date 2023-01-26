@@ -51,6 +51,12 @@ pre {
   }
 }
 
+table {
+  th, td {
+    padding: 0 0.5em;
+  }
+}
+
 ::selection {
   background: rgba($light-color, .25);
 }
