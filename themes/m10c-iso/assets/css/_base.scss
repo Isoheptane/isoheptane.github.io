@@ -63,3 +63,14 @@ table {
 ::-moz-selection {
   background: rgba($light-color, .25);
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-thumb {
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 6px;
+  background-color: #fff2;
+}
