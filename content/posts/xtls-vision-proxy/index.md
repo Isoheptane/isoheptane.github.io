@@ -2,7 +2,7 @@
 title = "XTLS Vision 简介与配置"
 tags = ["代理", "V2Ray"]
 date = "2023-01-26"
-update = "2023-01-26"
+update = "2023-03-17"
 enableGitalk = true
 +++
 
@@ -41,7 +41,7 @@ TLS (Transport Layer Security) 即传输层安全协议是一种被广泛应用�
 {{< notice warning >}}
 XTLS Vision 的特性仅在代理 TLS 1.3 连接时才会启用。
 
-XTLS Vision 还不支持检测代理客户端到代理服务器的 TLS 版本，当代理客户端与服务器协商的 TLS 版本为 TLS 1.2，而被代理的 TLS 连接版本为 TLS 1.3 时，可能出现故障。尽管 TLS 几乎不可能协商到低版本，也很难被降级攻击。有此顾虑的读者可以通过设置 TLS 连接的 ``minVersion`` 为 ``1.3`` 来强制使用 TLS 1.3。 
+XTLS Vision 现在已支持检测客户端到代理服务器的 TLS 版本，当代理客户端与服务器协商的 TLS 版本较低时，服务器将会拒绝代理流量。在一些情况下存在协商到低版本 TLS 的可能性，在这样的情况下建议将 ``minVersion`` 设置为 1.3，强制客户端使用 TLS 1.3。
 {{< /notice >}}
 
 ## 配置 XTLS Vision
