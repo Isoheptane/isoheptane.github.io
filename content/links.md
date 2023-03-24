@@ -22,10 +22,10 @@ enableGitalk = false
 - 图标：[头像](/images/avatar.webp)
 
 ### 友链请求
-您可以在 GitHub 上提交一个新的 [Issue](https://github.com/Isoheptane/isoheptane.github.io/issues) 来申请添加友链。申请添加友链需要提供如下的信息：  
+七碳推荐在 GitHub 上提交一个新的 [Issue](https://github.com/Isoheptane/isoheptane.github.io/issues) 来申请添加友链。您也可以直接联系七碳来申请添加友链。申请添加友链需要提供如下的信息：  
 - 网站名称
 - 网站地址
-- 网站图标或头像（尺寸大于 256x256）
+- 网站图标或头像（尺寸至少为 256x256，文件或链接皆可）
 - 描述（可选）
 
-您也可以自己动手修改本站的源代码，并提交一个 [Pull Request](https://github.com/Isoheptane/isoheptane.github.io)。网站图标或头像文件的应为 WebP 格式，尺寸为 256x256。 
+如果您想自己动手，您也可以修改本站的源代码，并提交一个 [Pull Request](https://github.com/Isoheptane/isoheptane.github.io)。网站图标或头像文件的应为 WebP 格式，尺寸为 256x256。 
