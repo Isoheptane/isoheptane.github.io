@@ -2,12 +2,16 @@
 title = "配置 VLESS+TCP+XTLS + Nginx 流量伪装 + VMess 回落"
 tags = ["代理", "V2Ray"]
 date = "2022-01-21"
-update = "2022-01-21"
+update = "2023-03-24"
 enableGitalk = true
 +++
 
+{{< notice warning >}}
+XTLS Direct 流控被指出存在[被主动探测和攻击的风险](https://github.com/e1732a364fed/xtls-/blob/main/README.md#%E5%85%B3%E4%BA%8Exray%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98)，因此不再建议使用 `xtls-rprx-direct` 流控。如果要使用 XTLS，请选择 **XTLS Vision** 流控。 
+{{< /notice >}}
+
 ## 前言
-放假前几天，原来的域名就要过期了。不过咱的代理服务器还是需要一个域名的，所以这几天买了`cascade.moe`这个域名，准备重建代理。  
+放假前几天，原来的域名就要过期了。不过咱的代理服务器还是需要一个域名的，所以这几天买了 `cascade.moe` 这个域名，准备重建代理。  
 
 我原本是打算继续用 `wulabing` 的 [V2Ray 基于 Nginx 的 vmess+ws+tls 一键安装脚本](https://github.com/wulabing/V2Ray_ws-tls_bash_onekey)，不过后来又想自己折腾。于是选择了自己在服务器上，从零开始配置 VLESS 代理服务器。配置代理这次使用了 Xray 而不是 V2Ray，想试试被称为黑科技的 XTLS。
 
