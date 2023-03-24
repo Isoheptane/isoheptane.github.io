@@ -6,10 +6,6 @@ update = "2023-03-24"
 enableGitalk = true
 +++
 
-{{< notice warning >}}
-XTLS Direct 流控被指出存在[被主动探测和攻击的风险](https://github.com/e1732a364fed/xtls-/blob/main/README.md#%E5%85%B3%E4%BA%8Exray%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98)，因此不再建议使用 `xtls-rprx-direct` 流控。如果要使用 XTLS，请选择 **XTLS Vision** 流控。 
-{{< /notice >}}
-
 ## 前言
 放假前几天，原来的域名就要过期了。不过咱的代理服务器还是需要一个域名的，所以这几天买了 `cascade.moe` 这个域名，准备重建代理。  
 
@@ -87,6 +83,10 @@ $ bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-relea
     ]
 }
 ```
+
+{{< notice warning >}}
+XTLS Direct 流控被指出存在[被主动探测和攻击的风险](https://github.com/e1732a364fed/xtls-/blob/main/README.md#%E5%85%B3%E4%BA%8Exray%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98)，因此不再建议使用 `xtls-rprx-direct` 流控。如果要使用 XTLS，请选择 **XTLS Vision** 流控。 
+{{< /notice >}}
 
 {{< notice note >}}
 JSON 不支持注释，因此需要将配置文件中所有双斜杠后的内容删去。
