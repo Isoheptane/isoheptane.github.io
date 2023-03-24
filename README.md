@@ -1,6 +1,6 @@
 # isoheptane.github.io
 This is Isoheptane's blog site.  
-This site is deployed on [GitHub Pages](https://blog.cascade.moe) using [Hugo](https://gohugo.io) and deployed by actions.
+This site is deployed on [GitHub Pages](https://blog.cascade.moe) using [Hugo](https://gohugo.io).
 
 ## License
 ![](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)  
