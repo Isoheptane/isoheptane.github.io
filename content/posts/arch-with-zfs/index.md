@@ -7,7 +7,7 @@ enableGitalk = true
 +++
 
 ### 前言
-某日在群里水群时和群友讨论在 Linux 上使用何种文件系统较s理想。**BtrFS** 作为 Linux 的新一代文件系统，在各方面都相当出色。但 BtrFS 在出问题之后的维护似乎会很麻烦，容易不小心做出错误的操作。
+某日在群里水群时和群友讨论在 Linux 上使用何种文件系统较理想。**BtrFS** 作为 Linux 的新一代文件系统，在各方面都相当出色。但 BtrFS 在出问题之后的维护似乎会很麻烦，容易不小心做出错误的操作。
 
 有群友提出使用 **ZFS** 作为 Linux 的文件系统。ZFS 是 Sun Microsystems 为 Solaris 开发的文件系统。ZFS 也具有 BtrFS 所具有的许多功能，但 ZFS 在许多概念上还要再先进一些。尽管 ZFS 是为 Solaris 开发的文件系统，[OpenZFS](https://github.com/openzfs/zfs) 使得 Linux 和 FreeBSD 上。
 
