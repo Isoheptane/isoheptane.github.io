@@ -3,7 +3,7 @@
     "languageCode": "zh-cn",
     "defaultContentLanguage": "zh-cn",
     "title": "Isoheptane",
-    "theme": ["hugo-notice", "m10c-iso"],
+    "theme": ["m10c-iso"],
     "module": {
         "imports": [
             {

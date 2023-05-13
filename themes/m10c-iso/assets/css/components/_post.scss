@@ -22,13 +22,11 @@
   .highlight > pre,
   .highlight > div {
     border-left: 0.4em solid rgba($primary-color, .8);
-    border-radius: 5px;
     padding: 1em 1em;
   }
 
   blockquote {
     border-left: 0.4em solid rgba($light-color, .8);
-    border-radius: 5px;
     margin: 1em 0em;
     padding: .5em 1em;
     background: $gray-color;
