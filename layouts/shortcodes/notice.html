@@ -1,0 +1,84 @@
+{{ $type := .Get 0 }}
+{{ $inner := (markdownify .Inner) }}
+
+{{ if not ($.Page.Scratch.Get "noticecount") }}
+<style>
+    :root {
+        --warning-color: #de3636;
+    }
+
+    .notice {
+        margin-block: 1em 1em;
+        border-left-width: 5px;
+        border-left-style: solid;
+    }
+
+    .notice-title {
+        font-weight: 700;
+        margin-bottom: 0.5em;
+    }
+
+    .notice {
+        padding: 1em 1.5em;
+    }
+
+    .notice-body p:first-child {
+        margin-block-start: 0;
+    }
+
+    .notice-body p:last-child {
+        margin-block-end: 0;
+    }
+
+    .notice-body code {
+        color: var(--text-color)
+    }
+
+    .notice-icon {
+        width: 1em;
+        height: 1em;
+        margin-right: 0.4em;
+    }
+
+    /* Tip */
+    .notice.tip {
+        border-left-color: #79cf79;
+        background-color: #79cf791f;
+    }
+
+    .notice-title.tip {
+        color: #79cf79;
+    }
+
+    /* Note */
+    .notice.note {
+        border-left-color: #58acf0;
+        background-color: #58acf01f;
+    }
+
+    .notice-title.note {
+        color: #58acf0;
+    }
+
+    /* Warning */
+    .notice.warning {
+        border-left-color: #de3636;
+        background-color: #de36361f;
+    }
+    
+    .notice-title.warning {
+        color: #de3636;
+    }
+
+    /* Add your own notice rule below */
+</style>
+{{ end }}
+<div class="notice {{ $type }}">
+    <div class="notice-title {{ $type }}">
+        {{ i18n $type }}
+    </div>
+    <div class="notice-body {{ $type }}">
+        {{ $inner }}
+    </div>
+</div>
+{{ $.Page.Scratch.Add "noticecount" 1 }}

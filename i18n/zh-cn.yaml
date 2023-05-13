@@ -1,0 +1,6 @@
+- id: tip
+  translation: 提示
+- id: note
+  translation: 注意
+- id: warning
+  translation: 警告
