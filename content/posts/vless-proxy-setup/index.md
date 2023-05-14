@@ -1,6 +1,6 @@
 +++
 title = "配置 VLESS+TCP+XTLS + Nginx 流量伪装 + VMess 回落"
-tags = ["代理", "V2Ray"]
+tags = ["代理", "v2ray", "XTLS"]
 date = "2022-01-21"
 update = "2023-03-24"
 enableGitalk = true
