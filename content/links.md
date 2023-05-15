@@ -13,6 +13,7 @@ enableGitalk = false
     {{< link name="Taranakineko" url="https://nekoq.eu.org" avatar="/images/links/taranakineko.webp" desc="青く滲む 青く滲む 綺麗に" >}}  
     {{< link name="Vincent文朔" url="https://blog.vincent1230.top/" avatar="/images/links/vincent.webp" desc="太阳出来了 雾就会散的" >}}  
     {{< link name="伊緻幻の主页" url="https://www.chwin.asia" avatar="/images/links/iori_maboroshi.webp" desc="Take my hands." >}}  
+    {{< link name="SakuraKooi" url="https://blog.sakurakooi.cyou/" avatar="/images/links/sakurakooi.webp" desc="梦是幽蓝色彩 灵魂如雪纯白" >}}  
 {{< /link_list >}}
 
 ### 本站的信息
