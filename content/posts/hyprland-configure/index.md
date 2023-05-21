@@ -12,7 +12,7 @@ enableGitalk = true
 其实一直打算使用平铺式窗口管理器，但是 KDE 已经配置好了，所以也就没有太想继续折腾的动力，直到昨天 KDE 出问题了。此时我发现了 [Hyprland](https://hyprland.org/) 这样的一个看起来非常美观的 Wayland 混成器，于是我决定使用 Hyprland 来替换 KDE。  
 
 
-你可以在 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/) 中找到我正在使用的完整的配置文件。在这里我将会使用如下的搭配，并给出各自的大体配置。
+你可以在 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/) 中找到我正在使用的完整的配置文件。在这里我将会使用如下的搭配，并给出大致的配置。
 
 | 类型 | 软件 |
 | --- | ---- |
@@ -152,7 +152,7 @@ bind = $mainMod, J, togglesplit, # dwindle  # 切换窗口分割方向
 ...
 ```
 
-`$mainMod` 键在此设置为了 `SUPER`，通常情况下 `SUPER` 即为 Windows 键。
+`$mainMod` 键在此设置为了 `SUPER`，即 Super 键。通常取消 Windows 键即为 Super 键。
 
 还有一部分关于工作区和窗口移动的按键绑定配置，在此不再展示。
 
@@ -199,7 +199,7 @@ Waybar 的样式配置是通过一个 CSS 文件来实现的。关于 Waybar 样
 exec-once = waybar
 ```
 
-重启 Hyprland 即可看到 Waybar。
+重启 Hyprland 即可看到 Waybar。如果等不及重启，也可以直接执行 `waybar` 来启动 Waybar。
 
 ## mako
 [mako](https://github.com/emersion/mako) 是一个为 Wayland 打造的轻量级的通知 Daemon。尽管 mako 非常轻量级，但却依然有许多可以配置的地方。
@@ -223,26 +223,26 @@ default-timeout=5000        ; 超时时间
 ignore-timeout=0            ; 忽略超时时间
 font="Noto Sans CJK SC" 14  ; 字体
 margin=12                   ; 通知的外边距
-padding=10,20               ; 通知的内边距
+padding=12,20               ; 通知的内边距
 
-[urgency=low]               ; 低优先级
+[urgency=low]               ; 低紧急度
 border-color=#cccccc
 
-[urgency=normal]            ; 正常优先级
+[urgency=normal]            ; 正常紧急度
 border-color=#99c0d0
 
-[urgency=critical]          ; 高优先级
+[urgency=critical]          ; 高紧急度
 border-color=#bf616a
 default-timeout=0
 ```
 
-{{< notice warning >}}
-以上的配置仅仅作为展示使用，而**不是**一个有效的配置文件，因为其包含了注释。
+{{< notice note >}}
+以上的配置仅仅作为展示使用，**不是**一个有效的配置文件，因为其包含了注释。
 
 你可以根据以上的内容对默认的配置文件进行修改，或从 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/tree/main/mako) 获取我的配置文件。
 {{< /notice >}}
 
-在修改好配置文件之后，用 `makoctl` 来重载配置文件：
+在修改配置文件之后，用 `makoctl` 来重载配置文件：
 ```shell
 $ makoctl reload
 ```
@@ -252,6 +252,8 @@ $ makoctl reload
 ```shell
 $ notify-send 'Hello world!' 'This is an example notification.' -u normal
 ```
+
+{{< image src=mako.webp desc="mako 配置完成后的效果" >}}
 
 ## tofi
 [tofi](https://github.com/philj56/tofi) 是一个简单但快速的应用启动器。和 mako 一样，尽管十分简单，但同样也有许多可以配置的地方。
@@ -284,15 +286,14 @@ input-background-corner-radius = 0
 
 # 默认结果样式
 default-result-background = #00000000
-default-result-background-padding = 4, 8
+default-result-background-padding = 4, 10
 default-result-background-corner-radius = 0
 
 # 已选择结果样式
 selection-color = #000000
 selection-background = #CCEEFF
-selection-background-padding = 4, 8
+selection-background-padding = 4, 10
 selection-background-corner-radius = 8
-# 匹配部分文字颜色
 selection-match-color = #00000000
 
 text-cursor-style = bar         # 光标样式
@@ -313,18 +314,15 @@ scale = true                    # 是否随显示器比例设置而缩放
 anchor = center                 # 启动器位置，center 为中心
 ```
 
-{{< notice warning >}}
-以上的配置仅仅作为展示使用，而**不是**一个有效的配置文件，因为并非一个完整的配置文件，且包含了注释。
+{{< notice note >}}
+以上的配置仅仅作为展示使用，**不是**一个有效的配置文件，因为其并非一个完整的配置文件。
 
 你可以根据以上的内容对默认的配置文件进行修改，或从 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/tree/main/tofi) 获取我的配置文件。
 {{< /notice >}}
 
 在保存好配置之后，可以用 `tofi-run` 或 `tofi-drun` 来启动 tofi。
 
-{{< image tofi.webp "tofi 配置完成后的效果">}}
-
 ### 配置 tofi 按键绑定
-
 `tofi-run` 和 `tofi-drun` 都可以启动 tofi。
 
 tofi 在选择要启动的应用后**并不会启动应用**，而是输出用于启动这个应用命令，因此按键绑定配置会有所不同。向 Hyprland 的配置文件中加入下面的内容：
@@ -332,16 +330,20 @@ tofi 在选择要启动的应用后**并不会启动应用**，而是输出用�
 bind = $mainMod, R, exec, tofi-drun | xargs hyprctl dispatch exec --
 ```
 
-这将会用 `tofi-drun` 的输出作为 `xargs hyperctl dispatch exec --` 中的 `--` 来执行，从而启动应用。
+在这里设置用 Super + R 来打开 toif。在选择了要启动的应用之后，将执行 `xargs hyperctl dispatch exec --`，这将会从 `stdin` 中读取要执行的启动命令。我们通过管道将前者的输出作为了后者的输入，从而实现了启动应用。
 
-## Qt / GTK 应用样式配置
+{{< image src=tofi.webp desc="tofi 配置完成后的效果">}}
+
+## Qt / GTK 应用主题配置
+之前用的是 KDE，所以可以很方便地设置 Qt / GTK 应用的主题，在切换到 Hyprland 之后相关的主题设置依然保留。但在 KDE 环境之外想要修改 Qt / GTK 应用的主题还是会有些麻烦。
+
 在这里我将会使用 `Adwaita` 来作为 Qt / GTK 应用的主题。
 ```shell
 $ yay -S adwaita-qt5 adwaita-qt6
 ```
 
-### Qt 5
-这里我们将会使用 `qt5ct` 来进行样式的配置，首先安装 `qt5ct`：
+### Qt
+这里我们将会使用 `qt5ct` 来进行主题的配置，首先安装 `qt5ct`：
 ```shell
 $ yay -S qt5ct
 ```
@@ -351,16 +353,18 @@ $ yay -S qt5ct
 env = QT_QPA_PLATFORMTHEME,qt5ct
 ```
 
-之后即可通过 `qt5ct` 来配置 Qt5 的样式。
+之后即可通过 `qt5ct` 来配置 Qt5 的主题。
 
 ### GTK
-[Arch Wiki](https://wiki.archlinux.org/title/GTK#Basic_theme_configuration) 上首先给出的方案是修改配置文件，然后才是使用 `gsettings` 指令。但实际测试发现还是用指令有用：
+[Arch Wiki](https://wiki.archlinux.org/title/GTK#Basic_theme_configuration) 上首先给出的方案是修改配置文件，然后才是使用 `gsettings` 指令。但实际测试发现还是 `gsettings` 有用，这里贴出 Arch Wiki 上给出的命令：
 ```shell
 $ gsettings set org.gnome.desktop.interface gtk-theme Adwaita
 $ gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 ```
 
 ## 结语
-于是经过这么多的操作之后，Hyprland 的环境差不多就配置好了，之后*大概*是可以比较舒适地使用了吧。
+于是经过这么多的操作之后，Hyprland 的环境差不多就配置好了，之后*大概*是可以比较舒适地使用了吧。~~谁叫你天天折腾桌面环境啊！~~
+
+虽然配置还是花了不少时间，不过得到的效果也蛮不错的。不出意外的话，之后大概会一直用这个环境吧。
 
 虽然还有例如 Alacritty 和截图工具的配置还没有提到，不过那就不是这篇文章的范畴了。
