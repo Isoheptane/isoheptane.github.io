@@ -1,6 +1,7 @@
 <p style="text-align: center;">
-    <a href="{{- .Get 0 -}}">
-        <img src="{{- .Get 0 -}}" alt="{{- .Get 1 -}}"/>
+    <a href="{{- .Get "src" -}}">
+        <img src="{{- .Get "src" -}}" alt="{{- .Get "desc" -}}" {{ with .Get "width" }} width="{{ . }}" {{ end }} {{ with .Get "height" }} height="{{ . }}" {{ end }} />
     </a>
-    {{- .Get 1 -}}
+    <br/>
+    {{- .Get "desc" -}}
 </p>
