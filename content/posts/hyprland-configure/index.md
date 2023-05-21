@@ -6,7 +6,7 @@ update = "2023-05-21"
 enableGitalk = true
 +++
 
-{{< image hyprland_screenshot.webp >}}
+{{< image src=hyprland_screenshot.webp >}}
 
 ### 前言
 其实一直打算使用平铺式窗口管理器，但是 KDE 已经配置好了，所以也就没有太想继续折腾的动力，直到昨天 KDE 出问题了。此时我发现了 [Hyprland](https://hyprland.org/) 这样的一个看起来非常美观的 Wayland 混成器，于是我决定使用 Hyprland 来替换 KDE。  
