@@ -2,7 +2,7 @@
 title = "Hyprland 环境配置与美化"
 tags = ["Hyprland", "Linux", "Arch Linux", "桌面环境"]
 date = "2023-05-21"
-update = "2023-05-21"
+update = "2023-06-04"
 enableGitalk = true
 +++
 
