@@ -12,7 +12,7 @@ enableGitalk = true
 其实一直打算使用平铺式窗口管理器，但是 KDE 已经配置好了，所以也就没有太想继续折腾的动力，直到昨天 KDE 出问题了。此时我发现了 [Hyprland](https://hyprland.org/) 这样的一个看起来非常美观的 Wayland 混成器，于是我决定使用 Hyprland 来替换 KDE。  
 
 
-你可以在 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/) 中找到我正在使用的完整的配置文件。在这里我将会使用如下的搭配，并给出大致的配置。
+你可以在 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/) 中找到我正在使用的完整的配置和在[本文章中出现的配置](https://github.com/Isoheptane/dotfiles/tree/blog-example)。在这里我将会使用如下的搭配，并给出大致的配置。
 
 | 类型 | 软件 |
 | --- | ---- |
@@ -239,7 +239,7 @@ default-timeout=0
 {{< notice note >}}
 以上的配置仅仅作为展示使用，**不是**一个有效的配置文件，因为其包含了注释。
 
-你可以根据以上的内容对默认的配置文件进行修改，或从 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/tree/main/mako) 获取我的配置文件。
+你可以根据以上的内容对默认的配置文件进行修改，或从 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/tree/blog-example/mako) 获取我的配置文件。
 {{< /notice >}}
 
 在修改配置文件之后，用 `makoctl` 来重载配置文件：
@@ -317,7 +317,7 @@ anchor = center                 # 启动器位置，center 为中心
 {{< notice note >}}
 以上的配置仅仅作为展示使用，**不是**一个有效的配置文件，因为其并非一个完整的配置文件。
 
-你可以根据以上的内容对默认的配置文件进行修改，或从 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/tree/main/tofi) 获取我的配置文件。
+你可以根据以上的内容对默认的配置文件进行修改，或从 [Dotfiles 仓库](https://github.com/Isoheptane/dotfiles/tree/blog-example/tofi) 获取我的配置文件。
 {{< /notice >}}
 
 在保存好配置之后，可以用 `tofi-run` 或 `tofi-drun` 来启动 tofi。
