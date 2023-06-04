@@ -5,13 +5,19 @@
       {{ range where .Paginator.Pages "Type" "!=" "page" }}
         <li class="posts-list-item">
           <a class="posts-list-item-title" href="{{ .Permalink }}">{{ .Title }}</a>
-          <span class="posts-list-item-description">
+          <div class="posts-list-item-description">
             {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
             {{ .PublishDate.Format "2006/01/02" }}
             &ensp;
-            {{ partial "icon.html" (dict "ctx" $ "name" "refresh-cw") }}
-            {{ (time .Params.update).Format "2006/01/02" }}
-          </span>
+            {{- with .Params.tags }}
+                {{ partial "icon.html" (dict "ctx" $ "name" "tag") }}
+                {{- range . -}}
+                  {{ with $.Site.GetPage (printf "/%s/%s" "tags" . ) }}
+                    <a class="tag" href="{{ .Permalink }}">{{ .Title }}</a>
+                  {{- end }}
+                {{- end }}
+            {{- end }}
+          </div>
         </li>
       {{ end }}
     </ul>
