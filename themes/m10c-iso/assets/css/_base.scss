@@ -57,6 +57,12 @@ table {
   }
 }
 
+hr {
+  border: none;
+  height: 1px;
+  background-color: #fff3;
+}
+
 ::selection {
   background: rgba($light-color, .25);
 }
