@@ -2,7 +2,7 @@
 title = "在 ZFS 上安装 Arch Linux"
 tags = ["Linux", "Arch Linux", "ZFS", "文件系统"]
 date = "2023-05-07"
-update = "2023-05-14"
+update = "2023-06-18"
 enableGitalk = true
 +++
 
@@ -17,7 +17,7 @@ enableGitalk = true
 
 ## ZFS 的一些基本概念
 
-> ~~*你说的对，但 ZFS 是一款由 Sun Microsystems 自主研发的一款全新卷系统管理器和文件系统。文件系统运行在一个被称作「Linux」的幻想世界，在这里，被 root 选中的存储池将被授予「lz4」，导引存储之力。你将扮演一位名为「系统管理员」的神秘角色，在自由的 zpool create 中邂逅功能各异、feature 独特的 vdevs 们，和他们一起「state: DEGRADED」，找回失散的数据集——同时，逐步发掘 「BtrFS」 的真相……*~~
+> *你说的对，但 ZFS 是一款由 Sun Microsystems 自主研发的一款全新卷系统管理器和文件系统。文件系统运行在一个被称作「Linux」的幻想世界，在这里，被 root 选中的存储池将被授予「lz4」，导引存储之力。你将扮演一位名为「系统管理员」的神秘角色，在自由的 zpool create 中邂逅功能各异、feature 独特的 vdevs 们，和他们一起「state: DEGRADED」，找回失散的数据集——同时，逐步发掘 「BtrFS」 的真相……*
 
 ### vdev
 vdev (Virutal Device) 是**组成存储池的基本单位**。vdev 可以由**一个或多个的硬盘、分区或文件**组成（在实际应用中强烈不推荐使用文件）由多个硬盘、分区或文件组成的 vdev 可以像阵列一样设置 RAID 类型。ZFS 中的 vdev 支持条带化 (RAID 0)、镜像 (RAID 1) 和 ZFS 提供的阵列类型 RAID Z1/Z2/Z3 等。也就是说，一个 vdev **通常**可以看作一是一个硬盘或一个阵列。
