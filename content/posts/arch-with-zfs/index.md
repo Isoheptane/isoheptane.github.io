@@ -2,7 +2,7 @@
 title = "在 ZFS 上安装 Arch Linux"
 tags = ["Linux", "Arch Linux", "ZFS", "文件系统"]
 date = "2023-05-07"
-update = "2023-06-18"
+update = "2023-06-21"
 enableGitalk = true
 +++
 
@@ -257,6 +257,6 @@ $ zpool export zroot
 
 - - -
 ### 参考资料
-- [ArchWiki - ZFS](https://wiki.archlinux.org/title/ZFS)
-- [ArchWiki - Install Arch Linux on ZFS](https://wiki.archlinux.org/title/Install_Arch_Linux_on_ZFS#Create_the_root_zpool)
+- [ZFS - ArchWiki](https://wiki.archlinux.org/title/ZFS)
+- [Install Arch Linux on ZFS - ArchWiki](https://wiki.archlinux.org/title/Install_Arch_Linux_on_ZFS#Create_the_root_zpool)
 - [OpenZFS Documentation](https://openzfs.github.io/openzfs-docs/man/index.html)
