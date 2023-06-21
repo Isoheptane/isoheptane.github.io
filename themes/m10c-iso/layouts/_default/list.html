@@ -12,7 +12,7 @@
             {{- with .Params.tags }}
                 {{ partial "icon.html" (dict "ctx" $ "name" "tag") }}
                 {{- range . -}}
-                  {{ with $.Site.GetPage (printf "/%s/%s" "tags" . ) }}
+                  {{ with $.Site.GetPage (printf "/%s/%s" "tags" (replace . " " "-") ) }}
                     <a class="tag" href="{{ .Permalink }}">{{ .Title }}</a>
                   {{- end }}
                 {{- end }}
