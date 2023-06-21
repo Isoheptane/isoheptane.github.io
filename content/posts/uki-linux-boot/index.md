@@ -13,16 +13,16 @@ enableGitalk = true
 
 ## 不同的引导方式
 ### 通过 GRUB 引导
-在 BIOS 平台上，如果使用[**主引导记录 (MBR)**](https://zh.wikipedia.org/zh-cn/%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95) 分区表，分区软件往往会在 MBR 与第一个分区之间留出大约 1MB 的空间，这被称之为 MBR 后间隙。GRUB 会被安装到 MBR 后间隙中，并将引导代码写入 MBR 中。在启动时，BIOS 会先执行 MBR 中的引导代码，随后这段引导代码将会加载 GRUB。
+在 BIOS 平台上，如果使用[**主引导记录 (MBR)**](https://zh.wikipedia.org/zh-cn/%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95) 分区表，分区软件往往会在 MBR 与第一个分区之间留出大约 1MB 的空间，这被称之为 MBR 后间隙。在安装时，安装程序会将 GRUB 嵌入到 MBR 后间隙中并重写 MBR，使得 MBR 中的引导代码可以加载 MBR 后间隙中的 GRUB。在启动时，BIOS 会先执行 MBR 中的引导代码，随后这段引导代码将会加载 GRUB。
 
-如果使用 [**GUID 分区表 (GPT)**](https://zh.wikipedia.org/zh-cn/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8)，GRUB 则会被安装到指定的 **BIOS 启动分区**中。在启动时 BIOS 将会从 BIOS 启动分区中加载 GRUB。
+如果使用 [**GUID 分区表 (GPT)**](https://zh.wikipedia.org/zh-cn/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8)，GRUB 则需要被安装到指定的 **BIOS 启动分区**中。在启动时 BIOS 将会从 BIOS 启动分区中加载 GRUB。
 
-在 UEFI 平台上，GRUB 呈现为一个**可执行 EFI 文件**。GRUB 通常会被安装到 EFI 系统分区中，并在 UEFI 引导序列中加入 GRUB 的引导选项。在 UEFI 固件中选择启动 GRUB 后，UEFI 固件将会从 **EFI 系统分区**中读取并引导 GRUB。
+在 UEFI 平台上，GRUB 呈现为一个**可执行 EFI 文件**。GRUB 通常会被安装到 EFI 系统分区中，作为一个可执行 EFI 文件存在。在安装时，安装程序也会向 UEFI 引导序列中加入一个 GRUB 的引导选项。在 UEFI 固件中选择启动 GRUB 后，UEFI 固件将会从 **EFI 系统分区**中读取并引导 GRUB。
 
-在 GRUB 被加载后，GRUB 会根据其配置文件呈现启动项。GRUB 可以读取 ext4 和 BtrFS 分区，因此可以将 Linux 内核与 initramfs 存储在 Linux 根分区中（往往会存储在 `/boot` 中）。当选择启动 Linux 时，GRUB 将会加载 Linux 内核 (`vmlinux`/`vmlinuz`) 与 initramfs，然后引导 Linux。
+在 GRUB 被加载后，GRUB 会根据其配置文件呈现启动项。GRUB 可以读取 ext4 和 BtrFS 分区，因此可以将 Linux 内核与 initramfs 存储在 Linux 根分区中（往往会存储在 `/boot` 中）。当选择启动 Linux 时，GRUB 将会将 Linux 内核 (`vmlinux`/`vmlinuz`) 与 initramfs 加载到内存中，然后启动 Linux。
 
 ### EFISTUB 引导
-在编译 Linux 内核时设置 `CONFIG_EFI_STUB=y` 即可启用 [EFISTUB 引导](https://wiki.archlinux.org/title/EFISTUB)，Arch Linux 的内核默认启用了 EFISTUB 引导。启用了 EFISTUB 引导的 Linux 内核映像包含一段被称之为 [UEFI Boot Stub](https://docs.kernel.org/admin-guide/efi-stub.html) 的代码，它会在 Linux 内核映像被引导后首先执行，并修改内核映像以保证 Linux 内核能够以 EFI 可执行文件的形式被引导。
+在编译 Linux 内核时设置 `CONFIG_EFI_STUB=y` 即可启用 [EFISTUB 引导](https://wiki.archlinux.org/title/EFISTUB)，Arch Linux 的内核默认启用了 EFISTUB 引导。启用了 EFISTUB 引导的 Linux 内核映像包含一段被称之为 [UEFI Boot Stub](https://docs.kernel.org/admin-guide/efi-stub.html) 的代码，它会在 Linux 内核映像被 UEFI 固件引导后首先执行，并修改内核映像以确保 Linux 内核能够被启动，然后启动 Linux 内核。
 
 UEFI Boot Stub 所做的工作类似于 Bootloader，所以在某种意义上它就是一个内置在 UKI 中的 Bootloader。
 
@@ -81,7 +81,7 @@ Idx Name          Size      VMA               LMA               File off  Algn
 还有一些在我的 UKI 中未使用的区段，例如 `.cmdline`，其包含嵌入的内核参数。
 
 ### systemd-stub 与 UKI 生成
-与 EFISTUB 引导中的 UEFI Boot Stub 一样，[systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html) 也实现了类似的功能——即在被引导后首先运行，加载 Linux 内核与相关资源，确保 Linux 内核能够被引导。systemd-stub 还提供了**仅包含 UEFI Boot Stub 的可执行 EFI 文件**，它们可以作为空白模板使用。
+与 EFISTUB 引导中的 UEFI Boot Stub 一样，[systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html) 也实现了类似的功能——即在被引导后首先运行，加载 Linux 内核与相关资源，然后启动 Linux 内核。systemd-stub 还提供了**仅包含 UEFI Boot Stub 的可执行 EFI 文件**，它们可以作为空白模板使用。
 
 在 UKI 被引导后，systemd-stub 会从 UKI 中加载 Linux 内核和所需的资源，如在 `.linux` 区段中寻找 ELF 格式的 Linux 内核、从 `.initrd` 区段加载 initramfs 和 CPU 微码、从 `.cmdline` 区段加载嵌入的内核参数等。所以可以通过**向空白模板中加入更多的 PE 区段来制作一个 UKI**。
 
