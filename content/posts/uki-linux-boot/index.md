@@ -110,7 +110,7 @@ root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3
 
 UKI 通常应该被保存到 EFI 系统分区中。以使用 `linux` 内核的 Arch Linux、EFI 系统分区挂载到 `/efi` 为例，修改完成后的 `linux.preset` 看起来应该像这样：
 
-```properties
+```shell
 ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux"
 ALL_microcode=(/boot/*-ucode.img)
