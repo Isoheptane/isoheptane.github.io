@@ -9,7 +9,7 @@ enableGitalk = true
 ### 前言
 我原本使用 [GRUB](https://wiki.archlinuxcn.org/wiki/GRUB) 作为 Bootloader，但 GRUB 让我感觉不太舒服。UEFI 固件可以直接引导可执行 EFI 文件，并不一定需要中间的 Bootloader 来引导操作系统。此外，GRUB 总是会在启动前显示引导选项菜单，而我并没有心思去美化这个菜单。
 
-让 UEFI 固件不经过中间 Bootloader 引导 Linux 似乎是可行的，因此我决定不再使用 GRUB，而是去寻找
+让 UEFI 固件不经过中间 Bootloader 引导 Linux 似乎是可行的，因此我决定不再使用 GRUB，而是选择让 UEFI 固件直接加载 Linux 内核映像。
 
 ## 不同的引导方式
 ### 通过 GRUB 引导
