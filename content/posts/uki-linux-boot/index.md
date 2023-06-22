@@ -80,15 +80,15 @@ Idx Name          Size      VMA               LMA               File off  Algn
 
 还有一些在我的 UKI 中未使用的区段，例如 `.cmdline`，其包含嵌入的内核参数。
 
-### systemd-stub 与 UKI 生成
+### systemd-stub 与 UKI 创建
 与 EFISTUB 引导中的 UEFI Boot Stub 一样，[systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html) 也实现了类似的功能——即在 UKI 被引导后首先执行，加载 Linux 内核与相关资源，然后启动 Linux 内核。systemd-stub 提供了**仅包含 UEFI Boot Stub 部分的可执行 EFI 文件**，它们可以作为空白模板使用。
 
 在 UKI 被引导后，systemd-stub 会从 UKI 中加载 Linux 内核和所需的资源，如在 `.linux` 区段中寻找 ELF 格式的 Linux 内核、从 `.initrd` 区段加载 initramfs 和 CPU 微码、从 `.cmdline` 区段加载嵌入的内核参数等。所以可以通过**向空白模板中加入更多的 PE 区段来制作一个 UKI**。
 
-[mkinitcpio](https://wiki.archlinux.org/title/Mkinitcpio) 和 [dracut](https://wiki.archlinux.org/title/Dracut) 等工具不仅可以用于生成 initramfs，也可以用于生成 UKI。下面将会介绍使用 mkinitcpio 生成 UKI 的操作。
+[mkinitcpio](https://wiki.archlinux.org/title/Mkinitcpio) 和 [dracut](https://wiki.archlinux.org/title/Dracut) 等工具不仅可以用于创建 initramfs，也可以用于创建 UKI。下面将会介绍使用 mkinitcpio 创建 UKI 的操作。
 
-## 使用 mkinitcpio 生成 UKI
-在生成 UKI 之前，需要先设置内核参数并修改 mkinitcpio 的预设配置。
+## 使用 mkinitcpio 创建 UKI
+在创建 UKI 之前，需要先设置内核参数并修改 mkinitcpio 的预设配置。
 
 ### 嵌入内核参数
 首先需要在 UKI 中嵌入你想要使用的内核参数，创建 `/etc/kernel/cmdline` 并写入内核参数。下面是一个例子：
@@ -97,16 +97,16 @@ Idx Name          Size      VMA               LMA               File off  Algn
 root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3
 ```
 
-在生成 initramfs 时，mkinitcpio 会读取其中的内容并将其作为内核参数将其嵌入 UKI 中。
+在创建 initramfs 时，mkinitcpio 会读取其中的内容并将其作为内核参数将其嵌入 UKI 中。
 
 {{< notice note >}}
 你也可以选择在 UEFI 引导选项中添加想要使用的内核参数。但请注意，如果启用了 Secure Boot 且 UKI 中嵌入了内核参数（即存在 `.cmdline` 区段），内核将会**只使用嵌入的内核参数**，并忽略从外部传递的额外参数。
 {{</ notice >}}
 
 ### 修改 mkinitcpio 预设
-[mkinitcpio](https://wiki.archlinux.org/title/mkinitcpio) 可以生成 UKI，但在此之前需要对 mkinitcpio 的预设进行一些修改。修改 `/etc/mkinitcpio.d/linux.preset`：
-- 取消对 `PRESET_uki=...` 的注释来启用 UKI 生成，并指定 UKI 的生成位置
-- 注释 `PRESET_image` 来关闭 initramfs 映像生成
+[mkinitcpio](https://wiki.archlinux.org/title/mkinitcpio) 可以创建 UKI，但在此之前需要对 mkinitcpio 的预设进行一些修改。修改 `/etc/mkinitcpio.d/linux.preset`：
+- 取消对 `PRESET_uki=...` 的注释来启用 UKI 创建，并指定 UKI 的保存位置
+- 注释 `PRESET_image` 来关闭 initramfs 映像创建
 
 UKI 通常应该被保存到 EFI 系统分区中。以使用 `linux` 内核的 Arch Linux、EFI 系统分区挂载到 `/efi` 为例，修改完成后的 `linux.preset` 看起来应该像这样：
 
@@ -134,7 +134,7 @@ fallback_options="-S autodetect"
 - 如果选择不使用嵌入的内核参数，在 `PRESET_options` 中添加 `--no-cmdline` 即可。
 {{</ notice >}}
 
-接下来就只需要使用 mkinitcpio 来生成 UKI 了。
+接下来就只需要使用 mkinitcpio 来创建 UKI 了。
 
 ```shell
 $ mkdir -p /efi/EFI/Linux
@@ -198,9 +198,9 @@ FS0:\EFI\Linux> arch-linux.efi root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw
 由于配置 Secure Boot 的内容较长，因此我会在另一篇文章中介绍 Secure Boot。
 
 ### 结语
-原本以为只是很简短的一篇关于如何生成并使用 UKI 的教程，实在没想到最后居然写了这么长。虽然说 objdump 和各种代码展示也占用了不少的篇幅，但整体来讲内容还是较为庞大的。
+原本以为只是很简短的一篇关于如何创建并使用 UKI 的教程，实在没想到最后居然写了这么长。虽然说 objdump 和各种代码展示也占用了不少的篇幅，但整体来讲内容还是较为庞大的。
 
-一开始还以为最终写出来也基本上只是照搬 Wiki，但在撰文的过程中我也在不断地学习，向文章中添加自己的理解。从不同的启动方式到 UKI 的结构、再到生成和引导 UKI，期间查阅各种资料，自己的理解也逐渐变得更深刻了。
+一开始还以为最终写出来也基本上只是照搬 Wiki，但在撰文的过程中我也在不断地学习，向文章中添加自己的理解。从不同的启动方式到 UKI 的结构、再到创建和引导 UKI，期间查阅各种资料，自己的理解也逐渐变得更深刻了。
 
 - - - 
 ### 参考资料
