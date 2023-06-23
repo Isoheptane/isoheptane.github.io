@@ -40,7 +40,7 @@ Linux 内核和 Linux 引导过程中需要用到的资源可以被制作成一�
 相比于 EFISTUB，UKI 可以整合 initramfs 和 CPU 微码等在引导过程中会使用到的资源。这使得 UKI 相比于支持 EFISTUB 引导的 Linux 内核映像集成度更高，也更容易使用，不需要太多配置即可被 UEFI 固件引导。
 
 ### UKI 的结构
-UKI 既是一个**可执行 EFI 文件**，也是一个 **PE/COFF 文件**。以我的系统上正在使用的 UKI 为例，其 PE 区段列表如下：
+UKI 是一个**可执行 EFI 文件**，而 EFI 文件也是一个 **PE/COFF 文件**。以我的系统上正在使用的 UKI 为例，其 PE 区段列表如下：
 
 ```plain
 Sections:
@@ -100,7 +100,7 @@ root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3
 在创建 initramfs 时，mkinitcpio 会读取其中的内容并将其作为内核参数将其嵌入 UKI 中。
 
 {{< notice note >}}
-你也可以选择在 UEFI 引导选项中添加想要使用的内核参数。但请注意，如果启用了 Secure Boot 且 UKI 中嵌入了内核参数（即存在 `.cmdline` 区段），内核将会**只使用嵌入的内核参数**，并忽略从外部传递的额外参数。
+你也可以选择在 UEFI 引导选项中添加想要使用的内核参数。但请注意，如果启用了 Secure Boot 且 UKI 中嵌入了内核参数（即存在 `.cmdline` 区段），内核将会**只使用嵌入的内核参数**，并忽略从外部传递的额外参数。详见 [systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html)。
 {{</ notice >}}
 
 ### 修改 mkinitcpio 预设
@@ -142,6 +142,11 @@ $ mkinitcpio -p linux
 ```
 
 ## 引导 UKI
+
+{{< notice warning >}}
+由于在这里并没有对 UKI 进行签名，因此如果启动了 Secure Boot，UEFI 固件将会拒绝引导 UKI。如果要引导未签名的 UKI，请确保 Secure Boot 处于关闭状态。
+{{</ notice >}}
+
 ### 使用 UEFI 引导选项
 在这里以使用 [efibootmgr](https://github.com/rhboot/efibootmgr) 为例，向 UEFI 引导序列中添加一个引导选项：
 
@@ -202,7 +207,7 @@ FS0:\EFI\Linux> arch-linux.efi root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw
 
 一开始还以为最终写出来也基本上只是照搬 Wiki，但在撰文的过程中我也在不断地学习，向文章中添加自己的理解。从不同的启动方式到 UKI 的结构、再到创建和引导 UKI，期间查阅各种资料，自己的理解也逐渐变得更深刻了。
 
-- - - 
+- - -
 ### 参考资料
 - [Unified Kernel Image - ArchWiki](https://wiki.archlinux.org/title/Unified_kernel_image)
 - [EFISTUB - ArchWiki](https://wiki.archlinux.org/title/EFISTUB)
