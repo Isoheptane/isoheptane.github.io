@@ -136,7 +136,7 @@ fallback_options="-S autodetect"
 
 接下来就只需要使用 mkinitcpio 来创建 UKI 了。
 
-```shell
+```bash-session
 $ mkdir -p /efi/EFI/Linux
 $ mkinitcpio -p linux
 ```
@@ -150,7 +150,7 @@ $ mkinitcpio -p linux
 ### 使用 UEFI 引导选项
 在这里以使用 [efibootmgr](https://github.com/rhboot/efibootmgr) 为例，向 UEFI 引导序列中添加一个引导选项：
 
-```shell
+```bash-session
 $ efibootmgr --create \
     -d /dev/sdX -p Y \
     --label "Arch Linux" \
@@ -161,12 +161,12 @@ $ efibootmgr --create \
 
 如果需要在 UEFI 引导选项中指定内核参数，使用 `-u parameters` 来指定以 UTF-16 编码的额外参数：
 
-```shell
+```bash-session
 $ efibootmgr --create \
-    -d /dev/sdX -p Y \
-    --label "Arch Linux" \
-    --loader "EFI/Linux/arch-linux.efi" \
-    -u "root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3"
+$   -d /dev/sdX -p Y \
+$   --label "Arch Linux" \
+$   --loader "EFI/Linux/arch-linux.efi" \
+$   -u "root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3"
 ```
 
 ### 使用 UEFI Shell 引导
@@ -174,7 +174,7 @@ $ efibootmgr --create \
 
 在进入 UEFI Shell 后，屏幕上通常会显示可用的文件系统 (FS) 和块设备 (BLK)。如果没有的话，执行 `map` 指令可以显示可用的文件系统和块设备。它们看起来通常是类似于这样的：
 
-```shell
+```plain
 Mapping table
       FS0: Alias(s):HD0b:;BLK1:
         PciRoot(0x0)/Pci(0x1,0x1)/Pci(0x0,0x0)/

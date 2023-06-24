@@ -47,7 +47,7 @@ ZFS **不支持**使用 Swap file。ZFS 可以创建 Swap 卷作为 Swap 分区�
 {{</ notice >}}
 
 然后就可以先在 EFI 系统分区和 Boot 分区上创建文件系统，**别忘了将设备名称替换为你自己的设备名称**。
-```shell
+```bash-session
 $ mkfs.fat /dev/<esp-partition>
 $ mkfs.ext4 /dev/<boot-partition>
 ```
@@ -55,18 +55,18 @@ $ mkfs.ext4 /dev/<boot-partition>
 ### 配置 ZFS 文件系统
 #### 创建存储池
 使用如下的命令来创建一个存储池。若设备的物理扇区大小为 4096 字节，则应设置 `ashift=12`；若设备的物理扇区大小为 512 字节，则应设置 `ashift=9`。
-```shell
+```bash-session
 $ zpool create -f -o ashift=12         \
-             -O acltype=posixacl       \
-             -O relatime=on            \
-             -O xattr=sa               \
-             -O dnodesize=legacy       \
-             -O normalization=formD    \
-             -O mountpoint=none        \
-             -O canmount=off           \
-             -O devices=off            \
-             -R /mnt                   \
-             zroot /dev/disk/by-id/id-to-partition-partx
+$            -O acltype=posixacl       \
+$            -O relatime=on            \
+$            -O xattr=sa               \
+$            -O dnodesize=legacy       \
+$            -O normalization=formD    \
+$            -O mountpoint=none        \
+$            -O canmount=off           \
+$            -O devices=off            \
+$            -R /mnt                   \
+$            zroot /dev/disk/by-id/id-to-partition-partx
 ```
 在这个存储池中的数据集也会继承存储池的一部分属性。
 
@@ -74,7 +74,7 @@ $ zpool create -f -o ashift=12         \
 创建数据集可以将系统和用户数据分离开，这样可以单独为系统创建快照。在有需要时可以从指定的快照启动系统，但本文不会涉及如何配置从快照启动。
 
 首先创建系统和用户数据的数据集。
-```shell
+```bash-session
 $ zfs create -o mountpoint=none zroot/data
 $ zfs create -o mountpoint=none zroot/ROOT
 $ zfs create -o mountpoint=/ -o canmount=noauto zroot/ROOT/default
@@ -83,7 +83,7 @@ $ zfs create -o mountpoint=/home zroot/data/home
 `zroot/ROOT` 将会用于存储所有的系统快照，而 `zroot/ROOT/default` 则是默认系统的数据集。
 
 对于某些系统目录，还需要设置 `canmount=off`。
-```shell
+```bash-session
 $ zfs create -o mountpoint=/var -o canmount=off     zroot/var
 $ zfs create                                        zroot/var/log
 $ zfs create -o mountpoint=/var/lib -o canmount=off zroot/var/lib
@@ -101,12 +101,12 @@ $ zfs create                                        zroot/var/lib/docker
 
 #### 导出/导入存储池
 为了确保我们的配置没有问题，我们需要先导出存储池并重新导入存储池。
-```shell
+```bash-session
 $ zpool export zroot
 $ zpool import -d /dev/disk/by-id -R /mnt zroot -N
 ```
 然后挂载所有数据集。
-```shell
+```bash-session
 $ zfs mount zroot/ROOT/default
 $ zfs mount -a
 ```
@@ -115,26 +115,26 @@ $ zfs mount -a
 `/etc/zfs/zpool.cache` 会存储已经导入的存储池的配置信息。当导入一个存储池的时候，这个存储池的信息也会被添加到 `zpool.cache` 当中。对于已经导入过的存储池，需要再次导入时直接执行指令 `zfs import` 即可。否则需要使用 `zfs import -d /dev/disk/by-id` 来导入。
 
 将 `zpool.cache` 复制到我们要安装的系统当中，这个文件在启动过程中是需要的。
-```shell
+```bash-session
 $ cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 ```
 如果 `zpool.cache` 不存在的话，那就用这个指令创建。
-```shell
+```bash-session
 $ zpool set cachefile=/etc/zfs/zpool.cache zroot
 ```
 ### 安装 Arch Linux 
 首先，你还需要手动挂载 EFI 系统分区和 Boot 分区，并生成 `fstab`。
-```shell
+```bash-session
 $ mount --mkdir /dev/esp-partition /mnt/efi
 $ mount --mkdir /dev/boot-partition /mnt/boot
 $ genfstab -U -p /mnt >> /mnt/etc/fstab
 ```
 然后安装 Arch Linux。
-```shell
+```bash-session
 $ pacstrap -K /mnt base linux linux-firmware ...
 ```
 接下来 chroot 进入安装好的新系统中。
-```shell
+```bash-session
 $ arch-chroot /mnt
 ```
 
@@ -142,7 +142,7 @@ $ arch-chroot /mnt
 此时的新系统中还没有安装 ZFS 的支持，所生成的 initrd 中自然也不包含对 ZFS 的支持。此时如果重新启动，是无法挂载根文件系统。我们要先安对 ZFS 的支持，首先需要将 [`Arch ZFS`](https://wiki.archlinux.org/title/Unofficial_user_repositories#archzfs) 仓库添加到 `/etc/pacman.conf` 中。然后安装 `zfs` 包。
 
 在安装好 `zfs` 之后，你还需要修改 `mkinitcpio` 的配置文件，确保 ZFS 模块能够被集成到 initrd 中。请修改 hooks，将 `zfs` 添加到 `filesystems` 之前，并且把 `keyboard` 也移动到 `zfs` 之前。
-```shell
+```bash-session
 HOOKS=(base udev autodetect modconf block keyboard zfs filesystems ...)
 ```
 
@@ -182,17 +182,17 @@ Exec=/bin/sh -c 'while read -r trg; do case $trg in linux) exit 0; esac; done; /
 在我写这篇文章的前一天，我也 `pacman -Syu` 了一下，到最后 `mkinitcpio` 的时候报错 module not found。
 
 我心想可能是 `zfs-dkms` 的编译出了问题，于是我就试着重新编译了一下 `zfs-dkms`。结果发现 `linux` 内核已经更新到了 `6.3.1-arch1-1`，但 `zfs-dkms` 最高也只支持到 `6.2`，这下就只能降级内核版本了：
-```shell
+```bash-session
 $ pacman -U /var/cache/pacman/pkg/linux-6.2.12.arch1-1-x86_64.pkg.tar.zst /var/cache/pacman/pkg/linux-headers-6.2.12.arch1-1-x86_64.pkg.tar.zst
 ```
 
 ### 安装 Bootloader
 在确保安装了 `grub` 包之后，使用如下的指令将 GRUB 安装到 EFI 系统分区上：
-```shell
+```bash-session
 $ grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 ```
 然后生成 GRUB 的配置文件：
-```shell
+```bash-session
 $ grub-mkconfig -o /efi/grub/grub.cfg
 ```
 
@@ -203,7 +203,7 @@ $ grub-mkconfig -o /efi/grub/grub.cfg
 - `zfs-import-cache.service`
 
 如果你想要让指定的存储池在启动时自动导入，使用如下的指令：
-```shell
+```bash-session
 $ zpool set cachefile=/etc/zfs/zpool.cache <pool-name>
 ```
 
@@ -217,31 +217,31 @@ $ zpool set cachefile=/etc/zfs/zpool.cache <pool-name>
 首先需要首先创建目录 `/etc/zfs/zfs-list.cache`，并启动 ZFS Evene Daemon (ZED) 服务 (`zfs-zed.service`)。
 
 对于你想要自动挂载数据集的存储池，你需要创建一个空文件：
-```shell
+```bash-session
 $ touch /etc/zfs/zfs-list.cache/<pool-name>
 ```
 
 然后修改任意 ZFS 文件系统的属性，ZED 会捕捉到这样的修改，并更新在目录 `/etc/zfs/zfs-list.cache` 中的文件。
-```shell
+```bash-session
 $ zfs set canmount=off zroot/anyDataset
 $ zfs set canmount=on zroot/anyDataset
 ```
 
 #### 设置 hostid
 ZFS 使用 hostid 来追踪存储池是在哪个设备上使用的。在挂载根文件系统的时候，hostid 是不可用的。我们可以将 hostid 写入内核启动参数中，或者将 hostid 写入 `/etc/hostid` 中，`/etc/hostid` 中记录的 hostid 将会在生成 initrd 时被写入 initrd 中。用下面的命令可以生成一个 hostid 并写入 `/etc/hostid` 中。
-```shell
+```bash-session
 $ zgenhostid $(hostid)
 ```
 当然，写入完成后别忘了用 `mkinitcpio` 重新生成 initrd。
 
 ### 导出存储池
 退出 chroot 环境，首先取消挂载 EFI 系统分区和 Boot 分区：
-```shell
+```bash-session
 $ umount /mnt/efi
 $ umount /mnt/boot
 ```
 接下来取消挂载所有数据集并导出存储池：
-```shell
+```bash-session
 $ zfs umount -a
 $ zpool export zroot
 ```

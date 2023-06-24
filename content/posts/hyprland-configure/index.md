@@ -31,7 +31,7 @@ enableGitalk = true
 
 其中带 `nvidia` 的版本包含了对 Nvidia 显卡闪烁问题的 patch，`git` 版本则是由 GitHub 上最新的源代码进行构建的版本。由于我是 Nvidia 用户，因此在这里选择安装 `hyprland-nvidia-git`。
 
-```shell
+```bash-session
 $ yay -S hyprland-nvidia-git
 ```
 
@@ -159,7 +159,7 @@ bind = $mainMod, J, togglesplit, # dwindle  # 切换窗口分割方向
 ## Waybar
 [Waybar](https://github.com/Alexays/Waybar) 为 Wayland 提供了一个高度可定制的状态栏。
 
-```shell
+```bash-session
 $ yay -S waybar
 ```
 
@@ -243,13 +243,13 @@ default-timeout=0
 {{< /notice >}}
 
 在修改配置文件之后，用 `makoctl` 来重载配置文件：
-```shell
+```bash-session
 $ makoctl reload
 ```
 
 ### 发送通知
 你可以通过 `notify-send` 指令来发送一个通知，以此观察修改配置文件之后的效果。
-```shell
+```bash-session
 $ notify-send 'Hello world!' 'This is an example notification.' -u normal
 ```
 
@@ -338,13 +338,13 @@ bind = $mainMod, R, exec, tofi-drun | xargs hyprctl dispatch exec --
 之前用的是 KDE，所以可以很方便地设置 Qt / GTK 应用的主题，在切换到 Hyprland 之后相关的主题设置依然保留。但在 KDE 环境之外想要修改 Qt / GTK 应用的主题还是会有些麻烦。
 
 在这里我将会使用 `Adwaita` 来作为 Qt / GTK 应用的主题。
-```shell
+```bash-session
 $ yay -S adwaita-qt5 adwaita-qt6
 ```
 
 ### Qt
 这里我们将会使用 `qt5ct` 来进行主题的配置，首先安装 `qt5ct`：
-```shell
+```bash-session
 $ yay -S qt5ct
 ```
 
@@ -357,7 +357,7 @@ env = QT_QPA_PLATFORMTHEME,qt5ct
 
 ### GTK
 [Arch Wiki](https://wiki.archlinux.org/title/GTK#Basic_theme_configuration) 上首先给出的方案是修改配置文件，然后才是使用 `gsettings` 指令。但实际测试发现还是 `gsettings` 有用，这里贴出 Arch Wiki 上给出的命令：
-```shell
+```bash-session
 $ gsettings set org.gnome.desktop.interface gtk-theme Adwaita
 $ gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 ```
