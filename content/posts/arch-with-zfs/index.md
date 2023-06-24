@@ -57,16 +57,16 @@ $ mkfs.ext4 /dev/<boot-partition>
 使用如下的命令来创建一个存储池。若设备的物理扇区大小为 4096 字节，则应设置 `ashift=12`；若设备的物理扇区大小为 512 字节，则应设置 `ashift=9`。
 ```bash-session
 $ zpool create -f -o ashift=12         \
-$            -O acltype=posixacl       \
-$            -O relatime=on            \
-$            -O xattr=sa               \
-$            -O dnodesize=legacy       \
-$            -O normalization=formD    \
-$            -O mountpoint=none        \
-$            -O canmount=off           \
-$            -O devices=off            \
-$            -R /mnt                   \
-$            zroot /dev/disk/by-id/id-to-partition-partx
+>            -O acltype=posixacl       \
+>            -O relatime=on            \
+>            -O xattr=sa               \
+>            -O dnodesize=legacy       \
+>            -O normalization=formD    \
+>            -O mountpoint=none        \
+>            -O canmount=off           \
+>            -O devices=off            \
+>            -R /mnt                   \
+>            zroot /dev/disk/by-id/id-to-partition-partx
 ```
 在这个存储池中的数据集也会继承存储池的一部分属性。
 

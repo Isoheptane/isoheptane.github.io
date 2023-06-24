@@ -29,10 +29,10 @@ enableGitalk = true
 我几乎没用过 `fdisk` 这种分区工具，所以我也是现学现用~~用完就忘~~的。按照 Arch Linux 官方的教程，UEFI 模式下应该分出三个分区，分别是 ESP 分区、交换分区和根文件系统分区。ESP 分区我设置了 512MB 的大小，交换分区为 12GB，根文件系统占用其他所有空间。
 
 ```bash-session
-$ Device            Start       End   Sectors  Size Type
-$ /dev/nvme0n1p1     2048   1048576   1048576  512M EFI System
-$ /dev/nvme0n1p2  1050624  25165824  25165824   12G Linux swap
-$ /dev/nvme0n1p3 26216448 500118158 473901711  226G Linux filesystem
+Device            Start       End   Sectors  Size Type
+/dev/nvme0n1p1     2048   1048576   1048576  512M EFI System
+/dev/nvme0n1p2  1050624  25165824  25165824   12G Linux swap
+/dev/nvme0n1p3 26216448 500118158 473901711  226G Linux filesystem
 ```
 
 然后我们在分区上创建文件系统。把根文件系统的分区挂载到 `/mnt` 上，把 ESP 分区挂载到 `/mnt/efi` 上，并开启 swap 分区。
@@ -146,9 +146,9 @@ Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 然后同步包列表，安装 key-ring 和 `yay` (Yet another yaourt)，因为我在 Manjaro 下常用的就是 `yay`。
 
 ```bash-session
-sudo pacman -Syu
-sudo pacman -S archlinuxcn-keyring
-sudo pacman -S yay
+$ sudo pacman -Syu
+$ sudo pacman -S archlinuxcn-keyring
+$ sudo pacman -S yay
 ```
 
 `yay` 是一个 AUR 助手，可以用来管理 AUR 上包。同样，AUR 也是有镜像的，可以通过下面的命令修改到清华大学开源软件镜像站。

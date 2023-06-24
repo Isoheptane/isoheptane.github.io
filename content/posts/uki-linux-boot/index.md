@@ -163,10 +163,10 @@ $ efibootmgr --create \
 
 ```bash-session
 $ efibootmgr --create \
-$   -d /dev/sdX -p Y \
-$   --label "Arch Linux" \
-$   --loader "EFI/Linux/arch-linux.efi" \
-$   -u "root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3"
+>   -d /dev/sdX -p Y \
+>   --label "Arch Linux" \
+>   --loader "EFI/Linux/arch-linux.efi" \
+>   -u "root=UUID=b9fb5b31-07f1-408c-9447-10a1b2476b4d rw splash loglevel=3"
 ```
 
 ### 使用 UEFI Shell 引导
