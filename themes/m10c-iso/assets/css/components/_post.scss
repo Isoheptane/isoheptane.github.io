@@ -21,6 +21,9 @@
   & > pre,
   .highlight > pre,
   .highlight > div {
+    overflow: auto;
+    word-break: break-all;
+    white-space: pre-wrap;
     border-left: 0.4em solid rgba($primary-color, .8);
     padding: 1em 1em;
   }
