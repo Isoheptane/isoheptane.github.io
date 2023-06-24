@@ -13,7 +13,7 @@ enableGitalk = true
 
 ## 不同的引导方式
 ### 通过 GRUB 引导
-在 BIOS 平台上，如果使用[**主引导记录 (MBR)**](https://zh.wikipedia.org/zh-cn/%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95) 分区表，分区软件往往会在 MBR 与第一个分区之间留出大约 1MB 的空间，这被称之为 **MBR 后间隙**。在安装时，安装程序会将 GRUB 嵌入到 MBR 后间隙中，并重写 MBR，使 MBR 中的引导代码可以启动 MBR 后间隙中的 GRUB。在启动时，BIOS 会先执行 MBR 中的引导代码，随后这段引导代码将会加载并启动 GRUB。
+在 BIOS 平台上，如果使用[**主引导记录 (MBR)**](https://zh.wikipedia.org/zh-cn/%E4%B8%BB%E5%BC%95%E5%AF%BC%E8%AE%B0%E5%BD%95) 分区表，在创建分区时往往会在 MBR 与第一个分区之间留出 1~2MB 的空间，这被称之为 **MBR 后间隙**。在安装时，安装程序会将 GRUB 嵌入到 MBR 后间隙中，并重写 MBR，使 MBR 中的引导代码可以启动 MBR 后间隙中的 GRUB。在启动时，BIOS 会先执行 MBR 中的引导代码，随后这段引导代码将会加载并启动 GRUB。
 
 如果使用 [**GUID 分区表 (GPT)**](https://zh.wikipedia.org/zh-cn/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8)，GRUB 则需要被安装到指定的 **BIOS 启动分区**中。在启动时 BIOS 将会从 BIOS 启动分区加载并启动 GRUB。
 
