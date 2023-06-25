@@ -2,7 +2,7 @@
 title = "使用统一内核映像 (UKI) 引导 Linux"
 tags = ["Linux", "UEFI"]
 date = "2023-06-21"
-update = "2023-06-21"
+update = "2023-06-24"
 enableGitalk = true
 +++
 
