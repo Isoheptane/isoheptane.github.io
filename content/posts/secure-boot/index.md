@@ -1,5 +1,5 @@
 +++
-title = "实现 Secure Boot"
+title = "实施 Secure Boot"
 tags = ["Secure Boot", "UEFI"]
 date = "2023-06-25"
 update = "2023-06-25"
@@ -162,28 +162,19 @@ $ sign-efi-sig-list -g "$(cat GUID.txt)" -k KEK.key -c KEK.crt db new_db.esl new
 $ sign-efi-sig-list -a -g "$(cat GUID.txt)" -k KEK.key -c KEK.crt db new_db.esl new_db.auth
 ```
 
-### 添加来自微软的证书
+### 添加其它证书
 {{< notice warning >}}
-这一步很重要！许多 UEFI 固件都经过了微软的密钥签名，如果仅安装你自己的 db 证书并启用了 Secure Boot，**UEFI 固件可能无法被加载，导致设备变砖**。
+这一步很重要！许多 UEFI 固件都经过了微软的密钥或其制造商的密钥签名，如果仅安装你自己的 db 证书并启用了 Secure Boot，**UEFI 固件可能无法被加载，导致设备变砖**。
 
 笔者在操作时就犯了这个错误，最终通过重刷 BIOS 和清空 CMOS 才就救回来。
 {{</ notice >}}
 
-#### 使用备份的 UEFI 变量
-还记得刚才备份的 UEFI 变量吗，其中包含了设备上原有的证书。在这里可以通过使用自己的 KEK 对原有的 EFI 签名列表进行签名，然后添加原有的 db 证书：
-
-```bash-session
-$ sign-efi-sig-list -a -g 77fa9abd-0359-4d32-bd60-28f4e78f784b -k KEK.key -c KEK.crt db old_db.esl add_MS_db.auth 
-```
-
-如果设备上还包含了其他的 db 证书，同样可以使用这种方式来安装。
+#### 添加来自微软的证书
+下载了来自微软的证书后，首先需要将证书转换为 EFI 证书列表，这里以 2011 年版本的证书为例：
 
 {{< notice note >}}
 在这里我们将 GUID 设置为了 `77fa9abd-0359-4d32-bd60-28f4e78f784b`，这是微软的所有者 GUID。
 {{</ notice >}}
-
-#### 使用来自微软的证书
-下载了来自微软的证书后，首先需要将证书转换为 EFI 证书列表，这里以 2011 年版本的证书为例：
 
 ```bash-session
 $ cert-to-efi-sig-list -g 77fa9abd-0359-4d32-bd60-28f4e78f784b MicWinProPCA2011_2011-10-19.crt MS_Win_db.esl
@@ -208,6 +199,15 @@ $ sign-efi-sig-list -a -g 77fa9abd-0359-4d32-bd60-28f4e78f784b -k KEK.key -c KEK
 $ cert-to-efi-sig-list -g 77fa9abd-0359-4d32-bd60-28f4e78f784b MicCorKEKCA2011_2011-06-24.crt MS_KEK.esl
 $ sign-efi-sig-list -a -g 77fa9abd-0359-4d32-bd60-28f4e78f784b -k PK.key -c PK.crt KEK MS_KEK.esl add_MS_KEK.auth
 ```
+
+#### 添加设备上原有的证书
+还记得刚才备份的 UEFI 变量吗？其中包含了设备上原有的证书。在这里可以通过使用自己的 KEK 对原有的 EFI 签名列表进行签名，然后添加原有的 db 证书：
+
+```bash-session
+$ sign-efi-sig-list -a -g -k KEK.key -c KEK.crt db old_db.esl add_MS_db.auth 
+```
+
+如果设备上还包含了其他的 db 证书，同样可以使用这种方式来安装。
 
 ### 对 EFI 二进制文件进行签名
 用下面的指令为一个 EFI 二进制文件签名：
