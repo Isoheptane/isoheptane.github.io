@@ -24,14 +24,14 @@
                 "url": "https://github.com/isoheptane"
             },
             {
-                "icon": "twitter",
-                "name": "Twitter",
-                "url": "https://twitter.com/CascadeNets"
-            },
-            {
                 "icon": "mail",
                 "name": "Email",
                 "url": "mailto:chomodiso@outlook.com"
+            },
+            {
+                "icon": "mastodon",
+                "name": "Mastodon",
+                "url": "https://mastodon.social/@Isoheptane"
             }
         ],
         "gitalk": {
