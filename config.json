@@ -29,9 +29,9 @@
                 "url": "mailto:chomodiso@outlook.com"
             },
             {
-                "icon": "mastodon",
-                "name": "Mastodon",
-                "url": "https://mastodon.social/@Isoheptane"
+                "icon": "misskey",
+                "name": "Misskey",
+                "url": "https://misskey.cascade.moe/@Isoheptane"
             }
         ],
         "gitalk": {
