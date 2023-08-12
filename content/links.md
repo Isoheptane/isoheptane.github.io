@@ -14,7 +14,8 @@ enableGitalk = false
     {{< link name="Vincent文朔" url="https://blog.vincent1230.top/" avatar="/images/links/vincent.webp" desc="太阳出来了 雾就会散的" >}}  
     {{< link name="伊緻幻の主页" url="https://www.chwin.asia" avatar="/images/links/iori_maboroshi.webp" desc="Take my hands." >}}  
     {{< link name="SakuraKooi" url="https://blog.sakurakooi.cyou/" avatar="/images/links/sakurakooi.webp" desc="梦是幽蓝色彩 灵魂如雪纯白" >}}  
-    {{< link name="Fika" url="Fika" avatar="/images/links/fika.webp" desc="遇到困难睡大觉" >}}  
+    {{< link name="Fika" url="https://fika.ink/" avatar="/images/links/fika.webp" desc="遇到困难睡大觉" >}}  
+    {{< link name="Menci" url="https://blog.men.ci/" avatar="/images/links/menci.webp" desc="OIer / Software Engineer" >}}  
 {{< /link_list >}}
 
 ### 本站的信息
