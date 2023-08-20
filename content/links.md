@@ -17,6 +17,7 @@ enableGitalk = false
     {{< link name="Fika" url="https://fika.ink/" avatar="/images/links/fika.webp" desc="遇到困难睡大觉" >}}  
     {{< link name="Menci" url="https://blog.men.ci/" avatar="/images/links/menci.webp" desc="OIer / Software Engineer" >}}  
     {{< link name="柠檬苏打夹心" url="https://moe.himoyo.cn" avatar="https://cravatar.cn/avatar/22b242a28bb848f2629f2a636bba9c03?s=256" desc="Not A Developer | nya!" >}}
+    {{< link name="厄尔科斯" url="https://sikan.moe" avatar="/images/links/sikan.png" >}}
 {{< /link_list >}}
 
 ### 本站的信息
