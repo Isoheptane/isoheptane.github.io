@@ -17,7 +17,7 @@ enableGitalk = false
     {{< link name="Menci" url="https://blog.men.ci/" avatar="/images/links/menci.webp" desc="OIer / Software Engineer" >}}  
     {{< link name="柠檬苏打夹心" url="https://moe.himoyo.cn" avatar="https://cravatar.cn/avatar/22b242a28bb848f2629f2a636bba9c03?s=256" desc="Not A Developer | nya!" >}}  
     {{< link name="厄尔科斯" url="https://sikan.moe" avatar="/images/links/sikan.png" >}}  
-    {{< link name="幽霜的日常记录" url="https://hanamiyuushimo.github.io/" avatar="/images/links/hanamiyuushimo.webp" desc="Stay young, stay simple." >}}
+    {{< link name="幽霜的日常记录" url="https://hanamiyuushimo.github.io/" avatar="/images/links/hanamiyuushimo.png" desc="Stay young, stay simple." >}}
     {{< link name="Steven" url="https://blog.steven53.top/" avatar="/images/links/steven.webp" desc="OIer / RMer" >}}
 {{< /link_list >}}
 
