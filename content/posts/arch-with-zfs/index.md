@@ -166,7 +166,7 @@ Description=Update Linux init cpio after dkms module update.
 Depends=mkinitcpio
 When=PostTransaction
 NeedsTargets
-Exec=/bin/sh -c 'while read -r trg; do case $trg in linux) exit 0; esac; done; /usr/bin/mkinitcpio -p linux'i
+Exec=/bin/sh -c 'while read -r trg; do case $trg in linux) exit 0; esac; done; /usr/bin/mkinitcpio -p linux'
 ```
 
 #### 遇到的麻烦
