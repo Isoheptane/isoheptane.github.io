@@ -1,0 +1,3 @@
+[submodule "m10c-iso"]
+	path = themes/m10c-iso
+	url = https://github.com/Isoheptane/m10c-iso.git
