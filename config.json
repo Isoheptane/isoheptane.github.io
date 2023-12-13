@@ -81,6 +81,13 @@
             "noClasses": true,
             "style": "monokai",
             "tabWidth": 4
+        },
+        "goldmark": {
+            "extensions": {
+                "typographer": {
+                    "disable": true
+                }
+            }
         }
     },
     "minify": {
