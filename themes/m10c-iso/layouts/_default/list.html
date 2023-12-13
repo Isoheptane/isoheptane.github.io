@@ -8,7 +8,7 @@
           <div class="posts-list-item-description">
             {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
             {{ .PublishDate.Format "2006/01/02" }}
-            &ensp;
+            <span class="posts-list-item-separator">-</span>
             {{- with .Params.tags }}
                 {{ partial "icon.html" (dict "ctx" $ "name" "tag") }}
                 {{- range . -}}
