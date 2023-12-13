@@ -84,9 +84,7 @@
         },
         "goldmark": {
             "extensions": {
-                "typographer": {
-                    "disable": true
-                }
+                "typographer": false
             }
         }
     },
