@@ -4,6 +4,7 @@ tags = ["算法", "数论"]
 date = "2022-02-08"
 update = "2022-02-08"
 enableGitalk = true
+enableKatex = true
 +++
 
 ## 前言
