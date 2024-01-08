@@ -13,7 +13,7 @@ enableGitalk = true
 
 由于许可证不兼容（OpenZFS 使用 CDDL 许可证），因此对 ZFS 的支持无法整合到 Linux 内核中，而只能以内核模块的形式加载。这会让整个安装过程变得更加麻烦……但我并不介意折腾！
 
-本次安装的流程参照 ArchWiki 上的[这篇文章](https://wiki.archlinux.org/title/Install_Arch_Linux_on_ZFS)。此次安装将会使用到 [`Arch ZFS`](https://wiki.archlinux.org/title/Unofficial_user_repositories#archzfs) 这个非官方用户仓库。
+本次安装的流程参照 ArchWiki 上的[这篇文章](https://wiki.archlinux.org/title/Install_Arch_Linux_on_ZFS)。此次安装将会使用到 [Arch ZFS](https://wiki.archlinux.org/title/Unofficial_user_repositories#archzfs) 这个非官方用户仓库。
 
 ## ZFS 的一些基本概念
 
