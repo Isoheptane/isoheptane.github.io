@@ -1,8 +1,8 @@
 {
-    "baseURL": "https://blog.cascade.moe",
+    "baseURL": "https://cascade.moe",
     "languageCode": "zh-cn",
     "defaultContentLanguage": "zh-cn",
-    "title": "Isoheptane",
+    "title": "Cascade",
     "theme": ["m10c-iso"],
     "module": {
         "imports": [
@@ -12,7 +12,7 @@
         ]
     },
     "params": {
-        "author": "Isoheptane",
+        "author": "Cascade",
         "description": "工程师猫娘",
         "avatar": "/images/avatar.webp",
         "menu_item_separator": " - ",
