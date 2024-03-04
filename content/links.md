@@ -21,7 +21,7 @@ enableGitalk = false
     {{< link name="Steven" url="https://blog.steven53.top/" avatar="/images/links/steven.webp" desc="OIer / RMer" >}}
     {{< link name="神奇的主页" url="https://www.ttiee.tech/" avatar="/images/links/ttiee.webp" desc="君子不器，随遇而安" >}}
     {{< link name="Junde Yhi" url="https://www.yhi.moe/" avatar="/images/links/jundeyhi.webp" desc="" >}}
-    {{< link name="ECWU (Zhenghao WU)" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}
+    {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}
 {{< /link_list >}}
 
 ### 本站的信息
