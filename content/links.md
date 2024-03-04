@@ -20,6 +20,7 @@ enableGitalk = false
     {{< link name="幽霜的日常记录" url="https://hanamiyuushimo.github.io/" avatar="/images/links/hanamiyuushimo.webp" desc="Stay young, stay simple." >}}
     {{< link name="Steven" url="https://blog.steven53.top/" avatar="/images/links/steven.webp" desc="OIer / RMer" >}}
     {{< link name="神奇的主页" url="https://www.ttiee.tech/" avatar="/images/links/ttiee.webp" desc="君子不器，随遇而安" >}}
+    {{< link name="Hao_Tian" url="https://haotian22.top" avatar="/images/links/haotian.webp" desc="生命不息，折腾不止ヾ(≧▽≦*)o" >}}
 {{< /link_list >}}
 
 ### 本站的信息
