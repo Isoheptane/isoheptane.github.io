@@ -2,7 +2,7 @@
 title = "七碳的自设"
 tags = ["杂谈"]
 date = "2021-10-31"
-update = "2024-02-11"
+update = "2024-04-07"
 enableGitalk = true
 +++
 

@@ -28,7 +28,7 @@ enableGitalk = false
 {{< /link_list >}}
 
 ### 本站的信息
-- 名称：Isoheptane
+- 名称：Cascade 或 Cascade Kobayashi
 - 描述：工程师猫娘
 - 链接地址：<https://blog.cascade.moe/>
 - 图标：[头像](/images/avatar.webp)
