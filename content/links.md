@@ -23,6 +23,8 @@ enableGitalk = false
     {{< link name="Hao_Tian" url="https://haotian22.top" avatar="/images/links/haotian.webp" desc="生命不息，折腾不止ヾ(≧▽≦*)o" >}}
     {{< link name="Junde Yhi" url="https://www.yhi.moe/" avatar="/images/links/jundeyhi.webp" desc="" >}}
     {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}
+    {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}
+    {{< link name="九弦之屋" url="https://blog.sinzmise.top/" avatar="/images/links/sinzmise.webp" desc="欢迎旅行者，来到这个平凡但又记载了许多故事的小屋" >}}
 {{< /link_list >}}
 
 ### 本站的信息
