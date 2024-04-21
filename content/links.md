@@ -17,14 +17,14 @@ enableGitalk = false
     {{< link name="Menci" url="https://blog.men.ci/" avatar="/images/links/menci.webp" desc="OIer / Software Engineer" >}}  
     {{< link name="柠檬苏打夹心" url="https://moe.himoyo.cn" avatar="https://cravatar.cn/avatar/22b242a28bb848f2629f2a636bba9c03?s=256" desc="Not A Developer | nya!" >}}  
     {{< link name="厄尔科斯" url="https://sikan.moe" avatar="/images/links/sikan.webp" >}}  
-    {{< link name="幽霜的日常记录" url="https://hanamiyuushimo.github.io/" avatar="/images/links/hanamiyuushimo.webp" desc="Stay young, stay simple." >}}
-    {{< link name="Steven" url="https://blog.steven53.top/" avatar="/images/links/steven.webp" desc="OIer / RMer" >}}
-    {{< link name="神奇的主页" url="https://www.ttiee.tech/" avatar="/images/links/ttiee.webp" desc="君子不器，随遇而安" >}}
-    {{< link name="Hao_Tian" url="https://haotian22.top" avatar="/images/links/haotian.webp" desc="生命不息，折腾不止ヾ(≧▽≦*)o" >}}
-    {{< link name="Junde Yhi" url="https://www.yhi.moe/" avatar="/images/links/jundeyhi.webp" desc="" >}}
-    {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}
-    {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}
-    {{< link name="九弦之屋" url="https://blog.sinzmise.top/" avatar="/images/links/sinzmise.webp" desc="欢迎旅行者，来到这个平凡但又记载了许多故事的小屋" >}}
+    {{< link name="幽霜的日常记录" url="https://hanamiyuushimo.github.io/" avatar="/images/links/hanamiyuushimo.webp" desc="Stay young, stay simple." >}}  
+    {{< link name="Steven" url="https://blog.steven53.top/" avatar="/images/links/steven.webp" desc="OIer / RMer" >}}  
+    {{< link name="神奇的主页" url="https://www.ttiee.tech/" avatar="/images/links/ttiee.webp" desc="君子不器，随遇而安" >}}  
+    {{< link name="Hao_Tian" url="https://haotian22.top" avatar="/images/links/haotian.webp" desc="生命不息，折腾不止ヾ(≧▽≦*)o" >}}  
+    {{< link name="Junde Yhi" url="https://www.yhi.moe/" avatar="/images/links/jundeyhi.webp" desc="" >}}  
+    {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}  
+    {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}  
+    {{< link name="中弦星空魔法屋" url="https://blog.sinzmise.top/" avatar="/images/links/sinzmise.webp" desc="欢迎旅行者，来到这个平凡但又记载了许多故事的小屋" >}}
 {{< /link_list >}}
 
 ### 本站的信息
