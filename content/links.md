@@ -10,7 +10,7 @@ enableGitalk = false
     {{< link name="ShinoMoe" url="https://shinomoe.xyz/" avatar="/images/links/shinomoe.webp" desc="桜は優しい遠方へ吹くと願っている。" >}}  
     {{< link name="我是小猫" url="https://yunline.github.io/LittleCatMemeCollection/" avatar="/images/links/littlecat.webp" >}}  
     {{< link name="Taranakineko" url="https://nekoq.eu.org" avatar="/images/links/taranakineko.webp" desc="青く滲む 青く滲む 綺麗に" >}}  
-    {{< link name="Vincent文朔" url="https://blog.vincent1230.top/" avatar="/images/links/vincent.webp" desc="太阳出来了 雾就会散的" >}}  
+    {{< link name="Vincy云昔" url="https://blog.vincy1230.net/" avatar="/images/links/vincy.webp" desc="太阳出来了 雾就会散的" >}}  
     {{< link name="伊緻幻の主页" url="https://www.chwin.asia" avatar="/images/links/iori_maboroshi.webp" desc="Take my hands." >}}  
     {{< link name="SakuraKooi" url="https://blog.sakurakooi.dev/" avatar="/images/links/sakurakooi.webp" desc="梦是幽蓝色彩 灵魂如雪纯白" >}}  
     {{< link name="Fika" url="https://fika.ink/" avatar="/images/links/fika.webp" desc="遇到困难睡大觉" >}}  
