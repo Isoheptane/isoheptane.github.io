@@ -165,6 +165,8 @@ bind = $mainMod, 0, exec, $switch_script move 10
 ### 结语
 儘管一個程式可能並不支援複雜的操作，但透過 sh 腳本，可以將不同的程式組合起來，以達成想要做到的複雜的操作。對於 Hyprland 的多顯示器設定來講，這就是一個利用 sh 腳本來將桌面環境改造得更適合個人習慣的例子。
 
+此外，本文所述的功能亦可用過 [`split-monitor-workspaces`](https://github.com/Duckonaut/split-monitor-workspaces) 插件實現，該插件添加了多個 Dispatcher，將工作區分割到多個顯示器上，並在每個顯示器上提供獨立的編號。個人傾向於使用 sh 腳本實現，編寫 Hyprland 插件對我來講，可能會相對麻煩一些。
+
 希望這篇文章可以為您提供改造桌面環境的思路和幫助。
 
 - - -
