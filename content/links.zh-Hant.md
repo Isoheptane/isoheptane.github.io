@@ -1,10 +1,10 @@
 +++
 name = "links"
-title = "链接"
+title = "連結"
 enableGitalk = false
 +++
 
-## 友情链接
+## 友情連結
 {{< link_list >}}
     {{< link name="Malachite" url="https://blog-malachite.vercel.app/" avatar="/images/links/malachite.webp" desc="高中生，计算器爱好者，MtF，不可爱的大可爱。" >}}  
     {{< link name="XenonWZH" url="https://xenonwzh.github.io/" avatar="/images/links/xenonwzh.webp" desc="玻璃晴朗，橘子辉煌 | AFO" >}}  
@@ -28,23 +28,22 @@ enableGitalk = false
     {{< link name="Souiken" url="https://souiken.moe/" avatar="https://souiken.moe/img/avatar.webp" desc="愿我们度过这个漫漫长夜之后，依旧能看到那旭日东升。" >}}
 {{< /link_list >}}
 
-### 本站的信息
-- 名称：Cascade 或 Cascade Kobayashi
+### 本站信息
+- 名稱：Cascade 或 Cascade Kobayashi
 - 描述：工程师猫娘
-- 链接地址：<https://blog.cascade.moe/>
-- 图标：[头像](/images/avatar.webp)
+- 網址：<https://blog.cascade.moe/>
+- 圖像：[頭像](/images/avatar.webp)
 
-### 友链请求
-您可以通过以下方式申请添加友链：
-- 在 GitHub 上提交一个新的 [Issue](https://github.com/Isoheptane/isoheptane.github.io/issues) 
-- 在 GitHub 上修改本站的原代码，并提交一个 [Pull Request](https://github.com/Isoheptane/isoheptane.github.io)
-- 直接联系七碳
+### 友情連結請求
+您可以透過以下方式申請添加友情連結：
+- 在 GitHub 上提交一個新的 [Issue](https://github.com/Isoheptane/isoheptane.github.io/issues) 
+- 在 GitHub 上修改本站的原始碼，並提交一個 [Pull Request](https://github.com/Isoheptane/isoheptane.github.io)
+- 直接聯繫七碳
 
-申请添加友链需要提供以下信息：  
-- 网站名称
-- 网站链接
-- 网站图标或头像（尺寸至少为 256x256，文档或链接皆可）
-- 描述（可选）
+申請添加友情連結需要提供以下信息：  
+- 網站名稱
+- 網址
+- 網站圖標或頭像（尺寸至少為 256x256，文檔或鏈接皆可）
+- 描述（可選）
 
-此外，如果您选择提交 PullRequest，则网站图标或头像应为 WebP 格式。  
-
+此外，如果您選擇提交 PullRequest，則網站圖標或頭像應為 WebP 格式。  
