@@ -77,6 +77,43 @@
                     }
                 ]
             }
+        },
+        "en": {
+            "languageCode": "en",
+            "languageDirection": "ltr",
+            "languageName": "English",
+            "weight": 3,
+            "params": {
+                "description": "Engineer Neko"
+            },
+            "menu": {
+                "main": [
+                    {
+                        "identifier": "home",
+                        "name": "Home",
+                        "pageRef": "/",
+                        "weight": 1
+                    },
+                    {
+                        "identifier": "tags",
+                        "name": "Tags",
+                        "pageRef": "/tags/",
+                        "weight": 2
+                    },
+                    {
+                        "identifier": "about",
+                        "name": "About",
+                        "pageRef": "/about/",
+                        "weight": 3
+                    },
+                    {
+                        "identifier": "links",
+                        "name": "Links",
+                        "pageRef": "/links/",
+                        "weight": 4
+                    }
+                ]
+            }
         }
      },  
     "title": "Cascade",

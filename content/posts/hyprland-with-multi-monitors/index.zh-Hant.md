@@ -1,7 +1,7 @@
 +++
 name = "hyprland-with-multi-monitors"
 title = "Hyprland 下的多顯示器設定"
-tags = ["Hyprland", "Linux", "桌面环境"]
+tags = ["Hyprland", "Linux", "桌面環境"]
 date = "2024-09-08"
 update = "2024-09-08"
 enableGitalk = true

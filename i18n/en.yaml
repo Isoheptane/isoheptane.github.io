@@ -1,0 +1,6 @@
+- id: notice-tip
+  translation: Tip
+- id: notice-note
+  translation: Note
+- id: notice-warning
+  translation: Warning
