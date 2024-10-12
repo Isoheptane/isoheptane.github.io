@@ -1,4 +1,5 @@
 +++
+name = "about"
 title = "关于"
 enableGitalk = true
 +++

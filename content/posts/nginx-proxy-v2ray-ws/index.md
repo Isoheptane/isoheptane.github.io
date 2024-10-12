@@ -1,4 +1,5 @@
 +++
+name = "nginx-proxy-v2ray-ws"
 title = "配置 Nginx 流量伪装并反向代理 V2Ray+WebSocket"
 tags = ["代理", "v2ray"]
 date = "2022-05-01"

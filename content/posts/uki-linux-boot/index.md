@@ -1,4 +1,5 @@
 +++
+name = "uki-linux-boot"
 title = "使用统一内核映像 (UKI) 引导 Linux"
 tags = ["Linux", "UEFI"]
 date = "2023-06-21"

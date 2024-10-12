@@ -1,5 +1,6 @@
 +++
-title = "Hyprland 下的多顯示器設定"
+name = "hyprland-with-multi-monitors"
+title = "Hyprland 下的多显示器设置"
 tags = ["Hyprland", "Linux", "桌面环境"]
 date = "2024-09-08"
 update = "2024-09-08"
@@ -7,29 +8,29 @@ enableGitalk = true
 +++
 
 ### 前言
-前段時間需要離開學校使用電腦工作，在學校的顯示器尺寸實在太大，因此購買了一個可攜式顯示器。
+前段时间需要离开学校使用电脑工作，在学校的显示器尺寸实在太大，因此购买了一个可携式显示器。
 
-在回到學校後，這個可攜式顯示器就作為了輔助顯示器使用。然而，儘管 Hyprland 支援多顯示器，其工作區 (Workspace) 切換的設定卻並不符合我的使用習慣。工作區可以在屏幕之間移動，但這需要配置額外的組合鍵。此外，當切換到另一個顯示器的工作區上時，焦點和光標也會移動到另一個工作區/顯示器上，這會讓我一時找不到焦點和光標在哪。
+在回到学校后，这个可携式显示器就作为了辅助显示器使用。然而，尽管 Hyprland 支持多显示器，其工作区 (Workspace) 切换的设置却并不符合我的使用习惯。工作区可以在屏幕之间移动，但这需要配置额外的组合键。此外，当切换到另一个显示器的工作区上时，焦点和光标也会移动到另一个工作区/显示器上，这会让我一时找不到焦点和光标在哪。
 
-如果是我，我應該會為每個顯示器分配 10 個工作區。當焦點在主顯示器上時，就切換到主顯示器上的工作區。當焦點在副顯示器上時，就切換到副顯示器上的工作區。這樣的邏輯不太能單純使用 Hyprland 的設定檔實現，因此需要藉助 sh 腳本的力量來實現我們的邏輯。
+如果是我，我应该会为每个显示器分配 10 个工作区。当焦点在主显示器上时，就切换到主显示器上的工作区。当焦点在副显示器上时，就切换到副显示器上的工作区。这样的逻辑不太能单纯使用 Hyprland 的设置档实现，因此需要借助 sh 脚本的力量来实现我们的逻辑。
 
 ### 思路
-Hyprland 的每個工作區有一個工作區 ID，每個顯示器也有一個顯示器 ID。那麼我們可以為 ID 為 0 的顯示器分配 ID 為 1~10 的工作區，為 ID 為 1 的顯示器分配 ID 為 11~20 的工作區，以此類推。在按下組合鍵時，檢測焦點在哪個顯示器上，然後切換到對應的工作區。
+Hyprland 的每个工作区有一个工作区 ID，每个显示器也有一个显示器 ID。那么我们可以为 ID 为 0 的显示器分配 ID 为 1~10 的工作区，为 ID 为 1 的显示器分配 ID 为 11~20 的工作区，以此类推。在按下组合键时，检测焦点在哪个显示器上，然后切换到对应的工作区。
 
 ### Hyprland Dispatcher
-Hyprland 有一系列的內建操作，例如切換工作區、移動工作區、移動窗口、執行指令等。這些操作可以透過 Hyprland 設定檔中配置組合鍵執行：
+Hyprland 有一系列的内置操作，例如切换工作区、移动工作区、移动窗口、运行指令等。这些操作可以通过 Hyprland 设置档中配置组合键运行：
 ```ini
 bind = $mainMod, 1, workspace, 1
-# 當按下 mod + 1 時，切換到 1 號工作區
+# 当按下 mod + 1 时，切换到 1 号工作区
 bind = $mainMod SHIFT 1, movetoworkspace, 1
-# 當按下 mod + Shift + 1 時，將當前視窗移動到 1 號工作區，並切換到 1 號工作區
+# 当按下 mod + Shift + 1 时，将当前窗口移动到 1 号工作区，并切换到 1 号工作区
 bind = $mainMod SHIFT, comma, movecurrentworkspacetomonitor, l
-# 當按下 mod + Shift + "," 時，將當前工作區移動到左邊的顯示器上
+# 当按下 mod + Shift + "," 时，将当前工作区移动到左边的显示器上
 bind = $mainMod T, exec, alacritty
-# 當按下 mod + T 時，執行 alacritty 指令，啟動 Alacritty 終端模擬器
+# 当按下 mod + T 时，运行 alacritty 指令，启动 Alacritty 终端仿真器
 ```
 
-也可以透過 `hyprctl dispatch` 指令執行：
+也可以通过 `hyprctl dispatch` 指令运行：
 
 ```shell
 hyprctl dispatch workspace 1
@@ -38,11 +39,11 @@ hyprctl dispatch movecurrentworkspacetomonitor l
 hyprctl dispatch exec alacritty
 ```
 
-那麼，可以讓切換工作區的組合鍵按下後執行一個 sh 腳本，在這個腳本中獲取焦點所在的顯示器，並將工作區切換到指定的顯示器上。
+那么，可以让切换工作区的组合键按下后运行一个 sh 脚本，在这个脚本中获取焦点所在的显示器，并将工作区切换到指定的显示器上。
 
-## sh 腳本
-### 檢測焦點所在的顯示器
-`hyprctl` 提供了子指令 `hyprctl activeworkspace`，可以用於獲取當前活躍工作區的狀態。在終端中執行這個指令可以得到類似如下的輸出：
+## sh 脚本
+### 检测焦点所在的显示器
+`hyprctl` 提供了子指令 `hyprctl activeworkspace`，可以用于获取当前活跃工作区的状态。在终端中运行这个指令可以得到类似如下的输出：
 
 ```plain
 workspace ID 2 (2) on monitor DP-1:
@@ -53,40 +54,40 @@ workspace ID 2 (2) on monitor DP-1:
 	lastwindowtitle: hyprctl activeworksp ~
 ```
 
-不難從第 2 行看出，當前活躍的工作區所屬的顯示器 ID 為 0。透過 `grep` 和 `awk` 即可將數字部分提取出來：
+不难从第 2 行看出，当前活跃的工作区所属的显示器 ID 为 0。通过 `grep` 和 `awk` 即可将数字部分提取出来：
 
 ```bash
 hyprctl activeworkspace | grep "monitorID" | awk '{print $2}'
 ```
 
-其中，`grep` 將會從 `hyprctl activeworkspace` 的輸出中提取出包含 `monitorID` 的這一行。而 `awk` 將會提取出用空格分割的第 2 個字串，也就是 `0`。
+其中，`grep` 将会从 `hyprctl activeworkspace` 的输出中提取出包含 `monitorID` 的这一行。而 `awk` 将会提取出用空格分割的第 2 个字符串，也就是 `0`。
 
-在 sh 腳本中，將將輸出保存為一個變量：
+在 sh 脚本中，将将输出保存为一个变量：
 
 ```bash
 monitor_id=$(hyprctl activeworkspace | grep "monitorID" | awk '{print $2}')
 ```
 
-### 參數設計
-如你所見，這個腳本也需要一些輸入參數，例如要切換到哪個工作區，以及是否需要將當前活動的視窗也移動到那個工作區。在 sh 腳本中，可以透過 `$` 加上參數編號來獲取執行腳本時的參數。
+### 参数设计
+如你所见，这个脚本也需要一些输入参数，例如要切换到哪个工作区，以及是否需要将当前活动的窗口也移动到那个工作区。在 sh 脚本中，可以通过 `$` 加上参数编号来获取运行脚本时的参数。
 
-在這裡，考慮將腳本的第 1 個參數作為操作類型，將第 2 個參數作為我們為工作區。
+在这里，考虑将脚本的第 1 个参数作为操作类型，将第 2 个参数作为我们为工作区。
 
 ```bash
 operation=$1
 workspace=$2
 ```
 
-當 `operation` 為 `switch` 時，則切換到目標工作區；當為 `move` 時，則將當前視窗移動到目標工作區，然後切換到目標工作區。
+当 `operation` 为 `switch` 时，则切换到目标工作区；当为 `move` 时，则将当前窗口移动到目标工作区，然后切换到目标工作区。
 
-### 操作工作區
-首先當然是計算目標工作區 ID。知道了顯示器 ID 和工作區編號參數之後，在 sh 腳本中計算目標工作區 ID：
+### 操作工作区
+首先当然是计算目标工作区 ID。知道了显示器 ID 和工作区编号参数之后，在 sh 脚本中计算目标工作区 ID：
 
 ```bash
 $workspace_id=$(($monitor_id * 10 + $workspace))
 ```
 
-然後根據操作類型，透過 `hyprctl` 來執行對應的操作：
+然后根据操作类型，通过 `hyprctl` 来运行对应的操作：
 
 ```bash
 if [[ $operation == "switch" ]]; then
@@ -99,9 +100,9 @@ if [[ $operation == "move" ]]; then
 fi
 ```
 
-您可能會注意到，在執行切換或移動工作區的操作前，還會首先將目標工作區移動到焦點所在的顯示器上。這是因為目標工作區可能並不在焦點所在的顯示器上，因此需要首先將其移動到焦點所在的顯示器上。
+您可能会注意到，在运行切换或移动工作区的操作前，还会首先将目标工作区移动到焦点所在的显示器上。这是因为目标工作区可能并不在焦点所在的显示器上，因此需要首先将其移动到焦点所在的显示器上。
 
-### 最終的腳本
+### 最终的脚本
 ```bash
 #!/bin/bash
 
@@ -123,10 +124,10 @@ fi
 
 ```
 
-在接下來的操作中，我將這個腳本保存為 `~/.config/hypr/switch_workspace.sh` 這一檔案。
+在接下来的操作中，我将这个脚本保存为 `~/.config/hypr/switch_workspace.sh` 这一文件。
 
 ## Hyprland 配置
-原本預設的配置如下：
+原本缺省的配置如下：
 
 ```ini
 # Switch workspaces with mainMod + [0-9]
@@ -142,7 +143,7 @@ bind = $mainMod, 2, movetoworkspace, 2
 bind = $mainMod, 0, movetoworkspace, 10
 ```
 
-現在將其修改為在按下組合鍵時，執行腳本：
+现在将其修改为在按下组合键时，运行脚本：
 
 ```ini
 $switch_script = ~/.config/hypr/switch_workspace.sh
@@ -160,14 +161,14 @@ bind = $mainMod, 2, exec, $switch_script move 2
 bind = $mainMod, 0, exec, $switch_script move 10
 ```
 
-在 Hyprland 中設定好組合鍵之後，所有工作就完成了。
+在 Hyprland 中设置好组合键之后，所有工作就完成了。
 
 ### 结语
-儘管一個程式可能並不支援複雜的操作，但透過 sh 腳本，可以將不同的程式組合起來，以達成想要做到的複雜的操作。對於 Hyprland 的多顯示器設定來講，這就是一個利用 sh 腳本來將桌面環境改造得更適合個人習慣的例子。
+尽管一个程序可能并不支持复杂的操作，但通过 sh 脚本，可以将不同的程序组合起来，以达成想要做到的复杂的操作。对于 Hyprland 的多显示器设置来讲，这就是一个利用 sh 脚本来将桌面环境改造得更适合个人习惯的例子。
 
-此外，本文所述的功能亦可用過 [`split-monitor-workspaces`](https://github.com/Duckonaut/split-monitor-workspaces) 插件實現，該插件添加了多個 Dispatcher，將工作區分割到多個顯示器上，並在每個顯示器上提供獨立的編號。個人傾向於使用 sh 腳本實現，編寫 Hyprland 插件對我來講，可能會相對麻煩一些。
+此外，本文所述的功能亦可用过 [`split-monitor-workspaces`](https://github.com/Duckonaut/split-monitor-workspaces) 插件实现，该插件添加了多个 Dispatcher，将工作区分割到多个显示器上，并在每个显示器上提供独立的编号。个人倾向于使用 sh 脚本实现，编写 Hyprland 插件对我来讲，可能会相对麻烦一些。
 
-希望這篇文章可以為您提供改造桌面環境的思路和幫助。
+希望这篇文章可以为您提供改造桌面环境的思路和帮助。
 
 - - -
 ### 参考资料

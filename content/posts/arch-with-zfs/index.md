@@ -1,4 +1,5 @@
 +++
+name = "arch-with-zfs"
 title = "在 ZFS 上安装 Arch Linux"
 tags = ["Linux", "Arch Linux", "ZFS", "文件系统"]
 date = "2023-05-07"

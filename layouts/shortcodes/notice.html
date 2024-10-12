@@ -75,7 +75,7 @@
 {{ end }}
 <div class="notice {{ $type }}">
     <div class="notice-title {{ $type }}">
-        {{ i18n $type }}
+        {{ i18n (printf "notice-%s" $type) }}
     </div>
     <div class="notice-body {{ $type }}">
         {{ $inner }}

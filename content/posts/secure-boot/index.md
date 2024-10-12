@@ -1,4 +1,5 @@
 +++
+name = "secure-boot"
 title = "实施 Secure Boot"
 tags = ["Secure Boot", "UEFI"]
 date = "2023-06-25"

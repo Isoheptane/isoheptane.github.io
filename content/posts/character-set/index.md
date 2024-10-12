@@ -1,4 +1,5 @@
 +++
+name = "character-set"
 title = "七碳的自设"
 tags = ["杂谈"]
 date = "2021-10-31"

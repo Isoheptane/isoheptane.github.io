@@ -1,7 +1,84 @@
 {
     "baseURL": "https://cascade.moe",
-    "languageCode": "zh-cn",
-    "defaultContentLanguage": "zh-cn",
+    "languageCode": "zh-Hans",
+    "defaultContentLanguage": "zh-Hans",
+    "defaultContentLanguageInSubdir": false,
+    "languages": {
+        "zh-Hans": {
+            "languageCode": "zh-Hans",
+            "languageDirection": "ltr",
+            "languageName": "简体中文",
+            "weight": 1,
+            "params": {
+                "description": "工程师猫娘"
+            },
+            "menu": {
+                "main": [
+                    {
+                        "identifier": "home",
+                        "name": "Home",
+                        "pageRef": "/",
+                        "weight": 1
+                    },
+                    {
+                        "identifier": "tags",
+                        "name": "Tags",
+                        "pageRef": "/tags/",
+                        "weight": 2
+                    },
+                    {
+                        "identifier": "about",
+                        "name": "About",
+                        "pageRef": "/about/",
+                        "weight": 3
+                    },
+                    {
+                        "identifier": "links",
+                        "name": "Links",
+                        "pageRef": "/links/",
+                        "weight": 4
+                    }
+                ]
+            }
+        },
+        "zh-Hant": {
+            "languageCode": "zh-Hant",
+            "languageDirection": "ltr",
+            "languageName": "繁體中文",
+            "weight": 2,
+            "params": {
+                "description": "工程師猫娘"
+            },
+            "menu": {
+                "main": [
+                    {
+                        "identifier": "home",
+                        "name": "Home",
+                        "pageRef": "/",
+                        "weight": 1
+                    },
+                    {
+                        "identifier": "tags",
+                        "name": "Tags",
+                        "pageRef": "/tags/",
+                        "weight": 2
+                    },
+                    {
+                        "identifier": "about",
+                        "name": "About",
+                        "pageRef": "/about/",
+                        "weight": 3
+                    },
+                    {
+                        "identifier": "links",
+                        "name": "Links",
+                        "pageRef": "/links/",
+                        "weight": 4
+                    }
+                ]
+            }
+        }
+     },  
     "title": "Cascade",
     "theme": ["m10c-iso"],
     "module": {
@@ -27,11 +104,6 @@
                 "icon": "mail",
                 "name": "Email",
                 "url": "mailto:chomodiso@outlook.com"
-            },
-            {
-                "icon": "misskey",
-                "name": "Misskey",
-                "url": "https://misskey.cascade.moe/@Isoheptane"
             }
         ],
         "gitalk": {

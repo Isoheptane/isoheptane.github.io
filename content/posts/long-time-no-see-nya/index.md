@@ -1,4 +1,5 @@
 +++
+name = "long-time-no-see-nya"
 title = "关于最近"
 tags = ["杂谈"]
 date = "2024-04-07"

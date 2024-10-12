@@ -1,4 +1,5 @@
 +++
+name = "install-arch"
 title = "第一次尝试安装 Arch Linux"
 tags = ["Linux", "Arch Linux"]
 date = "2021-10-13"
