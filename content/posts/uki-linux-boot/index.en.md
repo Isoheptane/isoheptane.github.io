@@ -14,7 +14,7 @@ It's possible to boot Linux without a 2nd bootloader. So I decided to let the UE
 
 ## Different Ways to Boot
 ### Boot via GRUB
-On legacy BIOS platforms, [**Master Boot Record (MBR)**](https://en.wikipedia.org/wiki/Master_boot_record) partition table is commonly used. When creating MBR disks, usually we leave a margin of about 1-2 MB between MBR and the first partition. This spare space is called **MBR gap**. While installing GRUB, installer will embed GRUB into MBR gap and rewrite MBR, codes in MBR will boot GRUB. When computer boots up, BIOS will first execute codes in MBR, codes is MBR will then load and boot GRUB.
+On legacy BIOS platforms, [**Master Boot Record (MBR)**](https://en.wikipedia.org/wiki/Master_boot_record) partition table is commonly used. When creating MBR disks, usually we leave a margin of about 1-2 MB between MBR and the first partition. This spare space is called **post-MBR gap**. While installing GRUB, installer will embed GRUB into post-MBR gap and rewrite MBR, codes in MBR will boot GRUB. When computer boots up, BIOS will first execute codes in MBR, codes is MBR will then load and boot GRUB.
 
 If [**GUID Barition Table (GPT)**](https://en.wikipedia.org/wiki/GUID_Partition_Table) is used, GRUB will be installed into the **BIOS boot partition**. While booting, BIOS will load and boot GRUB from that partition.
 
