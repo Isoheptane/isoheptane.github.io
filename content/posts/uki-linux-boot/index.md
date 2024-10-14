@@ -3,7 +3,7 @@ name = "uki-linux-boot"
 title = "使用统一内核映像 (UKI) 引导 Linux"
 tags = ["Linux", "UEFI"]
 date = "2023-06-21"
-update = "2023-06-24"
+update = "2024-10-14"
 enableGitalk = true
 +++
 
@@ -130,9 +130,9 @@ fallback_options="-S autodetect"
 ```
 
 {{< notice tip >}}
-- 如果要将启动屏幕图片整合进 UKI 当中，只需要取消对 `PRESET_options` 的注释并在其中添加 `--splash /path/to/your/splash_picture.bmp` 即可。
-- 如果需要为某一预设单独设置内核参数，在 `PRESET_options` 中添加 `--cmdline /path/to/your/cmdline` 即可。
-- 如果选择不使用嵌入的内核参数，在 `PRESET_options` 中添加 `--no-cmdline` 即可。
+- 如果要将启动屏幕图片整合进 UKI 当中，只需要取消对 `<PRESET_NAME>_options` 的注释并在其中添加 `--splash /path/to/your/splash_picture.bmp` 即可。
+- 如果需要为某一预设单独设置内核参数，在 `<PRESET_NAME>_options` 中添加 `--cmdline /path/to/your/cmdline` 即可。
+- 如果选择不使用嵌入的内核参数，在 `<PRESET_NAME>_options` 中添加 `--no-cmdline` 即可。
 {{</ notice >}}
 
 接下来就只需要使用 mkinitcpio 来创建 UKI 了。
