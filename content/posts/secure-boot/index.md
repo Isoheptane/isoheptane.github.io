@@ -3,7 +3,7 @@ name = "secure-boot"
 title = "实施 Secure Boot"
 tags = ["Secure Boot", "UEFI"]
 date = "2023-06-25"
-update = "2023-06-25"
+update = "2024-10-14"
 enableGitalk = true
 +++
 
@@ -30,7 +30,7 @@ PK 是最高级的密钥，主要用于**对设备上 KEK 证书的更新签名*
 KEK 是次级的密钥，主要用于**对设备上 db/dbx 的更新签名**。在一个设备上可以安装多个 KEK 证书。
 
 #### 签名数据库 (db)
-db 中存储了**受信任的证书和 Hash**。如果一个 EFI 二进制文件经过了 db 中的证书对应的私钥签名或其 Hash 存在于 dbx 中，则这个 EFI 二进制文件是可信的。
+db 中存储了**受信任的证书和 Hash**。如果一个 EFI 二进制文件经过了 db 中的证书对应的私钥签名或其 Hash 存在于 db 中，则这个 EFI 二进制文件是可信的。
 
 在本文中，db 中存储的证书也可被称作 db 证书，与之对应的密钥对则称之为 db 密钥。db 密钥主要用于**对 EFI 二进制文件签名**。
 
@@ -62,12 +62,16 @@ dbx 中存储**不再受信任的证书和 Hash**。如果一个 EFI 二进制�
 - [微软 UEFI CA 2023 证书](https://go.microsoft.com/fwlink/?linkid=2239872)
 - [Windows UEFI CA 2023 证书](https://go.microsoft.com/fwlink/?linkid=2239776)
 
+{{< notice note >}}
+微软 KEK CA 2011 证书将会在 2026 年失效。
+{{</ notice >}}
+
 ## 实施 Secure Boot 的方式
 ### 使用自己的密钥与证书
 在设备上安装自己的 PK 证书和 KEK 证书，并使用自己的 db 密钥来对 EFI 二进制文件签名。
 
 ### 使用已签名的 Bootloader
-使用已签名的 Bootloader 如 [shim](https://aur.archlinux.org/packages/shim-signed) 来加载其他 EFI 二进制文件。但 shim 同样不会自动加载未签名的 EFI 二进制文件，它使用了**机器所有者密钥列表 (MokList)**。当被加载的 EFI 二进制文件经过了 MokList 中的公钥对应的私钥签名或其 Hash 存在于 MokList 中时，Bootloader 才会加载这个 EFI 二进制文件。否则，Bootloader 会启动一个密钥管理工具，这个工具可以用于添加密钥或 Hash。
+使用已签名的 Bootloader 如 [shim](https://aur.archlinux.org/packages/shim-signed) 来加载其他 EFI 二进制文件。但 shim 同样不会自动加载未签名的 EFI 二进制文件，它使用了**机器所有者密钥列表 (MokList)**。当被加载的 EFI 二进制文件经过了 MokList 中的公钥对应的私钥签名或其 Hash 存在于 MokList 中时，Bootloader 才会加载这个 EFI 二进制文件。否则，Bootloader 同样会拒绝加载这个 EFI 二进制文件。你可以通过 Bootloader 提供的工具来管理 MokList。
 
 ## 实施 Secure Boot
 下面将会介绍使用自己的密钥和证书来实施 Secure Boot。接下来的步骤中，大部分的操作会需要用到 [`efitools`](https://archlinux.org/packages/extra/x86_64/efitools/) 和 [`sbsigntools`] 中的指令。
