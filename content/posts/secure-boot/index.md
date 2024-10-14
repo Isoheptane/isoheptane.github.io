@@ -295,14 +295,12 @@ $ sbkeysync --verbose
 $ sbkeysync --verbose --pk
 ```
 
-然后再尝试安装证书。
-
 #### 使用 UEFI 固件设置工具
-一些 UEFI 固件允许通过 UEFI 固件设置工具来管理设备上安装的证书。
+一些 UEFI 固件允许通过 UEFI 固件设置工具（BIOS）来管理设备上安装的证书。
 
 由于许多 UEFI 固件**仅支持读写 FAT 文件系统**，因此需要将要安装的证书放在一个 FAT 文件系统上。将要安装的证书放在 EFI 系统分区中也是可行的。
 
-首先将**除 `noPK.auth` 外**的所有 `.cer`, `.esl`, `.auth` 文件复制到一个 FAT 文件系统上。然后重启设备，进入 UEFI 固件设置工具。在 UEFI 固件设置工具中找到与 Secure Boot 相关的选项，并选择从外部存储中安装证书。在选择了对应的文件后，UEFI 固件可能会询问这个文件的类型，常见的选项有这些：
+首先将**除 `noPK.auth` 外**的所有 `.cer`, `.esl`, `.auth` 文件复制到一个 UEFI 固件设置工具可以访问的 FAT 文件系统上。然后重启设备，进入 UEFI 固件设置工具。在 UEFI 固件设置工具中找到与 Secure Boot 相关的选项，并选择从外部存储中安装证书。在选择了对应的文件后，UEFI 固件可能会询问这个文件的类型，常见的选项有这些：
 - **Key Certificate Blob**, 即**二进制证书对象**，对应 `.cer` 格式的文件。
 - **UEFI Secure Variable**, 即 **UEFI 安全变量**，对应 `.esl` 格式的文件。
 - **Authenticated Variable**, 即**经过签名的 UEFI 变量**，对应 `.auth` 格式的文件。
