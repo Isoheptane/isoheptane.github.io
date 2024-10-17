@@ -31,7 +31,7 @@ enableGitalk = false
 ### 本站信息
 - 名稱：Cascade 或 Cascade Kobayashi
 - 描述：工程师猫娘
-- 網址：<https://blog.cascade.moe/>
+- 網址：<https://cascade.moe/>
 - 圖像：[頭像](/images/avatar.webp)
 
 ### 友情連結請求
@@ -46,4 +46,4 @@ enableGitalk = false
 - 網站圖標或頭像（尺寸至少為 256x256，文檔或鏈接皆可）
 - 描述（可選）
 
-此外，如果您選擇提交 PullRequest，則網站圖標或頭像應為 WebP 格式。  
+此外，如果您選擇提交 Pull Request，則網站圖標或頭像應為 WebP 格式。  
