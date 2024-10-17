@@ -13,9 +13,9 @@ In my article [Boot Linux using Unified Kernel Image](/en/posts/uki-linux-boot/)
 Although for most people, Secure Boot is not necessary. But I still want to have a try on it, so I tried implementing it on my machine.
 
 ## Secure Boot
-Secure Boot is a part of UEFI standard. It ensures that **only trusted EFI binaries are loaded** by **verifying their digital signatures** before loading EFI binaries (UEFI firmwares, UEFI drivers, UEFI applications, bootloaders, etc.). This prevents untrusted EFI binaries from being loaded before booting up the OS. Since programs loaded the OS are privilleged and can directly access hardwares, therefore it's possible to perform attacks by loading malwares ahead of the OS. Secure Boot blocks untrusted malwares, therefore it provides protection against such type of attack (Rootkit).
+Secure Boot is a part of UEFI standard. It ensures that **only trusted EFI binaries are loaded** by **verifying their digital signatures** before loading EFI binaries (UEFI firmware, UEFI drivers, UEFI applications, bootloaders, etc.). This prevents untrusted EFI binaries from being loaded before booting up the OS. Since programs loaded the OS are privileged and can directly access hardwares, therefore it's possible to perform attacks by loading malware ahead of the OS. Secure Boot blocks untrusted malware, therefore it provides protection against such type of attack (Rootkit).
 
-For manufacturers and vendors, Secure Boot ensures that only softwares trusted by OEMs can be loaded, preventing users from privilleged operations like debugging the device or reading proprietary softwares. Thus many PC/Mobile Phone manufacturers and vendors will keep Secure Boot enabled. For many motherboard manufacturers however, their products for DIY markets usually have Secure Boot disabled by default while also enabling Compatibility Support Module to support legacy BIOS boot.
+For manufacturers and vendors, Secure Boot ensures that only softwares trusted by OEMs can be loaded, preventing users from privileged operations like debugging the device or reading proprietary softwares. Thus many PC/Mobile Phone manufacturers and vendors will keep Secure Boot enabled. For many motherboard manufacturers however, their products for DIY markets usually have Secure Boot disabled by default while also enabling Compatibility Support Module to support legacy BIOS boot.
 
 ### Keys in Secure Boot
 Keys used in Secure Boot are usually stored as UEFI variables in NVRAM of the device. An UEFI variable is a key-value pair containing identity (key) and data (value). It can be used to share data among UEFI environment, bootloaders and other applications.
@@ -72,7 +72,7 @@ Microsoft Corporation KEK CA 2011 is set to expire in 2026.
 Install your own PK certificate and KEK certificates, then sign EFI binaries with your own db keys.
 
 ### Using Signed Bootloaders
-Using signed bootloaders like [shim](https://aur.archlinux.org/packages/shim-signed) to load other EFI binaries. shim won't load EFI binaries without a valid signature. It uses **Machine Owner Key List (MokList)**. EFI binaries will be loaded only when the binray is signed with corresponding privates keys of public keys in MokList or its hash is in MokList. Otherwise bootloader will refuse to load the EFI binary. You can manage MokList using tools provided by the bootloader.
+Using signed bootloaders like [shim](https://aur.archlinux.org/packages/shim-signed) to load other EFI binaries. shim won't load EFI binaries without a valid signature. It uses **Machine Owner Key List (MokList)**. EFI binaries will be loaded only when the binary is signed with corresponding privates keys of public keys in MokList or its hash is in MokList. Otherwise bootloader will refuse to load the EFI binary. You can manage MokList using tools provided by the bootloader.
 
 ## Implementing Secure Boot
 Now I will demonstrate how to set up Secure Boot using own keys and certificates. In next steps, they will require commands provided by [`efitools`](https://archlinux.org/packages/extra/x86_64/efitools/) and [`sbsigntools`].
@@ -159,7 +159,7 @@ To update certificates under user mode, **the change should be signed**. Here we
 ```bash-session
 > # Conver db certificate into EFI signature list
 $ cert-to-efi-sig-list -g "$(cat GUID.txt)" new_db.crt new_db.esl
-> # Sign EFI signature list containting db certificates with KEK
+> # Sign EFI signature list containing db certificates with KEK
 $ sign-efi-sig-list -g "$(cat GUID.txt)" -k KEK.key -c KEK.crt db new_db.esl new_db.auth
 ```
 
@@ -171,16 +171,16 @@ $ sign-efi-sig-list -a -g "$(cat GUID.txt)" -k KEK.key -c KEK.crt db new_db.esl 
 
 ### Adding Other Certificates
 {{< notice warning >}}
-This step is important! UEFI firmwares may be signed by keys from Microsoft or device manufacturers. If you only install your own db certificates and set Secure Boot to enable, **UEFI firmware may not be loaded and the device may brick**.
+This step is important! UEFI firmware may be signed by keys from Microsoft or device manufacturers. If you only install your own db certificates and set Secure Boot to enable, **UEFI firmware may not be loaded and the device may brick**.
 
-I encountered this problem. Eventually I recovered by reflashing BIOS and CMOS clearing.
+I encountered this problem. Eventually I recovered by flashing BIOS and CMOS clearing.
 {{</ notice >}}
 
 #### Adding Certificates From Microsoft
 After downloading certificates from Microsoft, we need to convert the certificates to EFI certificate list. Here we use the 2011 version certificates as an example:
 
 {{< notice note >}}
-Here we setted GUID to `77fa9abd-0359-4d32-bd60-28f4e78f784b`, this is Microsoft's owner GUID.
+Here we set GUID to `77fa9abd-0359-4d32-bd60-28f4e78f784b`, this is Microsoft's owner GUID.
 {{</ notice >}}
 
 ```bash-session
@@ -214,7 +214,7 @@ Do you remember UEFI variables we backed up at the beginning. It contains existi
 $ sign-efi-sig-list -a -g -k KEK.key -c KEK.crt db old_db.esl add_MS_db.auth 
 ```
 
-If backup contains other cerificates, you can also install them like this.
+If backup contains other certificates, you can also install them like this.
 
 ### Sign EFI Binaries
 Use following command to sign an EFI binary:
@@ -300,7 +300,7 @@ $ sbkeysync --verbose --pk
 #### Using UEFI BIOS
 Some UEFI firmware allows you to manage certificates through their UEFI firmware configuration tool (aka. BIOS).
 
-Many UEFI firmwares only supports FAT filesystem, therefore you need to copy your certificates to a FAT filesystem. It's also OK to place them in your EFI boot partition.
+Many UEFI firmware only supports FAT filesystem, therefore you need to copy your certificates to a FAT filesystem. It's also OK to place them in your EFI boot partition.
 
 First, copy all `.cer`/`.esl`/`.auth` files except `noPK.auth` to a FAT filesystem that is accessible from your firmware. Go to the options related to Secure Boot, then select installing certificates from external storage. UEFI firmware may ask what type is this file. Here are some common options:
 - **Key Certificate Blob**, matches `.cer` certificate files
@@ -312,7 +312,7 @@ It's recommended to use `.auth` file if UEFI firmware supports.
 ### Enabling Secure Boot
 Now, enable Secure Boot and then reboot the device. If you did it correctly, your device should boot OS normally.
 
-If devices can not boot OS and you can not get to the configuration tool (BIOS interface), that's probably because UEFI firmware is signed with a key that is not trusted (corresponding certificate is not installed). You can try to reflash your UEFI firmware to the motherboard.
+If devices can not boot OS and you can not get to the configuration tool (BIOS interface), that's probably because UEFI firmware is signed with a key that is not trusted (corresponding certificate is not installed). You can try to flash your UEFI firmware to the motherboard.
 
 Now, you have completed implementing Secure Boot using your own keys.
 

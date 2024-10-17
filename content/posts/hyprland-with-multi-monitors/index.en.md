@@ -10,7 +10,7 @@ enableGitalk = true
 ### Foreword
 Recently, I need to leave school but I still need to work on a computer. The monitor in my room was just too large. So I bought a portable monitor.
 
-After returning to school, this portaable monitor became a secondary monitor. Although Hyprland supports multiple monitors, default monitor and workspace switching setup does not align with my habits. Workspaces can move between monitors, but this requires extra hotkey configuration. Besides, when you switch to a workspace on other monitors, focus and cursor will move to that workspace/monitor, which makes it hard for me to find the cursor at times.
+After returning to school, this portable monitor became a secondary monitor. Although Hyprland supports multiple monitors, default monitor and workspace switching setup does not align with my habits. Workspaces can move between monitors, but this requires extra hotkey configuration. Besides, when you switch to a workspace on other monitors, focus and cursor will move to that workspace/monitor, which makes it hard for me to find the cursor at times.
 
 I would like to allocate 10 workspaces for each monitor. When the focus is on the main monitor, it should switch to workspaces on the main monitor. When the focus is on the secondary monitor, it should switch to workspaces on the secondary monitor. Such logic doesn't seem to be implementable by hyprland configuration alone, so we need the power of shell scripts to implement our logic.
 
@@ -40,7 +40,7 @@ hyprctl dispatch movecurrentworkspacetomonitor l
 hyprctl dispatch exec alacritty
 ```
 
-So, it's possible can run a shell script when the switch workspace shortcut key is pressed. In this shell scrpt, we find the focused monitor and then switch to corresponding monitor.
+So, it's possible can run a shell script when the switch workspace shortcut key is pressed. In this shell script, we find the focused monitor and then switch to corresponding monitor.
 
 ## Shell Script
 ### Find The Focused Monitor
@@ -61,7 +61,7 @@ From line 2, it's obvious that the currently active workspace is on monitor 0. B
 hyprctl activeworkspace | grep "monitorID" | awk '{print $2}'
 ```
 
-`grep` will extract the line that contains `monitorID`, `awk` will extract the second string splited by space, which is `0` here.
+`grep` will extract the line that contains `monitorID`, `awk` will extract the second string split by space, which is `0` here.
 
 In our shell script, we store the result in a variable:
 

@@ -16,7 +16,7 @@ It's possible to boot Linux without a 2nd bootloader. So I decided to let the UE
 ### Boot via GRUB
 On legacy BIOS platforms, [**Master Boot Record (MBR)**](https://en.wikipedia.org/wiki/Master_boot_record) partition table is commonly used. When creating MBR disks, usually we leave a margin of about 1-2 MB between MBR and the first partition. This spare space is called **post-MBR gap**. While installing GRUB, installer will embed GRUB into post-MBR gap and rewrite MBR, codes in MBR will boot GRUB. When computer boots up, BIOS will first execute codes in MBR, codes is MBR will then load and boot GRUB.
 
-If [**GUID Barition Table (GPT)**](https://en.wikipedia.org/wiki/GUID_Partition_Table) is used, GRUB will be installed into the **BIOS boot partition**. While booting, BIOS will load and boot GRUB from that partition.
+If [**GUID Partition Table (GPT)**](https://en.wikipedia.org/wiki/GUID_Partition_Table) is used, GRUB will be installed into the **BIOS boot partition**. While booting, BIOS will load and boot GRUB from that partition.
 
 On UEFI platforms, GRUB is present as a **executable EFI file**. It's usually installed to the **EFI System Partition (ESP)**. While installing, installer will also add a GRUB boot option into the UEFI boot sequence. After selecting GRUB boot option in UEFI firmware, it will load and boot GRUB from EFI system partition.
 
@@ -28,7 +28,7 @@ After GRUB is booted, GRUB will present boot options according to its configurat
 UEFI boot sequence can be modified using tools like `efibootmgr`. After adding the boot option of Linux kernel image with proper arguments, when you select that boot option, UEFI firmware will boot the Linux kernel image.
 
 ## Unified Kernel Image (UKI)
-Linux kernel and resourses required in the boot process can be boundled into a **executalbe EFI file**. This EFI file is a [**Unified Kernel Image (UKI)**](https://wiki.archlinux.org/title/Unified_kernel_image). A UKI may contain:
+Linux kernel and resources required in the boot process can be bundled into a **executable EFI file**. This EFI file is a [**Unified Kernel Image (UKI)**](https://wiki.archlinux.org/title/Unified_kernel_image). A UKI may contain:
 - UEFI Boot Stub，like [systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html)
 - Linux Kernel Image
 - [initramfs Image](https://wiki.archlinux.org/title/Arch_boot_process#initramfs)
@@ -36,10 +36,10 @@ Linux kernel and resourses required in the boot process can be boundled into a *
 - [CPU Microcodes](https://wiki.archlinux.org/title/Microcode)
 - Splash Screen
 
-Compared to EFISTUB, UKI boundled initramfs and CPU microcodes that will be used in the boot process. This makes UKI more integrated and convenient than Linux kernel image with EFISTUB enabled. With few configuration, UKI will be able to boot from UEFI firmware.
+Compared to EFISTUB, UKI bundled initramfs and CPU microcodes that will be used in the boot process. This makes UKI more integrated and convenient than Linux kernel image with EFISTUB enabled. With few configuration, UKI will be able to boot from UEFI firmware.
 
 ### Structure of UKI
-UKI is an **executable EFI file**, and an EFI file is also a **PE/COFF file**. Using UKI on my system as an example, its PE segement list is like this: 
+UKI is an **executable EFI file**, and an EFI file is also a **PE/COFF file**. Using UKI on my system as an example, its PE segment list is like this: 
 
 ```plain
 Sections:
@@ -77,12 +77,12 @@ Among these segments:
 - `.initrd` contains initramfs and CPU microcodes
 - `.splash` contains splash screen image
 
-There are also segements that are not used in my UKI such as `.cmdline`, which contains embedded kernel parameters. 
+There are also segments that are not used in my UKI such as `.cmdline`, which contains embedded kernel parameters. 
 
-### systemd-stub 与 UKI 创建
-Just like UEFI Boot Stub in EFISTUB, [systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html) implemented similar functionality. They will be exectued first, load kernel and related resources, then boot Linux kernel. systemd-stub provides **executable EFI file with only the part of UEFI Boot Stub**, they are used as empty templates.
+### systemd-stub and UKI Creation
+Just like UEFI Boot Stub in EFISTUB, [systemd-stub](https://www.freedesktop.org/software/systemd/man/systemd-stub.html) implemented similar functionality. They will be executed first, load kernel and related resources, then boot Linux kernel. systemd-stub provides **executable EFI file with only the part of UEFI Boot Stub**, they are used as empty templates.
 
-When UKI is booted, systemd-stub will load Linux kernel from ELF formatted Linux kernel in `.linux` segment, initramfs and microcodes from `.initrd` segment, kernel parameters from `.cmdline`, etc. We can **make an UKI by adding PE segements into empty templates**.
+When UKI is booted, systemd-stub will load Linux kernel from ELF formatted Linux kernel in `.linux` segment, initramfs and microcodes from `.initrd` segment, kernel parameters from `.cmdline`, etc. We can **make an UKI by adding PE segments into empty templates**.
 
 [mkinitcpio](https://wiki.archlinux.org/title/Mkinitcpio) and [dracut](https://wiki.archlinux.org/title/Dracut) can not only create initramfs but also create UKI. Next, I will demonstrate how to create UKI using mkinitcpio.
 
@@ -157,7 +157,7 @@ $ efibootmgr --create \
     --loader "EFI/Linux/arch-linux.efi"
 ```
 
-In this command, `sdX` is the name of the device where ESP resides, `Y` is the partition number of ESP. `--loader` inidcates the path to our UKI in ESP.
+In this command, `sdX` is the name of the device where ESP resides, `Y` is the partition number of ESP. `--loader` indicates the path to our UKI in ESP.
 
 If you want to add kernel parameters in the UEFI boot option, use `-u parameter` to assign extra parameters encoded in UTF-16:
 
