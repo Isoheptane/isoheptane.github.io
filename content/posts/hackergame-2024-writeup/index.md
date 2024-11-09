@@ -547,6 +547,323 @@ Flag 为 `flag{pow3rful_r3gular_expressi0n_medium_70a46e715e}`。
 参考资料：
 [用正则表达式匹配3的任意倍数 - 腾讯云开发者社区](https://cloud.tencent.com/developer/article/1777692)
 
+## 看不见的彼方：交换空间
+一开始的思路是通过 POSIX Shared Memory 来共享内存交换信息，不过经过测试，发现 `shm_open()` 无法打开共享内存文件。后来想了想，发现可以使用 TCP Stream 来传输数据。而这道题目的空间在去掉文件之后，留给我们的空间只有大约 60 MiB，相当捉襟见肘。因此两个程序都不能简单地新建一份文件，而是要在原来的文件上操作。
+
+### 小菜一碟
+两个文件的大小是完全一样的，考虑每次交换 1 KiB 的数据。
+
+为了使双方步调同步，Bob 首先发送自己的第 1 个 1 KiB 块，Alice 在接收到来自 Bob 的切片后，将自己的第 1 个 1KiB 块也发送出去，双方接收到交换得到的数据之后，**指定位置地**覆写到自己的文件中。Bob 在收到了来自 Alice 的第 1 个 1KiB 块并写入文件之后，再发送自己的第。 2 个 1 KiB 块。如此重复，直到交换完总共 131072 个 1 KiB 块。
+
+Alice 的代码：
+```Rust
+use std::fs::OpenOptions;
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
+use std::os::unix::fs::FileExt;
+
+fn main() -> std::io::Result<()> {
+    let address = "0.0.0.0:50000";
+    let listener = TcpListener::bind(address)?;
+    println!("Start listening on {}...", address);
+
+    for stream in listener.incoming() {
+        match stream {
+            Ok(stream) => {
+                start_sending(stream);
+                return Ok(());
+            },
+            Err(e) => {
+                eprintln!("Connection failed: {}", e);
+                return Ok(())
+            }
+        }
+    }
+    println!("Done!");
+    Ok(())
+}
+
+fn start_sending(mut stream: TcpStream) {
+    let file = OpenOptions::new().read(true).write(true).open("space/file").unwrap();
+
+    let mut net_buf = [0; 1024];
+    let mut file_buf = [0; 1024];
+    for i in 0..(128 * 1024) as u64 {
+        file.read_exact_at(&mut file_buf, i * 1024).unwrap();
+
+        stream.read(&mut net_buf).unwrap();
+        stream.write(&file_buf).unwrap();
+
+        file.write_at(&mut net_buf, i * 1024).unwrap();
+        if i % 1024 == 0 {
+            println!("{} MiB transferred", i / 1024);
+        }
+    }
+
+    println!("Transfer done.");
+}
+```
+
+Bob 的代码：
+```Rust
+use std::fs::OpenOptions;
+use std::io::{Read, Write};
+use std::net::TcpStream;
+use std::os::unix::fs::FileExt;
+use std::thread;
+use std::time::Duration;
+
+fn main() -> std::io::Result<()> {
+    thread::sleep(Duration::from_millis(500));
+    let stream = TcpStream::connect("127.0.0.1:50000")?;
+    println!("Connected!");
+    start_sending(stream);
+    Ok(())
+}
+
+fn start_sending(mut stream: TcpStream) {
+    let file = OpenOptions::new().read(true).write(true).open("space/file").unwrap();
+
+    let mut net_buf = [0; 1024];
+    let mut file_buf = [0; 1024];
+    for i in 0..(128 * 1024) as u64 {
+        file.read_exact_at(&mut file_buf, i * 1024).unwrap();
+        
+        stream.write(&file_buf).unwrap();
+        stream.read(&mut net_buf).unwrap();
+
+        file.write_at(&mut net_buf, i * 1024).unwrap();
+    }
+
+    println!("Transfer done.");
+}
+```
+
+虽然代码充斥着 `.unwrap()`，不过测试环境下运行是没问题的。~~但还是请不要像我这样这样使用 Rust！！~~
+
+编译后分别上传两个文件即可得到 Flag。
+
+Flag 为 `flag{just A p1ece 0f cake_4a5786f40d}`。
+
+### 捉襟见肘
+Alice 有一块 128 MiB 的文件，Bob 有两块 64 MiB 的文件。既然我们已经知道如何交换同样大小的文件了，我们也可以考虑把 Alice 的 128 MiB 的文件切成两个 64 MiB 的文件。
+
+有一个文件操作叫做 **truncate**，这个操作可以将文件扩展或缩小到指定的大小。为了将 Alice 的 `file`切分成两个 64 MiB 的文件，首先需要创建 Alice 的 `file2`，然后一边将 `file` 的末尾写入 `file2`，一边 truncate `file`。虽然最后 `file2` 的内容是倒过来的 `file` 的后 64 MiB，但是可以原地处理 `file2`，把 `file2` 的内容颠倒回来。
+
+然后按照第一小问的方法交换 Alice 的 `file` 和 Bob `file1`， Alice 的 `file2` 和 Bob 的 `file2`。
+
+但是，交换之后 Alice 获取的 Bob 的 `file1` 的数据是存储在 `file` 这个名字的文件中的，因此还需要将 `file` 重命名为 `file1`。很不幸的是，经过测试，在测试环境中，我们是没办法重命名文件的。因此我们还是用切分 Alice 的 `file` 时的方法，一边将 `file` 的末尾写入 `file1`，一边 truncate `file`，最后原地处理 `file2`，把内容颠倒回来。
+
+交换之后 Bob 获取的 Alice 的 `file` 的数据也是分开储存在 `file1` 和 `file2` 中的。我们照葫芦画瓢，将 `file2` 合并到 `file1` 的末尾，然后原理处理 `file1`，把后 64 MiB 的内容颠倒回来。然后将 `file1` “重命名”为 `file`，即一边将 `file1` 的末尾写入 `file`，一边 truncate `file1`，最后原地处理 `file`，把内容颠倒回来。
+
+以上的文件操作都可以编译
+
+Alice 的代码：
+```Rust
+use std::fs::{OpenOptions, File};
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
+use std::os::unix::fs::FileExt;
+
+fn main() -> std::io::Result<()> {
+    {
+        println!("Creating placeholders...");
+        let _ = OpenOptions::new().read(true).write(true).create(true).open("space/file1").unwrap();
+        let _ = OpenOptions::new().read(true).write(true).create(true).open("space/file2").unwrap();
+    }
+    
+    let file1 = OpenOptions::new().read(true).write(true).open("space/file").unwrap();
+    let file2 = OpenOptions::new().read(true).write(true).create(true).open("space/file2").unwrap();
+    
+    let mut buf1 = [0; 1048576];
+    let mut buf2 = [0; 1048576];
+    for i in 0..64 as u64 {
+        let pfile1: u64 = (128 * 1048576) - (i + 1) * 1048576;
+        file1.read_exact_at(&mut buf1, pfile1).unwrap();
+        file1.set_len(pfile1).unwrap();
+        file2.write_at(&buf1, i * 1048576).unwrap();
+    }
+    println!("Splited, reshaping...");
+    for i in 0..32 as u64 {
+        let pfile2: u64 = (64 * 1048576) - (i + 1) * 1048576;
+        file2.read_exact_at(&mut buf1, i * 1048576).unwrap();
+        file2.read_exact_at(&mut buf2, pfile2).unwrap();
+        file2.write_at(&buf1, pfile2).unwrap();
+        file2.write_at(&buf2, i * 1048576).unwrap();
+    }
+    
+
+    let address = "0.0.0.0:50000";
+    let listener = TcpListener::bind(address)?;
+    println!("Start listening on {}...", address);
+
+    for stream in listener.incoming() {
+        match stream {
+            Ok(stream) => {
+                start_sending(&file1, &file2, stream);
+                break;
+            },
+            Err(e) => {
+                eprintln!("Connection failed: {}", e);
+                return Ok(())
+            }
+        }
+    }
+    // Move again
+    let renamed = OpenOptions::new().read(true).write(true).open("space/file1").unwrap();
+    println!("Moving files...");
+    for i in 0..64 as u64 {
+        let pfile1: u64 = (64 * 1048576) - (i + 1) * 1048576;
+        file1.read_exact_at(&mut buf1, pfile1).unwrap();
+        file1.set_len(pfile1).unwrap();
+        renamed.write_at(&buf1, i * 1048576).unwrap();
+    }
+    println!("Moved, reshaping...");
+    for i in 0..32 as u64 {
+        let pr: u64 = (64 * 1048576) - (i + 1) * 1048576;
+        renamed.read_exact_at(&mut buf1, i * 1048576).unwrap();
+        renamed.read_exact_at(&mut buf2, pr).unwrap();
+        renamed.write_at(&buf1, pr).unwrap();
+        renamed.write_at(&buf2, i * 1048576).unwrap();
+    }
+    
+
+    println!("Done!");
+    Ok(())
+}
+
+fn start_sending(file1: &File, file2: &File, mut stream: TcpStream) {
+
+    let mut net_buf = [0; 1024];
+    let mut file_buf = [0; 1024];
+    for i in 0..(64 * 1024) as u64 {
+        file1.read_exact_at(&mut file_buf, i * 1024).unwrap();
+
+        stream.read(&mut net_buf).unwrap();
+        stream.write(&file_buf).unwrap();
+
+        file1.write_at(&net_buf, i * 1024).unwrap();
+        if i % 4096 == 0 {
+            println!("File 1 {} MiB transferred", i / 1024);
+        }
+    }
+
+    for i in 0..(64 * 1024) as u64 {
+        file2.read_exact_at(&mut file_buf, i * 1024).unwrap();
+
+        stream.read(&mut net_buf).unwrap();
+        stream.write(&file_buf).unwrap();
+
+        file2.write_at(&net_buf, i * 1024).unwrap();
+        if i % 4096 == 0 {
+            println!("File 2 {} MiB transferred", i / 1024);
+        }
+    }
+
+    println!("Transfer done.");
+}
+```
+
+Bob 的代码：
+```Rust
+use std::fs::{OpenOptions, File};
+use std::io::{Read, Write};
+use std::net::TcpStream;
+use std::os::unix::fs::FileExt;
+use std::thread;
+use std::time::Duration;
+
+fn main() -> std::io::Result<()> {
+    {
+        println!("Creating placeholders...");
+        let _ = OpenOptions::new().read(true).write(true).create(true).open("space/file").unwrap();
+    }
+    let file1 = OpenOptions::new().read(true).write(true).open("space/file1").unwrap();
+    let file2 = OpenOptions::new().read(true).write(true).open("space/file2").unwrap();
+
+    thread::sleep(Duration::from_millis(2000));
+    let stream = TcpStream::connect("127.0.0.1:50000")?;
+    println!("Connected!");
+    start_sending(&file1, &file2, stream);
+    
+    println!("Reshaping files...");
+    let mut buf1 = [0; 1048576];
+    let mut buf2 = [0; 1048576];
+    for i in 0..64 as u64 {
+        let pfile2: u64 = (64 * 1048576) - (i + 1) * 1048576;
+        file2.read_exact_at(&mut buf1, pfile2).unwrap();
+        file2.set_len(pfile2).unwrap();
+        file1.write_at(&buf1, (64 * 1048576) + (i * 1048576)).unwrap();
+    }
+    println!("Merged, reshaping...");
+    for i in 0..32 as u64 {
+        let lp: u64 = (64 * 1048576) + (i * 1048576);
+        let rp: u64 = (128 * 1048576) - ((i + 1) * 1048576);
+        file1.read_exact_at(&mut buf1, lp).unwrap();
+        file1.read_exact_at(&mut buf2, rp).unwrap();
+        file1.write_at(&buf1, rp).unwrap();
+        file1.write_at(&buf2, lp).unwrap();
+    }
+    // Move again
+    let renamed = OpenOptions::new().read(true).write(true).open("space/file").unwrap();
+    println!("Moving files...");
+    for i in 0..128 as u64 {
+        let pfile1: u64 = (128 * 1048576) - (i + 1) * 1048576;
+        file1.read_exact_at(&mut buf1, pfile1).unwrap();
+        file1.set_len(pfile1).unwrap();
+        renamed.write_at(&buf1, i * 1048576).unwrap();
+    }
+    println!("Moved, reshaping...");
+    for i in 0..64 as u64 {
+        let pr: u64 = (128 * 1048576) - (i + 1) * 1048576;
+        renamed.read_exact_at(&mut buf1, i * 1048576).unwrap();
+        renamed.read_exact_at(&mut buf2, pr).unwrap();
+        renamed.write_at(&buf1, pr).unwrap();
+        renamed.write_at(&buf2, i * 1048576).unwrap();
+    }
+
+    Ok(())
+}
+
+fn start_sending(file1: &File, file2: &File, mut stream: TcpStream) {
+
+    let mut net_buf = [0; 1024];
+    let mut file_buf = [0; 1024];
+
+    for i in 0..(64 * 1024) as u64 {
+        file1.read_exact_at(&mut file_buf, i * 1024).unwrap();
+
+        stream.write(&file_buf).unwrap();
+        stream.read(&mut net_buf).unwrap();
+
+        file1.write_at(&net_buf, i * 1024).unwrap();
+        if i % 4096 == 0 {
+            println!("File 1 {} MiB received", i / 1024);
+        }
+    }
+
+    for i in 0..(64 * 1024) as u64 {
+        file2.read_exact_at(&mut file_buf, i * 1024).unwrap();
+
+        stream.write(&file_buf).unwrap();
+        stream.read(&mut net_buf).unwrap();
+
+        file2.write_at(&net_buf, i * 1024).unwrap();
+        if i % 4096 == 0 {
+            println!("File 2 {} MiB received", i / 1024);
+        }
+    }
+
+    println!("Transfer done.");
+}
+```
+
+还是同样，~~请不要像我这样使用 Rust！！~~不过这里使用 Rust 并没有特别的原因，只是因为自己比较熟悉 Rust。
+
+编译后分别上传两个文件即可得到 Flag。
+
+Flag 为 `flag{fa1I0catiIling_1NChains_15fun_1cb91f6aea}`。
+
 ## 不太分布式的软总线
 直接查看附件的代码，可以看到：
 - `flagserver` 在 System Bus 中创建了一个名为 `cn.edu.ustc.lug.hack.FlagService` 的 Bus
