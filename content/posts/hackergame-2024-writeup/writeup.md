@@ -1,12 +1,9 @@
-+++
-name = "hackergame-2024"
-title = "Hackergame 2024 Writeup"
-tags = ["Hackergame", "CTF"]
-date = "2024-11-09"
-update = "2024-11-09"
-enableGitalk = true
-+++
+## Hackergame 2024 Writeup
 
+> 这里是 Cascade Kobayashi, aka. 七碳
+> 
+> Blog Portal: [https://cascade.moe/posts/hackergame-2024-writeup/](https://cascade.moe/posts/hackergame-2024-writeup/)
+> 
 > License: CC BY-NC 4.0
 
 #### 前言
