@@ -72,9 +72,22 @@ flag{0k_175_a_h1dd3n_s3c3rt_f14g___please_join_us_ustc_nebula_anD_two_maJor_requ
 ## 打不开的盒
 下载 STL 文档，然后使用任意 3D 软件导入，在这里我使用了 Blender。删除上顶面和侧面后即可看到在内部底面的 Flag 了。
 
-![](blender-box.png)
+![Blender Box](img/blender-box.png)
 
 Flag 为 `flag{Dr4W_Us!nG_fR3E_C4D!!w0W}`。
+
+## 每日论文太多了！
+打开 PDF 后全文搜索 flag，可以看到在这里有 flag 字符串：
+
+![Suspicious Flag String](img/too-many-essay.png)
+
+由于之前试过给 PDF 里的 RGB 颜色改成 CMYK，这个过程中用到的是 Scribus。所以这里我就直接用 Scribus 打开了。
+
+打开之后找到对应的部分，可以看到两个对象重叠在一起，移开其中一个即可看到图片形式的 Flag。
+
+![Suspicious Flag String](img/too-many-essay-flag.png)
+
+Flag 为 `flag{h4PpY_hAck1ng_3veRyd4y}`。
 
 ## 比大小王
 对面实在是太快了喵！所以考虑用 JavaScript 自动化，首先可以想到的是检测两边数字的大小，然后模拟点击。但实际上这样做并不能让我们做得比对方更快，因为按下之后会有延迟，然后才会显示下一道题目。因此我们需要用别的方式超过对面。
@@ -152,6 +165,44 @@ submit(answers);
 在游戏开始后，在浏览器中运行这段代码即可得到 Flag。
 
 Flag 为 `flag{!-4M-7he-hACk3r-k!Ng-OF-cOmP@r!n9-nuM63R5-Z024}`。
+
+## 不宽的宽字符
+在 Windows 下，宽字符是 2 字节的，并且通常使用 UTF-16 LE 编码。而代码中，从 UTF-8 输入转换为 UTF-16 LE 编码的宽字符后，又直接将宽字符的字符指针转换为了窄字符的字符指针。
+
+```cpp
+// Convert to WIDE chars
+    wchar_t buf[256] = { 0 };
+    MultiByteToWideChar(CP_UTF8, 0, inputBuffer, -1, buf, sizeof(buf) / sizeof(wchar_t));
+
+    std::wstring filename = buf;
+
+    // Haha!
+    filename += L"you_cant_get_the_flag";
+
+    std::wifstream file;
+    file.open((char*)filename.c_str());
+```
+
+显然这样会存在问题。如果输入中存在窄字符，转换为宽字符后的第二个字节会变成 `\0`，导致字符串提前结束。即使后面添加了字符串，字符串也会在遇到第一个窄字符时就结束，这段被添加的字符串也就不会被认为是 `char*` 字符串的一部分了。
+
+接下来需要构造一个字符串，使得这个字符串在 UTF-16 LE 编码之后，ASCII 读取时读到的内容正好是 `Z:\theflag`。首先看看 `Z:\theflag` 在 ASCII 编码下的数据：
+
+```plaintext
+[cascade@cascade-ws hackergame-2024-writeup]$ echo -n "Z:\theflag" | xxd
+00000000: 5a3a 5c74 6865 666c 6167                 Z:\theflag
+```
+
+这里需要注意，因为使用的是 UTF-16 LE 编码而不是 UTF-16 BE 编码，因此我们要查找的几个字符分别是：
+
+```plaintext
+3a5a 745c 6568 6c66 6761
+```
+
+对应的字符串是 `㩚瑜敨汦条`。但是别忘了我们还需要让字符串提前结束，而很不幸， `Z:\theflag` 具有偶数个字符。我们没法让末尾的 `g` 来结束字符串。然而在 Windows 下，文件名末尾的空格似乎会被去除，因此也可以考虑用一个空格来结束我们的字符串。
+
+最后我们的字符串就是 `㩚瑜敨汦条 ` 了，在终端中输入这个字符串即可得到 Flag。
+
+Flag 为 `flag{wider_char_isnt_so_great_71c26f3828}`。
 
 ## Node.js is Web Scale
 题目中运行的服务是由 Node.js 编写的，在页面中点击下方的 `View source code` 即可看到 Node.js [源代码](node-web-scale-source.js)。
@@ -316,14 +367,14 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 
 这里以「匹配 4 的倍数」的状态机举例：
 
-![DFA-4](dfa-4.png)
+![DFA-4](img/dfa-4.png)
 
 现在删除状态 3。可以看到，有一条经过 3 的路径 `1 --(1)-> 3 --(0)-> 2`。
 由于状态 3 也可以转移到自己，因此实际上路径中还可以插入任意多个 `3 --(1)-> 3` 的转移，形如 `1 --(1)-> 3 --(1)-> 3 --(0)-> 2`。将这些状态转移拼接起来即可得到一条新的由 1 指向 2 的转移路径，转移条件为接下来的数字匹配 `11*0` 这个表达式。
 
 由于 1 本身已经有一条由 1 指向 2 的转移路径了，因此将 `1 --(11*0)-> 2` 这个转移与原来的 `1 --(0)-> 2` 合并，得到新的转移路径。对其他的所有路径做同样的操作（在这个例子中没有其他的路径了），删除状态 3，得到如下的状态机：
 
-![DFA-3](dfa-3.png)
+![DFA-3](img/dfa-3.png)
 
 现在删除状态 2。可以看到，有两条经过 2 的路径：
 - `1 --(0|11*0)-> 2 --(0)-> 0`
@@ -335,7 +386,7 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 
 删除状态 2，得到如下的状态机：
 
-![DFA-2](dfa-2.png)
+![DFA-2](img/dfa-2.png)
 
 现在删除状态 1。可以看到现在只剩下一条经过 1 的路径了：
 ```plaintext
@@ -346,23 +397,72 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 
 删除状态 1，得到如下的状态机：
 
-![DFA-1](dfa-1.png)
+![DFA-1](img/dfa-1.png)
 
 我们可以经过任意次这个状态转移，由 0 到达 0，因此最终的正则表达式为：
 ```re
 ((1((0|11*0)1)*(0|11*0)0)|0)*
 ```
 
-对于「匹配能被 13 整除的二进制数」，我们也照仿照以上的方式构造正则表达式。由于 13 的状态数较多，因此选择用 Python 脚本来构造这个正则表达式：
+对于「匹配能被 13 整除的二进制数」，我们也照仿照以上的方式构造正则表达式。由于 13 的状态数较多，因此选择用 Python 来构造这个正则表达式。
 
-（代码待补全）
+```python
+size = 13
 
-最后，建议将 Token、难度和正则表达式写在同一个文件中，然后：
-```bash
-nc XXXXXX:XXX 13.ans
+states = [dict[str, int]() for _ in range(0, size)]
+
+for mod in range(0, size):
+    states[mod].update({"0": (mod + mod) % size})
+    states[mod].update({"1": (mod + mod + 1) % size})
+
+# print(states)
+
+def filter(d, id):
+    new = {}
+    for k in d:
+        if d[k] == id:
+            new.update({k: d[k]})
+    return new
+
+def create_ex(d):
+    s = ""
+    for k in d:
+        s = s + k + "|"
+    s = s.removesuffix("|")
+    if len(s) == 1 or len(d) == 1:
+        return s
+    else:
+        return f"({s})"
+        
+
+for d in range(size - 1, 0, -1):
+    # print(f"Removing node {d}")
+    for p in range(d - 1, -1, -1):
+        for q in range(d - 1, -1, -1):
+            src = filter(states[p], d)
+            dst = filter(states[d], q)
+            # Not connected
+            if len(src) == 0:
+                continue
+            if len(dst) == 0:
+                continue
+            # Loop connection
+            lo = filter(states[d], d)
+            src_ex = create_ex(src) 
+            dst_ex = create_ex(dst)
+            lo_ex = create_ex(lo)
+
+            if len(lo) == 0:
+                s = f"({src_ex}{dst_ex})"
+            else:
+                s = f"({src_ex}{lo_ex}*{dst_ex})"
+            states[p].update({s: q})
+
+effect = filter(states[0], 0)
+print(f"{create_ex(effect)}*")
 ```
 
-即可得到 Flag。
+提交这个正则表达式即可得到 Flag。
 
 Flag 为 `flag{pow3rful_r3gular_expressi0n_medium_70a46e715e}`。
 
@@ -409,11 +509,10 @@ Flag 为 `flag{every_11nuxdeskT0pU5er_uSeDBUS_bUtn0NeknOwh0w_6614b12106}`。
 
 那么，发送什么文件描述符呢？我首先想到的思路是使用 POSIX Shared Memory，然而实际上 POSIX Shared Memory 会在 `/dev/shm` 中创建一个文件，而文件描述符会指向这个文件，因此这个方法行不通。
 
-除此之外，Socket 也可以拥有文件描述符，而且我们应该可以很容易地创建这个文件描述符。Socket 可以和文件系统中的地址绑定，然而我们并不需要一个有名字的 Socket，因为这样会在文件系统中有一个路径（而我们不希望这样做）。因此我们需要创建无名的 Socket。
+除此之外，Socket 也可以拥有文件描述符，而且我们应该可以很容易地创建这个文件描述符。Socket 可以和文件系统中的地址绑定，然而我们并不需要一个有名字的 Socket，因为这样会在文件系统中有一个路径（而我们不希望这样做）。因此我们需要创建匿名 Socket。
 
-在 Linux 中，`socketpair()` 调用可以创建一对无名的 Socket，这对 Socket 的两端是相连接的——即，向一个 Socket 发送的数据可以被另一个 Socket 接收到，反过来也一样。因此我们可以用 `socketpair()` 创建一对 Socket，并将其中一个 Socket 的文件描述符通过 `g_dbus_connection_call_with_unix_fd_list_sync()` 函数发送给 `flagserver`。
+在 Linux 中，`socketpair()` 调用可以创建一对匿名 Socket，这对 Socket 的两端是相连接的——即，向一个 Socket 发送的数据可以被另一个 Socket 接收到，反过来也一样。我们可以用 `socketpair()` 创建一对 Socket，并将其中一个 Socket 的文件描述符通过 `g_dbus_connection_call_with_unix_fd_list_sync()` 函数发送给 `flagserver`。
 
-以下是 C 源代码：
 ```c
 #include <gio/gio.h>
 #include <glib.h>
@@ -579,11 +678,11 @@ int main(int argc, char **argv)
 Flag 为 `flag{prprprprprCTL_15your_FRiEND_ec8c8f54d7}`。
 
 ### Comm Say Maybe 的另一个思路
-既然都在 `/dev/shm` 里面了……为什么我们不创建一个名叫 `getflag3` 的 POSIX Shared Memory 呢？
+既然都在 `/dev/shm` 里面了，为什么我们不创建一个名叫 `getflag3` 的 POSIX Shared Memory 呢？
 
 思路大概是这样：
 - 以只读方式，用 `shm_open()` 创建名叫 `getflag3` 但权限为 `777` 的 POSIX Shared Memory
-- Fork 自己，然后让字进程以可读写的方式用 `shm_open()` 打开名叫 `getflag3` 的 POSIX shm，`ftruncate()` 扩展这片内存的空间，然后用 `mmap()` 将这片内存映射到自己的内存空间中。
+- Fork 自己，然后让子进程以可读写的方式用 `shm_open()` 打开名叫 `getflag3` 的 POSIX shm，`ftruncate()` 扩展这片内存的空间，然后用 `mmap()` 将这片内存映射到自己的内存空间中。
 - 让子进程打开 `/dev/shm/executable`，读取里面的内容，然后写入到 shm 中。子进程在这个时候就结束了。
 - 此时只有原进程有以只读方式打开了 `/dev/shm/getflag3`，没有进程以可写的方式打开它。因此 `/dev/shm/getflag3` 可以被执行了。
 - 原进程以带参数的方式执行 `/dev/shm/getflag3`, 这样新的进程获取到的 `argc` 是大于 1 的，正常执行 DBus 访问的代码。
