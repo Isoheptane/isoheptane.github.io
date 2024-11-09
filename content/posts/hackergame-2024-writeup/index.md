@@ -865,7 +865,7 @@ fn start_sending(file1: &File, file2: &File, mut stream: TcpStream) {
 }
 ```
 
-还是同样，~~请不要像我这样使用 Rust！！~~不过这里使用 Rust 并没有特别的原因，只是因为自己比较熟悉 Rust。
+还是同样，~~请不要像我这样使用 Rust！！~~ 不过这里使用 Rust 并没有特别的原因，只是因为自己比较熟悉 Rust。
 
 编译后分别上传两个文件即可得到 Flag。
 
