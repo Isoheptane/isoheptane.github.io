@@ -7,6 +7,12 @@ update = "2024-11-09"
 enableGitalk = true
 +++
 
+#### 前言
+
+> 因为精神状态太差，完全提不起自信，所以选择了来打自己完全不熟悉的 CTF 比赛，让自己更加提不起自信。有一种身边的人或多或少都对 CTF 有了解，是 CTF 高手的幻觉。而自己对 CTF 却几乎没有任何经验，是彻头彻尾的弱者。但我还是想尝试证明一下自己并不*一无是处*，所以我还是尝试了一下。
+>
+> 结果很让我感到意外，因为确实对此几乎没有任何经验，但我还是设法做出了所有我能做出的题目，并且走到了这里。在打 Hackergame 2024 的过程中实践和学习到了很多。
+
 ## 签到
 60 秒肯定输入不完，因为平均 5 秒需要输入一个输入框。直接 F12，可以看到输入框的 HTML 代码大概是这样：
 
@@ -52,7 +58,7 @@ Welcome-to-USTC-Nebula-s-Homepage/
 and-We-are-Waiting-for-U/
 ```
 
-如果尝试 `cd` 会发现需要 root 权限才能 `cd`，而尝试 `sudo` 则会跳转到[奶龙](https://www.bilibili.com/bangumi/play/ss40551)。因此考虑使用 `ls` 指令直接列出两个目录中的内容。当执行 `ls and-We-are-Waiting-for-U/` 时可以看到输出产生了一些变化，列出了隐藏的文件：
+如果尝试 `cd` 会发现需要 root 权限才能 `cd`，而尝试 `sudo` 则会跳转到[奶龙](https://www.bilibili.com/bangumi/play/ss40551)~~（这是什么出题人的恶趣味吗？）~~。因此考虑使用 `ls` 指令直接列出两个目录中的内容。当执行 `ls and-We-are-Waiting-for-U/` 时可以看到输出产生了一些变化，列出了隐藏的文件：
 
 ```plaintext
 .flag
@@ -81,7 +87,7 @@ Flag 为 `flag{Dr4W_Us!nG_fR3E_C4D!!w0W}`。
 
 ![Suspicious Flag String](img/too-many-essay.png)
 
-由于之前试过给 PDF 里的 RGB 颜色改成 CMYK，这个过程中用到的是 Scribus。所以这里我就直接用 Scribus 打开了。
+由于之前试过给 PDF 里的 RGB 颜色改成 CMYK，这个过程中用到的是 Scribus，所以这里我就直接用 Scribus 打开了。
 
 打开之后找到对应的部分，可以看到两个对象重叠在一起，移开其中一个即可看到图片形式的 Flag。
 
@@ -553,7 +559,7 @@ Flag 为 `flag{pow3rful_r3gular_expressi0n_medium_70a46e715e}`。
 ### 小菜一碟
 两个文件的大小是完全一样的，考虑每次交换 1 KiB 的数据。
 
-为了使双方步调同步，Bob 首先发送自己的第 1 个 1 KiB 块，Alice 在接收到来自 Bob 的切片后，将自己的第 1 个 1KiB 块也发送出去，双方接收到交换得到的数据之后，**指定位置地**覆写到自己的文件中。Bob 在收到了来自 Alice 的第 1 个 1KiB 块并写入文件之后，再发送自己的第。 2 个 1 KiB 块。如此重复，直到交换完总共 131072 个 1 KiB 块。
+为了使双方步调同步，Bob 首先发送自己的第 1 个 1 KiB 块，Alice 在接收到来自 Bob 的切片后，将自己的第 1 个 1KiB 块也发送出去，双方接收到交换得到的数据之后，**指定位置地**覆写到自己的文件中。Bob 在收到了来自 Alice 的第 1 个 1KiB 块并写入文件之后，再发送自己的第。 2 个 1 KiB 块。如此循环，直到交换完总共 131072 个 1 KiB 块。
 
 Alice 的代码：
 ```Rust
@@ -683,7 +689,7 @@ fn main() -> std::io::Result<()> {
         file1.set_len(pfile1).unwrap();
         file2.write_at(&buf1, i * 1048576).unwrap();
     }
-    println!("Splited, reshaping...");
+    println!("Split, reshaping...");
     for i in 0..32 as u64 {
         let pfile2: u64 = (64 * 1048576) - (i + 1) * 1048576;
         file2.read_exact_at(&mut buf1, i * 1048576).unwrap();
@@ -1170,14 +1176,14 @@ int main() {
 }
 ```
 
-~~真的有人会直接用 C 写 TCP 吗？~~
+~~真的有人会直接用 C 写 TCP Socket 吗？~~
 
 注意上面的源代码如果直接使用 gcc 编译，上传运行可能会报错：
 ```plaintext
 /dev/shm/executable: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by /dev/shm/executable)
 ```
 
-因此编译时需要加上 `--static` 选项。然后上传运行即可获得 Flag。
+因此编译时可以尝试加上 `--static` 选项。然后上传运行即可获得 Flag。
 
 Flag 为 `flag{wa1t_no0O0oooO_mY_b1azIngfA5t_raust_f11r5erVer_bd4dc3991d}`。
 
