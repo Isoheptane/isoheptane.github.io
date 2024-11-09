@@ -1080,16 +1080,49 @@ Flag 为 `flag{prprprprprCTL_15your_FRiEND_ec8c8f54d7}`。
 - Fork 自己，然后让子进程以可读写的方式用 `shm_open()` 打开名叫 `getflag3` 的 POSIX shm，`ftruncate()` 扩展这片内存的空间，然后用 `mmap()` 将这片内存映射到自己的内存空间中。
 - 让子进程打开 `/dev/shm/executable`，读取里面的内容，然后写入到 shm 中。子进程在这个时候就结束了。
 - 此时只有原进程有以只读方式打开了 `/dev/shm/getflag3`，没有进程以可写的方式打开它。因此 `/dev/shm/getflag3` 可以被执行了。
-- 原进程以带参数的方式执行 `/dev/shm/getflag3`, 这样新的进程获取到的 `argc` 是大于 1 的，正常执行 DBus 访问的代码。
+- 利用 `argc` 来判断是否需要执行 DBus 调用的代码。原进程以带参数的方式执行 `/dev/shm/getflag3`, 这样新的进程获取到的 `argc` 是大于 1 的，正常执行 DBus 调用的代码。
 - 获得 Flag！
 
 事实上我一开始也是这样做的，因为想这个问题不会这么简单。也许在程序开始运行后，`/dev/shm` 是不可以以文件方式读写的。
 
 这个思路是可以运行的！但确实略显得麻烦……所以在这里只把它贴出来，不会详细讲解。
 
+## RISC-V：虎胆龙威
+这道题目还是第一次让我接触到了 RISC-V 架构，并且第一次为 RISC-V 编写汇编代码（事实上也是第一次编写汇编代码）。
+
+### 警告：易碎 / Fragility
+RAM 上每个有效的地址都只能读取一次。由于我们的程序存储在 RAM 上，这也意味着我们的程序的每一条指令只能被运行至多一次。这也意味着向前的跳转和循环都无法使用。
+
+然而，RV32I 架构包含了整整 31 个可以供我们随意使用的通用寄存器（x0 硬编码为了 0，因此无法随意使用），因此我们可以将 RAM 中的数组全部复制到寄存器中，然后直接在寄存器中排序，代码中需要硬编码排序算法的所有操作。这里为了减少空间使用，选择了插入排序。我用 python 生成了一部分汇编代码：
+```python
+n = int(input())
+
+def getcode(n):
+	lines = []
+	lines.append(f"_in{n}:");
+	for i in range (n, 1, -1):
+		lines.append(f"    bgt x{i}, x{i-1}, _in{n+1}");
+		lines.append(f"    mv x29, x{i}");
+		lines.append(f"    mv x{i}, x{i-1}");
+		lines.append(f"    mv x{i-1}, x29");
+		lines.append("");
+	return lines;
+
+for i in range(2, n + 1):
+	lines = getcode(i)
+	s = "\n".join(lines).strip()
+	print(s)
+```
+
+完整的汇编代码较长，因此放在了[这里](files/riscv-die-hard-q2.S)，不在此展示。
+
+编译这份汇编代码，然后将 `firmware.hex` 文件中的内容提交即可获取 Flag。
+
+Flag 为 `flag{1snT_tHiS_co4BcdEf9ll_9dbf2afdb1}`
+
 ## 动画分享
 ### 只要不停下 HTTP 服务，响应就会不断延伸
-观察附件中的 Rust `fileserver` 代码，尽管没有找到会让 `fileserver` 崩溃的契机，但我们可以看到 `fileserver` 是以**完全同步**的方式运行的。也就是只会在处理完一个请求之后才会开始处理下一个请求。
+观察附件中的 Rust `fileserver` 代码，尽管没有找到可能会让 `fileserver` 崩溃的代码，但我们可以注意到 `fileserver` 是以**完全同步**的方式运行的。也就是只会在处理完一个请求之后才会开始处理下一个请求。
 
 在 `server.py` 中可以看到，我们的程序最多只会执行 10 秒就会被杀死，连接也会就此断开，而 HTTP Server 也得以处理下一个请求。我们也许需要让另一个进程来保持这个连接。
 
@@ -1107,7 +1140,7 @@ Flag 为 `flag{prprprprprCTL_15your_FRiEND_ec8c8f54d7}`。
 #include <unistd.h>
 
 int main() {
-    int pid = fork();
+    int pid = fork();/
     if (pid != 0) {
         sleep(2);
         printf("subprocess %d spwaned, exiting.\n", pid);
@@ -1147,4 +1180,87 @@ int main() {
 因此编译时需要加上 `--static` 选项。然后上传运行即可获得 Flag。
 
 Flag 为 `flag{wa1t_no0O0oooO_mY_b1azIngfA5t_raust_f11r5erVer_bd4dc3991d}`。
+
+## 关灯
+### Easy, Medium, Hard
+~~还是算法题~~
+
+关灯游戏一个较优的解法是构造一个异或线性方程组，然后利用高斯消元求解。时间复杂度为 O(n)。这三道题的数据规模均在 n = 11^3 以内，因此规模较小，可以很容易地在限定时间内求解。
+
+在异或线性方程组中，一个值只可能是 0 和 1 中的其中一个，并且 1 + 1 = 0。
+
+可以注意到如果一组对灯的操作可以**让一些灯亮起来**，那么**重复**一遍这个操作，也可以让这些灯**全部熄灭**。这里考虑求求解一组对灯的操作，使得游戏可以从全部熄灭的状态变为初始状态。而这组对灯的操作也正好可以让游戏从初始状态变为全部熄灭的状态。
+
+如果有 n 盏灯，则需要构造 n 个具有 n 个未知数的方程。每个未知数 x_i 都代表「是否在要按第 i 盏灯」。对第 i 个方程，其常数项为第 i 盏灯**操作后的状态**，而每个未知数 x_j 的系数都代表「开关第 j 盏灯是否会**影响第 i 盏灯**」，系数乘上 x_j 即代表「第 j 盏灯上的操作是否的确影响第 i 盏灯」。将它们加起来其实就得到了常数项，即操作后的状态。
+
+对于三维空间，可以将 x, y, z 坐标用数字 x + n * y + n^2 * z 表示。此外，在构建方程组的时候也需要注意 x, y, z 在边界的情况。
+
+求解这个方程组即可得到一组操作序列，将这个操作序列打印出来即可。
+
+我正好前段时间写了个线性方程组求解器，稍作改造就可以用在这个题目上。完整的求解代码较长，因此放在了[这里](files/lights-out.c)，不在此展示。
+
+Easy, Medium, Hard 的 Flag 分别为：
+- `flag{bru7e_f0rce_1s_a1l_y0u_n3ed_c046f81bf1}`
+- `flag{prun1ng_1s_u5eful_b9581cbc76}`
+- `flag{lin3ar_alg3bra_1s_p0werful_5815f15071}`
+
+## 禁止内卷
+服务器上的代码中直接将 POST 请求中传入的文件名和 `/tmp/uploads` 拼接了起来，然后将文件写入了这个路径：
+```python
+UPLOAD_DIR = "/tmp/uploads"
+# <- omitted ->
+@app.route("/submit", methods=["POST"])
+def submit():
+    if "file" not in request.files or request.files['file'].filename == "":
+        flash("你忘了上传文件")
+        return redirect("/")
+    file = request.files['file']
+    filename = file.filename
+    filepath = os.path.join(UPLOAD_DIR, filename)
+    file.save(filepath)
+```
+
+而这个 Flask App 的启动命令为 `flask run --reload --host 0`，这代表：
+- 开启了 `--reload` 选项，当源文件被更改时，Flask 会热重载。
+- 没有指定 `--app`，因此 Flask 会从 `app.py` 或 `wsgi.py` 加载 App。
+
+如果原来的代码中没有对 POST 请求传入的文件名做过滤，如果文件名为 `../web/app.py` 或 `../web/wsgi.py`，则有可能会覆写原本在 `/tmp/web/` 中运行的 Flask App，转而运行我们上传的源文件。
+
+这里编写一个 Flask App，这个 Flask App 会在接收到对路径 `/` 的 GET 请求时，直接读取并返回 `answers.json`：
+```python
+from flask import Flask, render_template, request, flash, redirect
+import json
+import os
+import traceback
+import secrets
+
+app = Flask(__name__)
+app.secret_key = secrets.token_urlsafe(64)
+
+@app.route("/", methods=["GET"])
+def index():
+    answers = json.load(open("answers.json"))
+    return answers
+```
+
+将这个文件保存为 `app.py`，然后在 Firefox 浏览器中上传这个文件。这样并不会将这个文件写到 `/tmp/web/` 中，但是这样提供了请求模板，让我们可以更改这个请求，然后重新发送这个 POST 请求。
+
+在 Firefox 中上传这个文件后，对这个请求选择 "Edit and Resend"，将 Body 部分中的 `filename="app.py"` 修改为 `filename="../web/app.py"`，然后重新发送请求：
+
+![Please dont convulte](img/firefox-edit-and-resend.png)
+
+刷新页面就会直接返回原始的 `answers.json` 文件。将所有数字加上 65 并以 ASCII 字符形式输出：
+```c
+#include <stdio.h>
+int list[] = {37, 43, 32, 38}; /* more numbers are omitted */
+int main() {
+    for (int i = 0; i < sizeof(list) / sizeof(int); i++)
+        putchar(list[i] + 65);
+    return 0;
+ }
+```
+
+将获取的数据填入 list 中，编译运行，即可在输出中找到 Flag。
+
+Flag 为 `flag{uno!!!!_esrever_now_U_run_MY_c0de9fba75991b}`
 
