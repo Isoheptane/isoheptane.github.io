@@ -24,7 +24,7 @@ enableGitalk = false
     {{< link name="Hao_Tian" url="https://haotian22.top" avatar="/images/links/haotian.webp" desc="生命不息，折腾不止ヾ(≧▽≦*)o" >}}  
     {{< link name="Junde Yhi" url="https://www.yhi.moe/" avatar="/images/links/jundeyhi.webp" desc="" >}}  
     {{< link name="ECWU" url="https://ecwuuuuu.com/" avatar="/images/links/ecwu.webp" desc="An Tech noob." >}}  
-    {{< link name="中弦星空魔法屋" url="https://blog.sinzmise.top/" avatar="/images/links/sinzmise.webp" desc="种下一颗有故事的种子，让它带着魔法和奇迹生根发芽" >}}
+    {{< link name="汐塔魔法屋" url="https://blog.sinzmise.top/" avatar="/images/links/sinzmise.webp" desc="种下一颗有故事的种子，让它带着魔法和奇迹生根发芽" >}}
     {{< link name="Souiken" url="https://souiken.moe/" avatar="https://souiken.moe/img/avatar.webp" desc="愿我们度过这个漫漫长夜之后，依旧能看到那旭日东升。" >}}
 {{< /link_list >}}
 
