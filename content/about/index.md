@@ -18,5 +18,5 @@ enableGitalk = true
 使用的[头像](https://www.pixiv.net/artworks/96876583)来自画师 ゾイルン ( [Pixiv](https://www.pixiv.net/users/2882559) / [Twitter](https://twitter.com/Zoirun) )
 
 本站使用 [Hugo](https://gohugo.io/) 部署在 [GitHub Pages](https://pages.github.com/) 上，并使用经过个性化修改的 [m10c](https://github.com/vaga/hugo-theme-m10c) 作为本站主题。  
-### 转载许可  
-除非另行说明，本站所有内容（除代码）均采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 许可证。
+### 转载许可
+除非另行说明，本站所有内容（除不包含文章內容的源代码）均采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.zh-hans) 许可证。
