@@ -3,7 +3,7 @@ name = "hackergame-2024"
 title = "Hackergame 2024 Writeup"
 tags = ["Hackergame", "CTF"]
 date = "2024-11-09"
-update = "2024-11-09"
+update = "2024-11-11"
 enableGitalk = true
 +++
 
@@ -1158,7 +1158,7 @@ Flag 为 `flag{1snT_tHiS_co4BcdEf9ll_9dbf2afdb1}`
 #include <unistd.h>
 
 int main() {
-    int pid = fork();/
+    int pid = fork();
     if (pid != 0) {
         sleep(2);
         printf("subprocess %d spwaned, exiting.\n", pid);
