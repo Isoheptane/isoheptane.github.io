@@ -192,6 +192,9 @@
             "tabWidth": 4
         },
         "goldmark": {
+            "renderer": {
+                "unsafe": true
+            },
             "extensions": {
                 "typographer": false
             }
