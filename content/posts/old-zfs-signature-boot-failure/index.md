@@ -1,7 +1,7 @@
 +++
 name = "old-zfs-signature-boot-failure"
 title = "残留的 ZFS 文件系统签名引发的 Linux 启动故障"
-tags = ["Linux", "ZFS", "BLKID", "文件系统"]
+tags = ["Linux", "ZFS", "udev", "blkid", "文件系统"]
 date = "2025-07-08"
 update = "2025-07-08"
 enableGitalk = true
