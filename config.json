@@ -207,5 +207,6 @@
             }
         }
     },
-    "buildFuture": true
+    "buildFuture": true,
+    "titleCaseStyle": "none"
 }
