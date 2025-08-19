@@ -14,7 +14,7 @@ enableGitalk = true
 
 ### 尝试启动
 
-{{< image src=cant-boot.png >}}
+{{< image src=cant-boot.webp >}}
 
 于是我就被丢进 Emergency Shell 了。
 
@@ -62,7 +62,7 @@ Linux 的块设备文件名实际上可能会变动，不过为了在本文中�
 
 块设备持久化命名是由 **udev** 管理的，因此我观察了一下 udev 对块设备持久化命名的配置文件 `60-persistent-storage.rules`，发现了为块设备分配 UUID 的代码调用了 udev 内建的 blkid，然后再根据 blkid 的结果创建 `/dev/disk/by-uuid/<UUID>` 到实际块设备的符号链接。这里调用 blkid 的这一行为第 133 行：
 
-{{< image src=udev-rule.png >}}
+{{< image src=udev-rule.webp >}}
 
 尽管看起来是 blkid 的问题，但我还是把 udev 的 Debug 信息输出打开了。通过在内核启动参数中添加 `udev.log_level=debug`，可以让 udev 输出调试信息。
 
@@ -185,7 +185,7 @@ LIBBLKID_DEBUG="0xFFFF" blkid /dev/nvme0n1p2
 
 uberblock 位置是 vdev label 的起始位置加上 128 * 1024 (`0x20000`) 字节，因此用 xxd 定位这些 uberblock 的位置，果然在第 1 个 vdev label 中发现了 ZFS uberblock 的 Magic Number 和一片数据：
 
-{{< image src=magic-zfs.png >}}
+{{< image src=magic-zfs.webp >}}
 
 看起来似乎只要把 Magic Number 抹除，blkid 就不会认出 ZFS 的 uberblock 了，于是我把 Magic Number 的地方都填充上了 0：
 

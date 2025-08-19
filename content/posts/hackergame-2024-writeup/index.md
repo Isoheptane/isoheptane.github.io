@@ -79,20 +79,20 @@ flag{0k_175_a_h1dd3n_s3c3rt_f14g___please_join_us_ustc_nebula_anD_two_maJor_requ
 ## 打不开的盒
 下载 STL 文档，然后使用任意 3D 软件导入，在这里我使用了 Blender。删除上顶面和侧面后即可看到在内部底面的 Flag 了。
 
-{{< image src=img/blender-box.png >}}
+{{< image src=img/blender-box.webp >}}
 
 Flag 为 `flag{Dr4W_Us!nG_fR3E_C4D!!w0W}`。
 
 ## 每日论文太多了！
 打开 PDF 后全文搜索 flag，可以看到在这里有 flag 字符串：
 
-{{< image src=img/too-many-essay.png >}}
+{{< image src=img/too-many-essay.webp >}}
 
 由于之前试过给 PDF 里的 RGB 颜色改成 CMYK，这个过程中用到的是 Scribus，所以这里我就直接用 Scribus 打开了。
 
 打开之后找到对应的部分，可以看到两个对象重叠在一起，移开其中一个即可看到图片形式的 Flag。
 
-{{< image src=img/too-many-essay-flag.png >}}
+{{< image src=img/too-many-essay-flag.webp >}}
 
 Flag 为 `flag{h4PpY_hAck1ng_3veRyd4y}`。
 
@@ -463,14 +463,14 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 
 这里以「匹配 4 的倍数」的状态机举例：
 
-{{< image src=img/dfa-4.png >}}
+{{< image src=img/dfa-4.webp >}}
 
 现在删除状态 3。可以看到，有一条经过 3 的路径 `1 --(1)-> 3 --(0)-> 2`。
 由于状态 3 也可以转移到自己，因此实际上路径中还可以插入任意多个 `3 --(1)-> 3` 的转移，形如 `1 --(1)-> 3 --(1)-> 3 --(0)-> 2`。将这些状态转移拼接起来即可得到一条新的由 1 指向 2 的转移路径，转移条件为接下来的数字匹配 `11*0` 这个表达式。
 
 由于 1 本身已经有一条由 1 指向 2 的转移路径了，因此将 `1 --(11*0)-> 2` 这个转移与原来的 `1 --(0)-> 2` 合并，得到新的转移路径。对其他的所有路径做同样的操作（在这个例子中没有其他的路径了），删除状态 3，得到如下的状态机：
 
-{{< image src=img/dfa-3.png >}}
+{{< image src=img/dfa-3.webp >}}
 
 现在删除状态 2。可以看到，有两条经过 2 的路径：
 - `1 --(0|11*0)-> 2 --(0)-> 0`
@@ -482,7 +482,7 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 
 删除状态 2，得到如下的状态机：
 
-{{< image src=img/dfa-2.png >}}
+{{< image src=img/dfa-2.webp >}}
 
 现在删除状态 1。可以看到现在只剩下一条经过 1 的路径了：
 ```plaintext
@@ -493,7 +493,7 @@ Flag 为 `flag{p0werful_r3gular_expressi0n_easy_5671700122}`。
 
 删除状态 1，得到如下的状态机：
 
-{{< image src=img/dfa-1.png >}}
+{{< image src=img/dfa-1.webp >}}
 
 我们可以经过任意次这个状态转移，由 0 到达 0，因此最终的正则表达式为：
 ```re
@@ -1274,7 +1274,7 @@ def index():
 
 在 Firefox 中上传这个文件后，对这个请求选择 "Edit and Resend"，将 Body 部分中的 `filename="app.py"` 修改为 `filename="../web/app.py"`，然后重新发送请求：
 
-{{< image src=img/firefox-edit-and-resend.png >}}
+{{< image src=img/firefox-edit-and-resend.webp >}}
 
 刷新页面就会直接返回原始的 `answers.json` 文件。将所有数字加上 65 并以 ASCII 字符形式输出：
 ```c
@@ -1295,13 +1295,13 @@ Flag 为 `flag{uno!!!!_esrever_now_U_run_MY_c0de9fba75991b}`
 ### 三碰撞之一
 通过 Ghidra 逆向分析第一个文件（这里已经标注好了变量名）：
 
-{{< image src=img/hash-ghidra-1.png >}}
+{{< image src=img/hash-ghidra-1.webp >}}
 
 可以看到程序的输入应该是 3 个 8 字节长度的数据，输入格式为 16 进制编码。
 
 再往后看可以看到求 Hash 的部分：
 
-{{< image src=img/hash-ghidra-2.png >}}
+{{< image src=img/hash-ghidra-2.webp >}}
 
 程序运行到这里，通过 `strcmp()` 确认了三个输入是不同的，然后计算了三个输入的 SHA-256。而对于每个计算出来的 SHA-256 又取了它最后的 4 个字节作为最后要比较的 Hash 。
 
