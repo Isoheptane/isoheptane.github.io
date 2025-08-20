@@ -155,10 +155,10 @@ bind = $mainMod, 2, exec, $switch_script switch 2
 bind = $mainMod, 0, exec, $switch_script switch 10
 
 # Move active window to a workspace with mainMod + SHIFT + [0-9]
-bind = $mainMod, 1, exec, $switch_script move 1
-bind = $mainMod, 2, exec, $switch_script move 2
+bind = $mainMod SHIFT, 1, exec, $switch_script move 1
+bind = $mainMod SHIFT, 2, exec, $switch_script move 2
 # ...
-bind = $mainMod, 0, exec, $switch_script move 10
+bind = $mainMod SHIFT, 0, exec, $switch_script move 10
 ```
 
 在 Hyprland 中設定好組合鍵之後，所有工作就完成了。
