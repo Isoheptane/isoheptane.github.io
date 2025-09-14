@@ -29,6 +29,7 @@ enableGitalk = false
     {{< link name="Sunset Mikoto" url="https://sunmkt.uk/" avatar="/images/links/sunset.webp" desc="Lead Programmer of Sunset Edu. & Tech. Group." >}}
     {{< link name="ZeroQing的个人博客" url="https://www.zeroqing.com" avatar="https://q.qlogo.cn/g?b=qq&nk=859822928&s=100" desc="一目洞察网中险，一策化解千般难。" >}}
     {{< link name="zlicdt" url="https://blog.zlicdt.top" avatar="https://blog.zlicdt.top/img/avatar.webp" desc="今日无事可做" >}}
+    {{< link name="中二电工吹短笛的个人博客" url="https://bitlogs.cn" avatar="/images/links/zedgcdd.webp" desc="永远相信美好的事情即将发生" >}}
 {{< /link_list >}}
 
 ### 本站的信息
