@@ -30,6 +30,7 @@ enableGitalk = false
     {{< link name="ZeroQing的个人博客" url="https://www.zeroqing.com" avatar="https://q.qlogo.cn/g?b=qq&nk=859822928&s=100" desc="一目洞察网中险，一策化解千般难。" >}}
     {{< link name="zlicdt" url="https://blog.zlicdt.top" avatar="https://blog.zlicdt.top/img/avatar.webp" desc="今日无事可做" >}}
     {{< link name="中二电工吹短笛的个人博客" url="https://bitlogs.cn" avatar="/images/links/zedgcdd.webp" desc="永远相信美好的事情即将发生" >}}
+    {{< link name="Amicors" url="https://amicors.cc" avatar="https://amicors.cc/_astro/avatar.WKle1sZJ_22GWqu.webp" desc="那小而美丽的火车穿梭在翻飞与风中的天之芒草里，飞奔过银河之水及三角标的蓝白微光，然后就那么永无止境地，一直奔跑下去。" >}}
 {{< /link_list >}}
 
 ### 本站的信息
