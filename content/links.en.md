@@ -31,6 +31,7 @@ enableGitalk = false
     {{< link name="zlicdt" url="https://blog.zlicdt.top" avatar="https://blog.zlicdt.top/img/avatar.webp" desc="今日无事可做" >}}
     {{< link name="中二电工吹短笛的个人博客" url="https://bitlogs.cn" avatar="/images/links/zedgcdd.webp" desc="永远相信美好的事情即将发生" >}}
     {{< link name="Amicors" url="https://amicors.cc" avatar="https://amicors.cc/_astro/avatar.WKle1sZJ_22GWqu.webp" desc="那小而美丽的火车穿梭在翻飞与风中的天之芒草里，飞奔过银河之水及三角标的蓝白微光，然后就那么永无止境地，一直奔跑下去。" >}}
+    {{< link name="70CentsApple" url="https://70centsapple.top" avatar="/images/links/70centsapple.webp" desc="Be innocent, be confident." >}}
 {{< /link_list >}}
 
 ### Information About This Site
