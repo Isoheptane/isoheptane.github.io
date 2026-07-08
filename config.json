@@ -131,6 +131,10 @@
         "avatar": "/images/avatar.webp",
         "menu_item_separator": " - ",
         "favicon": "/images/favicon.ico",
+        "favicon16": "/images/favicon-16x16.png",
+        "favicon32": "/images/favicon-32x32.png",
+        "favicon48": "/images/favicon-48x48.png",
+        "favicon64": "/images/favicon-64x64.png",
         "social": [
             {
                 "icon": "github",
