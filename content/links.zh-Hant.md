@@ -32,6 +32,7 @@ enableGitalk = false
     {{< link name="中二电工吹短笛的个人博客" url="https://bitlogs.cn" avatar="/images/links/zedgcdd.webp" desc="永远相信美好的事情即将发生" >}}
     {{< link name="Amicors" url="https://amicors.cc" avatar="https://amicors.cc/_astro/avatar.WKle1sZJ_22GWqu.webp" desc="那小而美丽的火车穿梭在翻飞与风中的天之芒草里，飞奔过银河之水及三角标的蓝白微光，然后就那么永无止境地，一直奔跑下去。" >}}
     {{< link name="70CentsApple" url="https://70centsapple.top" avatar="/images/links/70centsapple.webp" desc="Be innocent, be confident." >}}
+    {{< link name="第四号破壁者" url="https://wbo4.xyz" avatar="https://image.wall-breaker-no4.xyz/wall-images/20260708171816428.gif" desc="APEX 北洋水师；诺文斯克经济特区生物链最底层；最伟大的快递员；神之天平持有者；提丰星上的走地鸡；泰拉大陆一般通过博士" >}}
 {{< /link_list >}}
 
 ### 本站信息
